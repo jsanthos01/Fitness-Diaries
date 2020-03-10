@@ -53,8 +53,8 @@ INSERT INTO member_name (name) VALUES('Brave');
 INSERT INTO member_name (name) VALUES('Ann');
 INSERT INTO member_name (name) VALUES('Jane');
 
-INSERT INTO member_info (my_name, my_weight, my_height, BMI, goal, diet) VALUES('Elsa', 116, 156, 29, 5, "loose weight by walk');
-INSERT INTO member_info (my_name, my_weight, my_height, BMI, goal, diet) VALUES('Fiona', 200, 165, 37.8, 10, "loose weight by walk');
+INSERT INTO member_info (my_name, my_weight, my_height, BMI, goal, diet) VALUES('Elsa', 116, 156, 29, 5, 'loose weight by walk');
+INSERT INTO member_info (my_name, my_weight, my_height, BMI, goal, diet) VALUES('Fiona', 200, 165, 37.8, 10, 'loose weight by walk');
 
 INSERT INTO login_credential(my_name, username, user_password, user_img,) VALUES('Elsa', 'elsausername', 'hashpasswordelsa', '');
 INSERT INTO login_credential(my_name, username, user_password, user_img,) VALUES('Fiona', 'fionausername', 'hashpasswordfiona', '');
@@ -65,7 +65,11 @@ INSERT INTO member_goal (goal_message) VALUES('i want to loose 5 pounds follow k
 
 INSERT INTO group_goal (goal_message) VALUES(x);
 
-INSERT INTO top_three (name, weight, user_img) VALUES('Elsa', 116, 'userimg');
-INSERT INTO top_three (name, weight, user_img) VALUES('Elsa', 116, 'userimg');
+## INSERT INTO top_three (name, weight, user_img) VALUES('Elsa', 116, 'userimg');
+## INSERT INTO top_three (name, weight, user_img) VALUES('Elsa', 116, 'userimg');
+
+INSERT INTO group_posts()
+
+
 
 
