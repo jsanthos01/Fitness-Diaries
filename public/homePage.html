@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 </head>
 <body>
     <style>
+        .head{
+            background-image: url("https://www.thefitnesscentrenuneaton.co.uk/wp-content/uploads/2014/04/green-gym-background.jpg");
+        }
+        .heading{
+            color: aliceblue;
+        }
         .image{
             height: 400px;
             width: 400px;
@@ -31,27 +38,34 @@
             transition: all ease .4s;
             width: 25%;
             margin: 10px 0;
-            border: 2px solid orange;
+            border: 2px solid rgb(89, 194, 185);
         }
         .Btns:hover {
             color: white;
-            background: orange;
-            border: 2px solid orange;
+            background: rgb(89, 194, 185);
+            border: 2px solid rgb(89, 194, 185);
             border-radius: 25px;
             padding: 10px;
             border-style: none;
         }
+        h3{
+            margin-top: 50px;
+        }
 
     </style>
     <div class="container-fluid">
-        <div class="container" style="text-align: center;"><img src="https://image.freepik.com/free-vector/health-fitness-cartoon_24640-25691.jpg" alt="" class="image"></div>
-    </div>
-    <div class="container" style="text-align: center;">
+        <div class="container head" style="text-align: center;">
+            <h1 class="heading"><i class="fa fa-heartbeat" aria-hidden="true"></i> Fitness Diaries</h1>
+        </div>
+        <div class="container" style="text-align: center;">
             <h3>Let's get Started</h3>
             <p>Take a small step everyday...</p>
+            <img src="https://image.freepik.com/free-vector/health-fitness-cartoon_24640-25691.jpg" alt="" class="image">
             <button class="Btns mx-auto" type="button" id="loginBtn" onClick="loginBtn()">Log in</button>
             <button class="Btns mx-auto" type="button" id="regBtn" onClick="registerBtn()">Create Account</button>
-    </div>
+        </div>
+
+       
  
     <script>
       function registerBtn(){
