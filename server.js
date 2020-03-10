@@ -7,7 +7,7 @@ const app = express()
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 
-app.post("/api/registration", async function(){
+app.post("/api/registration", async function(req, res){
     const storeUserInfo = await storeRegistrationInfo(req.body);
     // bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
     //   console.log(hash);
@@ -24,9 +24,6 @@ app.post("/api/registration", async function(){
     //       }
       
     //   })
-
-
-
 
   console.log( `[POST api/registration] recieved: `, req.body );
 })

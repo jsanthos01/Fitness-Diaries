@@ -43,8 +43,8 @@ async function postUsersInfo(){
 
 async function storeRegistrationInfo(myPost){
     const myResult = await db.query( 
-        "INSERT INTO users(first_name,last_name,email_address,user_password) VALUES(?,?,?,?)",
-        [ myPost.first_name, myPost.last_name, myPost.email_address, myPost.user_password ] );
+        "INSERT INTO login_credential(my_name,username,user_password) VALUES(?,?,?)",
+        [ myPost.my_name, myPost.username, myPost.user_password]);
     return myResult
     
 }
