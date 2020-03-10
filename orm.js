@@ -33,6 +33,25 @@ const db = new Database({
     database: "fitness_diaries"
 });
 
+//store registration info 
+async function storeRegistrationInfo(myPost){
+    const myResult = await db.query( 
+        "INSERT INTO login_credential(my_name,username,user_password) VALUES(?,?,?)",
+        [ myPost.my_name, myPost.username, myPost.user_password]);
+
+    const storeUsersName = await db.query("INSERT INTO member_name(my_name) VALUES(?)", [myPost.my_name]);
+    
+}
+
+
+//retrieve fullname of user 
+async function getFullName(){
+    const myResult = await db.query("SELECT my_name FROM member_name");
+    return myResult 
+}
+
+
+
 async function getUsersInfo() {
     
 }
@@ -41,15 +60,9 @@ async function postUsersInfo(){
 
 }
 
-async function storeRegistrationInfo(myPost){
-    const myResult = await db.query( 
-        "INSERT INTO login_credential(my_name,username,user_password) VALUES(?,?,?)",
-        [ myPost.my_name, myPost.username, myPost.user_password]);
-    return myResult
-    
-}
 module.exports = {
     storeRegistrationInfo,
+    getFullName,
     getUsersInfo,
     postUsersInfo
 }
