@@ -44,3 +44,7 @@ app.listen(PORT, function () {
 });
 
 
+app.get("/api/user", async function (req, res) {
+  const displayUserBase = await orm.fetchUserBase();
+  res.send(displayUserBase);
+});
