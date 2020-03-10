@@ -15,50 +15,51 @@
     <script>
         window.onload = function() {
             if(localStorage.getItem("userId")){
-                location.href = '/index.html';
+                location.href = '/individual.html';
             }
         };
         
         $(document).ready( async function(){
-          // check if editing or new
+
             $('#submitUserBtn').click( async function(event){
                 event.preventDefault();
-                // disable save button
-                // $('#submitUserBtn').prop('disabled', true);
-                // build our save object
+
                 const usersEmail= $('#userEmail').val();
                 const usersPassword= $('#userPassword').val();
 
+                //checking validation of email and password
                 if( usersEmail == "" ) {
-                        alert( "Please provide your Email!" );
-                        $('#userEmail').focus() ;
-                        return false;
-                    }
-                    if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(usersEmail))) {
-                        alert( "Please provide valid Email!" );
-                        $('#userEmail').focus() ;
-                        return false;
-                    }
-                    if( usersPassword == "" ) {
-                        alert( "Please provide your Password!" );
-                        $('#userPassword').focus() ;
-                        return false;
-                    }
+                    alert( "Please provide your Email!" );
+                    $('#userEmail').focus() ;
+                    return false;
+                } 
 
-                    if(usersPassword.length <8 ) {
-                        alert( "Please provide a password that is atleast 8 character long" );
-                        $('#userPassword').focus() ;
-                        return false;
-                    }
+                if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(usersEmail))) {
+                    alert( "Please provide valid Email!" );
+                    $('#userEmail').focus() ;
+                    return false;
+                }
 
+                if( usersPassword == "" ) {
+                    alert( "Please provide your Password!" );
+                    $('#userPassword').focus() ;
+                    return false;
+                }
+
+                if(usersPassword.length <8 ) {
+                    alert( "Please provide a password that is atleast 8 character long" );
+                    $('#userPassword').focus() ;
+                    return false;
+                }
+
+                //user object
                 const myUser = {
-                        first_name: $('#firstName').val(),
-                        last_name: $('#lastName').val(),
-                        email_address: $('#userEmail').val(),
-                        user_password: $('#userPassword').val()  
-                    };
+                    first_name: $('#firstName').val(),
+                    last_name: $('#lastName').val(),
+                    email_address: $('#userEmail').val(),
+                    user_password: $('#userPassword').val()  
+                };
 
-                
                 let apiResult = await $.post( '/api/registration', myUser );
                 
                 alert( apiResult.message );
@@ -74,10 +75,10 @@
     <main role="main">
 
         <section class="jumbotron text-center">
-        <div class="container">
-            <h1>User Registration</h1>
-            <p class="lead text-muted">Register and have fun saving picture url</p>
-        </div>
+            <div class="container">
+                <h1>User Registration</h1>
+                <p class="lead text-muted">Register and have fun saving picture url</p>
+            </div>
         </section>
     
         <!-- add picture form -->
@@ -90,8 +91,8 @@
             <form role="form">
                 <input type='hidden' id='db_id' value=''>
                 <div class="form-group">
-                <label for="name">First Name</label>
-                <input type="text" class="form-control" id="firstName">
+                    <label for="name">First Name</label>
+                    <input type="text" class="form-control" id="firstName">
                 </div>
                 <div class="form-group">
                     <label for="name">Last Name</label>
