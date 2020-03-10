@@ -26,3 +26,4 @@ CREATE TABLE login_credential(
     user_password VARCHAR(250)
     FOREIGN KEY 
 );
+
