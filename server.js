@@ -7,40 +7,56 @@ const app = express()
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 
+//posts user's registration information inside database
 app.post("/api/registration", async function(req, res){
-    const storeUserInfo = await storeRegistrationInfo(req.body);
-    // bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
-    //   console.log(hash);
-    //   orm.registerUser({
-    //       first_name:req.body.first_name,
-    //       last_name:req.body.last_name,
-    //       email_address:req.body.email_address,
-    //       user_password:hash
+  console.log(req.body);
+  const storeUserInfo = await storeRegistrationInfo(req.body);
+  //   // bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
+  //   //   console.log(hash);
+  //   //   orm.registerUser({
+  //   //       first_name:req.body.first_name,
+  //   //       last_name:req.body.last_name,
+  //   //       email_address:req.body.email_address,
+  //   //       user_password:hash
 
-    //   }).then (function(data){
-    //       console.log(hash);
-    //       if (data){
-    //           res.send('success!')
-    //       }
+  //   //   }).then (function(data){
+  //   //       console.log(hash);
+  //   //       if (data){
+  //   //           res.send('success!')
+  //   //       }
       
-    //   })
+  //   //   })
 
   console.log( `[POST api/registration] recieved: `, req.body );
 })
 
+// //retrieves user's name from the database
+// app.get("/api/getUsersName", async function(req,res) {
+//   const fullName = await getFullName();
+//   console.log(fullName);
+//   res.send(fullName);
+// });
+// //posts user's basic dashboard info on database
+// app.post("api/userInfo", async function(){
+//   const postBasicInfo = await postUsersInfo();
+
+// });
+
+// //retrieves user's basic dashboard info on database
+// app.get("api/userInfo", async function(){
+//     const getBasicInfo = await getUsersInfo();
+// });
 
 
-app.get("api/userInfo", async function(){
-    const getBasicInfo = await getUsersInfo();
-});
-app.post("api/userInfo", async function(){
-    const postBasicInfo = await postUsersInfo()
-});
+
 app.listen(PORT, function () {
   console.log(`[pictures] RUNNING, http://localhost:${PORT}`);
 });
 
 
+
+
+//norma's code
 app.get("/api/user", async function (req, res) {
   const displayUserBase = await orm.fetchUserBase();
   res.send(displayUserBase);

@@ -19,37 +19,66 @@
 <!-- #001b48 // #004581 // #018abd // #97cbdc // #dde8f0-->
 <body>
     <style>
-        .thumbnail-size {
-            width: 100%;
-            height: 15vw;
-            object-fit: cover;
-        }
-        #goalCard:hover {
-          text-decoration: none;
-          color: #001b48;
-          background-color: #dde8f0;
-        }
-        #dietCard:hover{
-          text-decoration: none;
-          color: rgb(30, 85, 74);
-          background-color: rgb(85, 231, 188);
-        }
-        #fitnessCard{
-          color: #97cbdc;
-        }
-        #fitnessCard:hover{
-          text-decoration: none;
-          color: rgb(223, 183, 54);
-          background-color: #97cbdc;
-        }
-        .profilePicture {
-          border-radius: 50%;
-        }
-        .jumbotron{
+      .thumbnail-size {
+          width: 100%;
+          height: 15vw;
+          object-fit: cover;
+      }
+      #goalCard:hover {
+        text-decoration: none;
+        color: #001b48;
+        background-color: #dde8f0;
+      }
+      #dietCard:hover{
+        text-decoration: none;
+        color: rgb(30, 85, 74);
+        background-color: rgb(85, 231, 188);
+      }
+      #fitnessCard{
+        color: #97cbdc;
+      }
+      #fitnessCard:hover{
+        text-decoration: none;
+        color: rgb(223, 183, 54);
+        background-color: #97cbdc;
+      }
+      .profilePicture {
+        border-radius: 50%;
+      }
+      .jumbotron{
 
-        }
+      }
     </style>
+
     <script>
+      $(document).ready(async function(){
+        
+        //get user's name from database and present it inside card
+        const getUsersName = $.get("/api/getUsersName");
+
+
+        $('#submitUserBtn').click( async function(event){
+          event.preventDefault();
+
+          //user object
+          const myUser = {
+              my_name: $('#myName').val(),
+              email_address: $('#userEmail').val(),
+              user_password: $('#userPassword').val()  
+          };
+
+          let apiResult = await $.post( '/api/registration', myUser );
+          
+          alert( apiResult.message );
+          if( apiResult.message ){
+            // registration worked! redirect to the main page (listing thumbnails)
+            location.href = '/individual.html';
+          }
+
+        })
+        
+      })
+
     </script>
     <main role="main">
         <section class="jumbotron text-center container-fluid">
