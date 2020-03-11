@@ -9,13 +9,11 @@ app.use(express.urlencoded({ extended: false }));
 
 //posts user's registration information inside database
 app.post("/api/registration", async function(req, res){
-  console.log(req.body);
   let storeUserInfo = await orm.registrationSql(req.body);
   res.send({
     message: "Success!!!"
   });
 })
-
 
 //retrieves user's name from the database
 app.get("/api/getName", async function(req,res) {
@@ -27,9 +25,8 @@ app.get("/api/getName", async function(req,res) {
 //posts user's basic dashboard info on database
 app.post("/api/userInfo", async function(){
   console.log(req.body);
-  const postBasicInfo = await orm.postUsersInfo(req.body);
-  console.log( `[POST dashboard info] recieved: `, req.body );
-
+//   const postBasicInfo = await orm.postUsersInfo(req.body);
+//   console.log( `[POST dashboard info] recieved: `, req.body );
 });
 
 //retrieves user's basic dashboard info on database
@@ -39,15 +36,9 @@ app.get("/api/userInfo", async function(){
   
 });
 
-
-
-<<<<<<< HEAD
 app.listen(PORT, function () {
   console.log(`[fitness_app] RUNNING, http://localhost:${PORT}`);
 });
-=======
-
->>>>>>> c472ac28a678c86755503bcac4b32cb310397b8c
 
 
 
@@ -73,10 +64,3 @@ app.listen(PORT, function () {
 
   // res.send(sum)
 //----------------------------
-
-
-
-
-app.listen(PORT, function () {
-  console.log(`[pictures] RUNNING, http://localhost:${PORT}`);
-});

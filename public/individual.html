@@ -44,8 +44,8 @@
         color: rgb(30, 85, 74);
         background-color: rgb(85, 231, 188);
       }
-      #fitnessThumbnail{
-      }
+      /* #fitnessThumbnail{
+      } */
       #fitnessThumbnail:hover{
         text-decoration: none;
         color: rgb(223, 183, 54);
@@ -122,9 +122,12 @@
       }
   </style>
   <script>
-    $(document).ready( async function(){
-      const getFullName = $.get("api/getName");
-    })
+
+    //NORMA WILL DO FROM LOCAL STORAGE
+    // $(document).ready( async function(){
+    //   const getFullName = $.get("api/getName");
+    
+    // })
 
     $("#infoButton").on('click', async function() {
       let inputWeight = $("#inputWeight").val();
@@ -145,57 +148,61 @@
 
     } )
 
-    
-
     function recipeCall(){
       var chosenDiet = $("#inputGroupSelectDiet").val();
       console.log(chosenDiet);
 
-      if (chosenDiet == "Vegan" || chosenDiet == "Zone" || chosenDiet == "Low Carb" || chosenDiet == "Atkins" || chosenDiet == "Ultra Low Fat" ){
+      if (chosenDiet == "Vegan" ){
         var settings = {
           "async": true,
           "crossDomain": true,
-          "url": `https://recipe-puppy.p.rapidapi.com/?q=${chosenDiet}`,
-          "method": "GET",
+          "url": "https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi",
+          "method": "POST",
           "headers": {
-            "x-rapidapi-host": "recipe-puppy.p.rapidapi.com",
-            "x-rapidapi-key": "a2d04f2ce0msh0b395c3746199ebp101c55jsne0e6419c8f94"
-          }
+              "x-rapidapi-host": "mycookbook-io1.p.rapidapi.com",
+              "x-rapidapi-key": "a2d04f2ce0msh0b395c3746199ebp101c55jsne0e6419c8f94",
+              "content-type": "text/plain",
+              "accept": "text/plain"
+          },
+          "data": `${recipeUrl}`
         }
 
-        $.ajax(settings).done(function (response) {
-          console.log(response[0].title);
-        });
+        $.ajax(settings).done(showRecipes);
 
       }else {
         alert("Nothing Available right now !! Sorry")
       }
     }
 
-    // function showRecipes(response){
-    //   // $("#dietSections").append(
-    //   //   `
-    //   //   <div class="card">
-    //   //     <img class="card-img-top thumbnail-size" src="${response.thumbnail}" alt="Card image cap">
-    //   //     <div class="card-body">
-    //   //       <h5 class="card-title">${response.}</h5>
-    //   //       <p class="card-text"> is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-    //   //     </div>
-    //   //     <div class="card-body">
-    //   //       <a href="#" class="btn btn-primary">Show Recipe</a>
-    //   //     </div>
-    //   //   </div>
-        
-        
-    //   //   `
-    //   // )
+    function showRecipes(response){
+      console.log(response);
+      // $("#dietSections").empty();
 
-    //   console.log(response);
-    //   console.log(response.title);
-    //   console.log(response.thumbnail);
-    //   console.log(response.href);
+      // var dietResponse = JSON.parse(response);
+      // console.log(dietResponse);
 
-    // }
+      // for(var i = 0; i<3; i++){
+      //   console.log(dietResponse.results[i]);
+      // //   $("#dietSections").append(
+      // //     `
+      // //     <div class="card">
+      // //       <img class="card-img-top thumbnail-size" src="${dietResponse.results[i].thumbnail}" alt="Card image cap">
+      // //       <div class="card-body">
+      // //         <h5 class="card-title">${dietResponse.results[i].title}</h5>
+      // //         <p class="card-text">${dietResponse.results[i].ingredients}</p>
+      // //       </div>
+      // //       <div class="card-body">
+      // //         <a href="${dietResponse.results[i].href}" class="btn btn-primary">Show Recipe</a>
+      // //       </div>
+      // //     </div>
+      // //     `
+      // //   )
+      // // }
+
+    
+
+    
+    }
 
 
     function hideMenu(){
@@ -460,36 +467,7 @@
             <div class="card-body">
               <h3>Top 3 Recipes</h3>
               <div class="card-deck" id="dietSections">
-                <div class="card">
-                  <img class="card-img-top thumbnail-size" src="assets/DD_keto-meals_feat.jpg" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Keto diet</h5>
-                    <p class="card-text"> is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  </div>
-                  <div class="card-body">
-                    <a href="#" class="btn btn-primary">Show Recipe</a>
-                  </div>
-                </div>
-                <div class="card">
-                  <img class="card-img-top thumbnail-size" src="https://www.freshnlean.com/wp-content/uploads/2019/04/keto-dish-chicken-vegetables.jpg" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                  </div>
-                  <div class="card-body">
-                    <a href="#" class="btn btn-primary">Show Recipe</a>
-                  </div>
-                </div>
-                <div class="card">
-                  <img class="card-img-top thumbnail-size" src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/190430-cheesy-bacon-ranch-chicken-226-1556829090.jpg?crop=0.668xw:1.00xh;0.167xw,0&resize=640:*" alt="Card image cap">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                  </div>
-                  <div class="card-body">
-                    <a href="#" class="btn btn-primary">Show Recipe</a>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
