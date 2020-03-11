@@ -122,23 +122,43 @@
       }
   </style>
   <script>
+    //shows the user's name in the dashboard section
+     $(document).ready( async function(){
+      if(localStorage != null){
+        let userData = localStorage.getItem("myUser");
+        userData = JSON.parse(userData);
+        console.log(userData);
+        let myName = userData.my_name;
+        console.log(myName);
 
-    //NORMA WILL DO FROM LOCAL STORAGE
-    // $(document).ready( async function(){
-    //   const getFullName = $.get("api/getName");
-    
-    // })
+        $("#h1Value").html(myName);
+      }
+    })
 
-    $("#infoButton").on('click', async function() {
-      let inputWeight = $("#inputWeight").val();
-      let inputHeight = $("#inputHeight").val();
-      let profileImg = $("#profileImg").val();
-      
+
+  async function insertInfo() {
+      console.log("I AM CLICKED")
+      let weight = $("#insertWeight").val();
+      let height = $("#insertHeight").val();
+      // let profileImg = $("#profileImg").val();
+
+      //get username and post inside database
+      let userData = localStorage.getItem("userData");
+      userData = JSON.parse(userData);
+      let userName = userData.userName;
+
+
+      console.log(userName)
       let userDashboardInfo = {
-        inputWeight: inputWeight,
-        inputHeight: inputHeight,
-        user_img: profileImg
+        userName:userName,
+        inputWeight: weight,
+        inputHeight: height
+        // user_img: profileImg
       };
+
+      console.log(userDashboardInfo);
+
+
 
       const postInfo = await $.post("/api/userInfo", userDashboardInfo);
       console.log(postInfo);
@@ -147,7 +167,7 @@
       console.log("Getting the dashboard info!!!!")
       console.log(getInfo);
 
-    } )
+    } 
 
     function recipeCall(){
       var chosenDiet = $("#inputGroupSelectDiet").val();
@@ -272,25 +292,33 @@
         <div class="card mt-4 col-8">
           <form class="card-body">
             <h3>Add your Information</h3>
-            <div class="input-group mb-3">
+            
+            <div class="form-group">
               <label for="profileImg">Add Profile Image</label>
-              <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="profileImg">
-                  <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
-              </div>
-              <div class="input-group-append">
-                  <span class="input-group-text" id="">Upload</span>
+              <div class="input-group mb-3 ">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="profileImg">
+                    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                    <span class="input-group-text" id="">Upload</span>
+                </div>
               </div>
             </div>
+        
             <div class="form-group">
               <label for="inputWeight">Weight</label>
-              <input type="text" class="form-control" id="inputWeight" placeholder="Insert Your Current Weight">
+              <input type="text" class="form-control" id="insertWeight" placeholder="Insert Your Current Weight">
             </div>
             <div class="form-group">
               <label for="inputHeight">Height</label>
-              <input type="text" class="form-control" id="inputHeight" placeholder="Insert Your Current Height">
+              <input type="text" class="form-control" id="insertHeight" placeholder="Insert Your Current Height">
             </div>
-            <button type="submit" class="btn btn-primary" id="infoButton">Submit</button>
+            <div class="form-group">
+              <label for="insertGoal">Goal</label>
+              <input type="text" class="form-control" id="insertGoal" placeholder="Insert Your Current Goal">
+            </div>
+            <button class="btn btn-primary" type="button" id="insertBtn" onclick="insertInfo()">Submit</button>
           </form>
         </div>
       </div>
@@ -346,7 +374,7 @@
   <main role="main">
     <section class="jumbotron text-center container-fluid">
       <!-- <img src="assets/LibreOffice_MotifScatter_RGB.png" alt=""> -->
-      <h1>Individual Profile</h1>
+      <h1 id="h1Value"> Welcome! </h1>
       <div>
         <div class="container d-flex justify-content-end ">
           <div class="col-lg-4">
@@ -355,10 +383,7 @@
           <div class="col-lg-8 userInfo">
             <div class="">
               <ul class="text-left card-body">
-                <br>
-                <li class="profileName">Name: Jonh doe</li> 
-                <br>
-                <li class="profileName">Weight:    </li>
+                <li class="profileName">Weight:</li>
                 <br>
                 <li class="profileName">Height</li>
                 <br>
@@ -368,7 +393,8 @@
             </div>
           </div>
         </div>
-        <p class="lead text-muted">Inspirational Quote</p>
+
+        <p class="lead text-muted card" id="usersMainGoal">My goal is to do .....!</p>
       </div>
     </section>
     <section class="container allThumbNails">

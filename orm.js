@@ -38,9 +38,9 @@ const db = new Database({
 async function registrationSql(myPost){
     const postUserLogin = await db.query( 
         "INSERT INTO login_credential(my_name,username,user_password) VALUES(?,?,?)",
-        [ myPost.my_name, myPost.email_address, myPost.user_password]);
+        [ myPost.my_name, myPost.userName, myPost.user_password]);
 
-    const storeUsersName = await db.query("INSERT INTO member_name(my_name) VALUES(?)", [myPost.my_name]);
+    const storeUsersName = await db.query("INSERT INTO member_info(my_name, username) VALUES(?,?)", [myPost.my_name, myPost.userName]);
     return postUserLogin, storeUsersName;
 }
 
@@ -52,7 +52,7 @@ async function getFullName(){
 }
 
 async function postUsersInfo(myPost){
-    const postMemberInfo = await db.query("INSERT INTO member_info(weight, height) VALUES(?,?) ", [ myPost.inputWeight, myPost.inputHeight ]);
+    const postMemberInfo = await db.query("INSERT INTO member_info(weight, height) VALUES(?,?) WHERE username=?", [ myPost.inputWeight, myPost.inputHeight, myPost.userName ]);
     return postMemberInfo;
 }
 
@@ -64,6 +64,7 @@ async function loginUser( email, password ) {
     let userFetch = await db.query('SELECT * FROM login_credential WHERE username=?', [ email ] );
     userFetch = JSON.stringify(userFetch); 
     userFetch = JSON.parse(userFetch); 
+    
     console.log( `[loadUser] email='${email}' userFetch:`, userFetch );
 
     if( !userFetch ) {
@@ -102,12 +103,8 @@ async function loginUser( email, password ) {
 
 //-----------------
 
-async function postUsersInfo(){
-}
-
 module.exports = {
     registrationSql,
-    getFullName,
     postUsersInfo,
     getUsersInfo,
     loginUser
