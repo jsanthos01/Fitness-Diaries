@@ -14,9 +14,13 @@
 <body>
     <script>
         window.onload = function() {
-            if(localStorage.getItem("userId")){
-                location.href = '/individual.html';
-            }
+            // if(localStorage.getItem("userId")){
+            //     location.href = '/individual.html';
+            // }
+            let userData = localStorage.getItem("userData");
+            userData = JSON.parse(userData);
+            if( userData.userId )
+            location.href = '/individual.html';
         };
         
         $(document).ready( async function(){

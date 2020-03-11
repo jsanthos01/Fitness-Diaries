@@ -39,11 +39,16 @@
             }
             const checkUser = await $.post("/api/checkuser", userInfo);
             console.log(checkUser.id);
+            console.log(checkUser.my_name);
 
             if (checkUser.id){
               console.log('passwords match!')
-
-              localStorage.setItem("userId", checkUser.id);
+              let userData = {
+                userId: checkUser.id,
+                userName: checkUser.my_name
+              }  
+              
+              localStorage.setItem("userData", JSON.stringify(userData));
 
               console.log("local storage workeddd???")
               location.href = 'individual.html';
@@ -55,7 +60,9 @@
           }
           //norma's add
           $(document).ready(function(){
-            if( localStorage.userId )
+            let userData = localStorage.getItem("userData");
+            userData = JSON.parse(userData);
+            if( userData.userId )
             location.href = '/individual.html';
           });
     </script>

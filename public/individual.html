@@ -124,6 +124,16 @@
   <script>
     $(document).ready( async function(){
       const getFullName = $.get("api/getName");
+      if(localStorage != null){
+        let userData = localStorage.getItem("userData");
+        userData = JSON.parse(userData);
+        console.log(userData);
+        let userName = userData.userName;
+        console.log(userName);
+
+        $("#h1Value").html(userName)
+      }
+      
     })
 
     $("#infoButton").on('click', async function() {
@@ -338,7 +348,7 @@
   <main role="main">
     <section class="jumbotron text-center container-fluid">
       <!-- <img src="assets/LibreOffice_MotifScatter_RGB.png" alt=""> -->
-      <h1>Individual Profile</h1>
+      <h1 id="h1Value"> Welcome! </h1>
       <div>
         <div class="container d-flex justify-content-end ">
           <div class="col-lg-4">
