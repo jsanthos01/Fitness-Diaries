@@ -123,9 +123,81 @@
   </style>
   <script>
     $(document).ready( async function(){
-      const showUserInfo = $.get("api/userInfo");
-        
+      const getFullName = $.get("api/getName");
     })
+
+    $("#infoButton").on('click', async function() {
+      let inputWeight = $("#inputWeight").val();
+      let inputHeight = $("#inputHeight").val();
+      let profileImg = $("#profileImg").val();
+      let userDashboardInfo = {
+        inputWeight: inputWeight,
+        inputHeight: inputHeight,
+        user_img: profileImg
+      };
+
+      const postInfo = await $.post("/api/userInfo", userDashboardInfo);
+      console.log(postInfo);
+
+      const getInfo = await $.get("/api/userInfo");
+      console.log("Getting the dashboard info!!!!")
+      console.log(getInfo);
+
+    } )
+
+    
+
+    function recipeCall(){
+      var chosenDiet = $("#inputGroupSelectDiet").val();
+      console.log(chosenDiet);
+
+      if (chosenDiet == "Vegan" || chosenDiet == "Zone" || chosenDiet == "Low Carb" || chosenDiet == "Atkins" || chosenDiet == "Ultra Low Fat" ){
+        var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": `https://recipe-puppy.p.rapidapi.com/?q=${chosenDiet}`,
+          "method": "GET",
+          "headers": {
+            "x-rapidapi-host": "recipe-puppy.p.rapidapi.com",
+            "x-rapidapi-key": "a2d04f2ce0msh0b395c3746199ebp101c55jsne0e6419c8f94"
+          }
+        }
+
+        $.ajax(settings).done(function (response) {
+          console.log(response[0].title);
+        });
+
+      }else {
+        alert("Nothing Available right now !! Sorry")
+      }
+    }
+
+    // function showRecipes(response){
+    //   // $("#dietSections").append(
+    //   //   `
+    //   //   <div class="card">
+    //   //     <img class="card-img-top thumbnail-size" src="${response.thumbnail}" alt="Card image cap">
+    //   //     <div class="card-body">
+    //   //       <h5 class="card-title">${response.}</h5>
+    //   //       <p class="card-text"> is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+    //   //     </div>
+    //   //     <div class="card-body">
+    //   //       <a href="#" class="btn btn-primary">Show Recipe</a>
+    //   //     </div>
+    //   //   </div>
+        
+        
+    //   //   `
+    //   // )
+
+    //   console.log(response);
+    //   console.log(response.title);
+    //   console.log(response.thumbnail);
+    //   console.log(response.href);
+
+    // }
+
+
     function hideMenu(){
       // alert('something');
       $( "#navMenu" ).hide( "slow" );
@@ -134,10 +206,11 @@
       // alert('something');
       $( "#addInfoWin" ).hide( "slow" );
     }
+
     function hideEditInfo(){
       $( "#editInfoWin" ).hide( "slow" );
-
     }
+
     function showAddInfo(){
       // alert('something');
       $( "#addInfoWin" ).slideDown( "slow" );
@@ -152,7 +225,6 @@
       $( "#navMenu" ).show( "slow" );
     };
     function showGoalCard(){
-      
       $( "#goalCard" ).show( 1500 );
       $('html, body').animate({
         scrollTop: $("#goalCard").offset().top
@@ -172,7 +244,6 @@
       $( "#dietCard" ).hide( "slow" );
     }
     function showfitnessCard(){
-      
       $( "#fitnessCard" ).show( 1500 );
       $('html, body').animate({
         scrollTop: $("#fitnessCard").offset().top
@@ -181,9 +252,6 @@
     function hidefitnessCard(){
       $( "#fitnessCard" ).hide( "slow" );
     }
-
-
-
 
       // $( "#addInfoWin" ).show( "slow" );
   </script>
@@ -196,14 +264,14 @@
         <div class="card mt-4 col-8">
           <form class="card-body">
             <h3>Add your Information</h3>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="firstName">First Name</label>
-                <input type="text" class="form-control" id="firstName" placeholder="Email">
+            <div class="input-group mb-3">
+              <label for="profileImg">Add Profile Image</label>
+              <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="profileImg">
+                  <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
               </div>
-              <div class="form-group col-md-6">
-                <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" id="lastName" placeholder="Email">
+              <div class="input-group-append">
+                  <span class="input-group-text" id="">Upload</span>
               </div>
             </div>
             <div class="form-group">
@@ -214,7 +282,7 @@
               <label for="inputHeight">Height</label>
               <input type="text" class="form-control" id="inputHeight" placeholder="Insert Your Current Height">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" id="infoButton">Submit</button>
           </form>
         </div>
       </div>
@@ -257,15 +325,16 @@
         </div>
         <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 75px;">
         <li class="navItem"><a class="navLink" onClick="showAddInfo( )" >Add Info</a></li>
-        <li class="navItem"><a class="navLink" href="#" onClick="showEditInfo( )" >Edit Info</a></li>
+        <li class="navItem"><a class="navLink" href="#" onClick="showEditInfo()" >Edit Info</a></li>
         <li class="navItem"><a class="navLink" href="#">Log Out</a></li>
       </ul>
     </div>
     <div class="col-lg-11"></div>
-    <div class="col-lg-1 menuProImg" onClick="showMenu( )" >
+    <div class="col-lg-1 menuProImg" onClick="showMenu()" >
       <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 50px;">
     </div>
   </div>
+
   <main role="main">
     <section class="jumbotron text-center container-fluid">
       <!-- <img src="assets/LibreOffice_MotifScatter_RGB.png" alt=""> -->
@@ -273,7 +342,7 @@
       <div>
         <div class="container d-flex justify-content-end ">
           <div class="col-lg-4">
-              <img src="assets/download.png" alt="" class="profilePicture">
+            <img src="assets/download.png" alt="" class="profilePicture">
           </div>
           <div class="col-lg-8 userInfo">
             <div class="">
@@ -291,7 +360,7 @@
             </div>
           </div>
         </div>
-        <p class="lead text-muted">My goal is to ...........</p>
+        <p class="lead text-muted">Inspirational Quote</p>
       </div>
     </section>
     <section class="container allThumbNails">
@@ -373,15 +442,15 @@
           <h3>Diet</h3>
           <h4>Current Diet you are following: keto</h4>
           <div class="input-group mb-3">
-            <select class="custom-select" id="inputGroupSelectDiet">
-              <option selected>Choose a Diet</option>
-              <option value="1">The Paleo Diet</option>
-              <option value="2">The Vegan Diet</option>
-              <option value="3">Low-Carb Diets</option>
-              <option value="4">The Dukan Diet</option>
-              <option value="5">The Ultra-Low-Fat Diet</option>
-              <option value="6">The Atkins Diet</option>
-              <option value="7">The Zone Diets</option>
+            <select class="custom-select" id="inputGroupSelectDiet" onchange="recipeCall()">
+              <option>Choose a Diet</option>
+              <option value="Paleo">The Paleo Diet</option>
+              <option value="Vegan">The Vegan Diet</option>
+              <option value="Low Carb ">Low-Carb Diets</option>
+              <option value="Dukan">The Dukan Diet</option>
+              <option value="Ultra Low Fat">The Ultra-Low-Fat Diet</option>
+              <option value="Atkins">The Atkins Diet</option>
+              <option value="Zone">The Zone Diets</option>
             </select>
             <div class="input-group-append">
               <label class="input-group-text" for="inputGroupSelectDiet">Options</label>
