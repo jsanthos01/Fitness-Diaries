@@ -34,13 +34,14 @@ const db = new Database({
 });
 
 //store registration info 
-async function storeRegistrationInfo(myPost){
-    const myResult = await db.query( 
+
+async function registrationSql(myPost){
+    const postUserLogin = await db.query( 
         "INSERT INTO login_credential(my_name,username,user_password) VALUES(?,?,?)",
-        [ myPost.my_name, myPost.username, myPost.user_password]);
+        [ myPost.my_name, myPost.email_address, myPost.user_password]);
 
     const storeUsersName = await db.query("INSERT INTO member_name(my_name) VALUES(?)", [myPost.my_name]);
-    
+    return postUserLogin;
 }
 
 
@@ -50,7 +51,15 @@ async function getFullName(){
     return myResult 
 }
 
+async function postUsersInfo(myPost){
+    const postMemberInfo = await db.query("INSERT INTO member_info(user_img, weight, height) VALUES(?,?,?)", [myPost.user_img, myPost.inputWeight, myPost.inputHeight ]);
+    return postMemberInfo;
+}
 
+async function getUsersInfo() {
+    const myInfo = await db.query("SELECT weight, height, user_image FROM member_info");
+    return myInfo
+}
 //norma's code
 async function getUsersInfo(myId) {
     const userInfo =await db.query("SELECT * FROM member_info WHERE id=?", [ myId ]);
@@ -85,9 +94,9 @@ async function postUsersInfo(){
 }
 
 module.exports = {
-    storeRegistrationInfo,
+    registrationSql,
     getFullName,
-    getUsersInfo,
-    postUsersInfo
+    postUsersInfo,
+    getUsersInfo
 }
 
