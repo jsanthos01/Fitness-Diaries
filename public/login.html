@@ -46,7 +46,7 @@
               localStorage.setItem("userId", checkUser.id);
 
               console.log("local storage workeddd???")
-              location.href = '/index.html';
+              location.href = 'individual.html';
             }else{
               // alert("PASSWORD IS NOT CORRECT");
               alert( checkUser.error );
@@ -56,7 +56,7 @@
           //norma's add
           $(document).ready(function(){
             if( localStorage.userId )
-            location.href = '/index.html';
+            location.href = '/individual.html';
           });
     </script>
 

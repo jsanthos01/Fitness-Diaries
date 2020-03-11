@@ -10,11 +10,43 @@ app.use(express.urlencoded({ extended: false }));
 //posts user's registration information inside database
 app.post("/api/registration", async function(req, res){
   console.log(req.body);
+  // const storeUserInfo = await storeRegistrationInfo(req.body);
+    // bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
+    //   console.log(hash);
+      // orm.registerUser({
+      //     first_name:req.body.first_name,
+      //     last_name:req.body.last_name,
+      //     email_address:req.body.email_address,
+      //     user_password:hash
+
+      // }).then (function(data){
+      //     console.log(hash);
+      //     if (data){
+      //         res.send('success!')
+      //     }
+      
+      // })
+
+  console.log( `[POST api/registration] recieved: `, req.body );
+  res.send({ message: 'success!'})
   let storeUserInfo = await orm.registrationSql(req.body);
   res.send({
     message: "Success!!!"
   });
 })
+
+app.post("/api/checkuser", async function(req, res){
+    console.log(req.body)
+    const userEmail = req.body.userEmail;
+    const userPassword = req.body.userPassword;
+    const userData = await orm.loginUser(userEmail, userPassword);
+    console.log(userData)
+    // if( !userData ){
+    // res.send( { error: 'Sorry unknown user or wrong password' } );
+    // }
+    res.send(userData);
+   });
+
 
 
 //retrieves user's name from the database
@@ -41,13 +73,10 @@ app.get("/api/userInfo", async function(){
 
 
 
-<<<<<<< HEAD
 app.listen(PORT, function () {
   console.log(`[fitness_app] RUNNING, http://localhost:${PORT}`);
 });
-=======
 
->>>>>>> c472ac28a678c86755503bcac4b32cb310397b8c
 
 
 
@@ -76,7 +105,3 @@ app.listen(PORT, function () {
 
 
 
-
-app.listen(PORT, function () {
-  console.log(`[pictures] RUNNING, http://localhost:${PORT}`);
-});
