@@ -59,9 +59,8 @@ app.get("/api/getName", async function(req,res) {
 //posts user's basic dashboard info on database
 app.post("/api/userInfo", async function(){
   console.log(req.body);
-  const postBasicInfo = await orm.postUsersInfo(req.body);
-  console.log( `[POST dashboard info] recieved: `, req.body );
-
+//   const postBasicInfo = await orm.postUsersInfo(req.body);
+//   console.log( `[POST dashboard info] recieved: `, req.body );
 });
 
 //retrieves user's basic dashboard info on database

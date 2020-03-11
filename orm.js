@@ -29,7 +29,7 @@ const db = new Database({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "root1234", //change 
+    password: "bootcamp2020", //change 
     database: "fitness_diaries"
 });
 
@@ -41,7 +41,7 @@ async function registrationSql(myPost){
         [ myPost.my_name, myPost.email_address, myPost.user_password]);
 
     const storeUsersName = await db.query("INSERT INTO member_name(my_name) VALUES(?)", [myPost.my_name]);
-    return postUserLogin;
+    return postUserLogin, storeUsersName;
 }
 
 
@@ -52,18 +52,13 @@ async function getFullName(){
 }
 
 async function postUsersInfo(myPost){
-    const postMemberInfo = await db.query("INSERT INTO member_info(user_img, weight, height) VALUES(?,?,?)", [myPost.user_img, myPost.inputWeight, myPost.inputHeight ]);
+    const postMemberInfo = await db.query("INSERT INTO member_info(weight, height) VALUES(?,?) ", [ myPost.inputWeight, myPost.inputHeight ]);
     return postMemberInfo;
 }
 
 async function getUsersInfo() {
     const myInfo = await db.query("SELECT weight, height, user_image FROM member_info");
     return myInfo
-}
-//norma's code
-async function getUsersInfo(myId) {
-    const userInfo =await db.query("SELECT * FROM member_info WHERE id=?", [ myId ]);
-    return userInf0[0];   
 }
 async function loginUser( email, password ) {
     let userFetch = await db.query('SELECT * FROM login_credential WHERE username=?', [ email ] );
@@ -76,6 +71,14 @@ async function loginUser( email, password ) {
     }
     return userFetch[0]
 }
+   
+
+// //norma's code
+// async function getUsersInfo(myId) {
+//     const userInfo =await db.query("SELECT * FROM member_info WHERE id=?", [ myId ]);
+//     return userInf0[0];   
+// }
+
 //query to fetch all user image to display
 //whats the order of showing images
 
@@ -100,7 +103,6 @@ async function loginUser( email, password ) {
 //-----------------
 
 async function postUsersInfo(){
-
 }
 
 module.exports = {
