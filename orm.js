@@ -29,7 +29,7 @@ const db = new Database({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "bootcamp2020", //change 
+    password: "root1234", //change 
     database: "fitness_diaries"
 });
 
@@ -51,6 +51,7 @@ async function getFullName(){
     return myResult 
 }
 
+<<<<<<< HEAD
 async function postUsersInfo(myPost){
     const postMemberInfo = await db.query("INSERT INTO member_info(user_img, weight, height) VALUES(?,?,?)", [myPost.user_img, myPost.inputWeight, myPost.inputHeight ]);
     return postMemberInfo;
@@ -59,6 +60,40 @@ async function postUsersInfo(myPost){
 async function getUsersInfo() {
     const myInfo = await db.query("SELECT weight, height, user_image FROM member_info");
     return myInfo
+=======
+
+//norma's code
+async function getUsersInfo(myId) {
+    const userInfo =await db.query("SELECT * FROM member_info WHERE id=?", [ myId ]);
+    return userInf0[0];   
+}
+
+//query to fetch all user image to display
+//whats the order of showing images
+
+//------
+//query to get group post
+//get last 10 posts from the database
+//get username, imag, timestamp
+//----
+
+//like button 
+
+//query to get top 3 data 
+//from weight table
+
+//winners of last week, winners of last month
+
+
+
+
+
+
+//-----------------
+
+async function postUsersInfo(){
+
+>>>>>>> c472ac28a678c86755503bcac4b32cb310397b8c
 }
 
 module.exports = {

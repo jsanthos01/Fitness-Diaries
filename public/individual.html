@@ -563,6 +563,48 @@
             </div>
           </div>
         </div>
+      </footer>
+
+      <script>
+
+        //norma's code
+        //add save button to page
+        //logout
+        function logOut(){  
+            localStorage.clear();
+            location.href = '/login.html';
+        }
+        //populating user dashboard from database
+        $(document).ready( async function(){
+          const userid = localStorage.userId;
+          const showUserInfo = $.get("/api/user/:userid");
+          console.log(showUserInfo);
+            
+        })
+        //------
+        //we should automatically conver weight to metric
+        //if(weight && height){
+        //  getbmi();
+        //} function getbmi = w in kg/(height)square
+
+        //-------------
+        // PUT call add button
+        //---------------
+
+        //--------------
+        // PUT edit button
+        //-----------------
+
+        //---------------
+        //display goal
+        //---------------
+
+
+        //--------------------
+        //diet fitness api call
+        //---------------
+
+      </script>
       </div>
     </section>
   </main>

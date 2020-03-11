@@ -20,7 +20,7 @@ CREATE TABLE member_info(
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_img VARCHAR(250),
     my_name VARCHAR(250) NOT NULL,
-    weight DECIMAL(4,2),
+    my_weight DECIMAL(4,2),
     height DECIMAL(4,2),
     BMI DECIMAL(4,2),
     goal VARCHAR(250),
@@ -28,6 +28,11 @@ CREATE TABLE member_info(
     member_id INT,
     FOREIGN KEY (member_id) REFERENCES login_credential(id)
 );
+
+-- CREATE TABLE weight_history(
+--     weight_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+--     weight_past INTEGER 
+-- );
 
 CREATE TABLE member_goal(
     goal_id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -52,6 +57,19 @@ CREATE TABLE group_posts(
     update_time DATETIME ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- CREATE TABLE thumbs_up(
+--     id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+--     thumbs_upimage VARCHAR(250),
+--     total_thumbsup INT,
+--     thumbup_id INT,     
+--     FOREIGN KEY (member_id) REFERENCES group_posts(id)
+-- );
+
+
+
+INSERT INTO login_credential(my_name, username, user_password, user_img,) VALUES('Elsa', 'elsausername', 'hashpasswordelsa', 'assets/userdb/user_one.png');
+INSERT INTO login_credential(my_name, username, user_password, user_img,) VALUES('Fiona', 'fionausername', 'hashpasswordfiona', 'assets/userdb/user_two.png');
+
 INSERT INTO member_name (my_name) VALUES('Elsa');
 INSERT INTO member_name (my_name) VALUES('Tinker');
 INSERT INTO member_name (my_name) VALUES('Hermi');
@@ -61,13 +79,8 @@ INSERT INTO member_name (my_name) VALUES('Ann');
 INSERT INTO member_name (my_name) VALUES('Jane');
 
 
-
-
-INSERT INTO member_info (my_name, my_weight, my_height, BMI, goal, diet) VALUES('Elsa', 116, 156, 29, 5, "loose weight by walk');
-INSERT INTO member_info (my_name, my_weight, my_height, BMI, goal, diet) VALUES('Fiona', 200, 165, 37.8, 10, "loose weight by walk');
-
-INSERT INTO login_credential(my_name, username, user_password, user_img,) VALUES('Elsa', 'elsausername', 'hashpasswordelsa', '');
-INSERT INTO login_credential(my_name, username, user_password, user_img,) VALUES('Fiona', 'fionausername', 'hashpasswordfiona', '');
+INSERT INTO member_info (my_name, my_weight, my_height, BMI, goal, diet) VALUES('Elsa', 116, 156, 29, 5, 'loose weight by walk');
+INSERT INTO member_info (my_name, my_weight, my_height, BMI, goal, diet) VALUES('Fiona', 200, 165, 37.8, 10, 'loose weight by walk');
 
 
 INSERT INTO member_goal (goal_message) VALUES('i want to loose 10pounds');
@@ -75,7 +88,11 @@ INSERT INTO member_goal (goal_message) VALUES('i want to loose 5 pounds follow k
 
 INSERT INTO group_goal (goal_message) VALUES(x);
 
-INSERT INTO top_three (name, weight, user_img) VALUES('Elsa', 116, 'userimg');
-INSERT INTO top_three (name, weight, user_img) VALUES('Elsa', 116, 'userimg');
+## INSERT INTO top_three (name, weight, user_img) VALUES('Elsa', 116, 'assets/userdb/user_one.png');
+## INSERT INTO top_three (name, weight, user_img) VALUES('Elsa', 116, 'assets/userdb/user_two.png');
+
+INSERT INTO group_posts()
+
+
 
 
