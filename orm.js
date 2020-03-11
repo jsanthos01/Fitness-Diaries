@@ -65,7 +65,17 @@ async function getUsersInfo(myId) {
     const userInfo =await db.query("SELECT * FROM member_info WHERE id=?", [ myId ]);
     return userInf0[0];   
 }
+async function loginUser( email, password ) {
+    let userFetch = await db.query('SELECT * FROM login_credential WHERE username=?', [ email ] );
+    userFetch = JSON.stringify(userFetch); 
+    userFetch = JSON.parse(userFetch); 
+    console.log( `[loadUser] email='${email}' userFetch:`, userFetch );
 
+    if( !userFetch ) {
+       return false;
+    }
+    return userFetch[0]
+}
 //query to fetch all user image to display
 //whats the order of showing images
 
@@ -97,6 +107,6 @@ module.exports = {
     registrationSql,
     getFullName,
     postUsersInfo,
-    getUsersInfo
+    getUsersInfo,
+    loginUser
 }
-

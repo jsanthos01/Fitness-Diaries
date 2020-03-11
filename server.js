@@ -35,6 +35,19 @@ app.post("/api/registration", async function(req, res){
   });
 })
 
+app.post("/api/checkuser", async function(req, res){
+    console.log(req.body)
+    const userEmail = req.body.userEmail;
+    const userPassword = req.body.userPassword;
+    const userData = await orm.loginUser(userEmail, userPassword);
+    console.log(userData)
+    // if( !userData ){
+    // res.send( { error: 'Sorry unknown user or wrong password' } );
+    // }
+    res.send(userData);
+   });
+
+
 
 //retrieves user's name from the database
 app.get("/api/getName", async function(req,res) {
