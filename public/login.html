@@ -19,11 +19,13 @@
         }
     </style>
     <script>
-          window.onload = function() {
-              if(localStorage.getItem("userId")){
-                  location.href = '/index.html';
-              }
-          };
+
+          //norma's delete
+          // window.onload = function() {
+          //     if(localStorage.getItem("userId")){
+          //         location.href = '/index.html';
+          //     }
+          // };-------------------
 
           function registerBtn(){
             location.href = '/registration.html';
@@ -51,6 +53,11 @@
             }
 
           }
+          //norma's add
+          $(document).ready(function(){
+            if( localStorage.userId )
+            location.href = '/index.html';
+          });
     </script>
 
     <main role="main">
