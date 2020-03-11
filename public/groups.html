@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pictures</title>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+
+
+    </head>
+        <!-- background #121f3f // 
+        gradient from #49c4cc to #40e0d0 //#cdedf7//
+        leaf colors #0f444a // // #29a37d //   
+        button gradient from #f84c00  to #f9c724 -->
+    <body>
+    <style>
+        body {
+            height: 100%;
+            color: #100048;
+            background-color: #cdedf7;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .thumbnail-size {
+            width: 100%;
+            height: 15vw;
+            object-fit: cover;
+        }
+        #goalThumbnail:hover {
+            text-decoration: none;
+            color: #001b48;
+            background-color: #dde8f0;
+        }
+        #dietThumbnail:hover{
+            text-decoration: none;
+            color: rgb(30, 85, 74);
+            background-color: rgb(85, 231, 188);
+        }
+        #fitnessThumbnail:hover{
+            text-decoration: none;
+            color: rgb(223, 183, 54);
+            background-color: #97cbdc;
+        }
+        .profilePicture {
+            border-radius: 50%;
+        }
+        .profileName {
+            padding: 10px;
+            background-image: linear-gradient(45deg, #f84c00, #f9c724);
+            width: 60%;
+            border-radius: 10px;
+        }
+        .jumbotron{
+            
+        }
+        .navBar{
+            width: 100%;
+            /* background: navy; */
+            position: absolute;
+            z-index: 200;
+            
+        }
+        ul {
+            list-style: none;
+        }
+        .navMenu{
+            /* background: red; */
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 100;
+        }
+        #addGroupWin{
+            height: 160vh;
+            background-image: linear-gradient(45deg, #f84a00de, #f9c724de);
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 20;
+        }
+        #editInfoWin{
+            height: 160vh;
+            background-image: linear-gradient(45deg, #0f444ade, #29a37cde);
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 20;
+        }
+        .navLink {
+            padding: 10px;
+            display: block;
+        }
+        .navLink:hover {
+            background: #dde8f0;
+            text-decoration: none;
+        }
+        .hide {
+            display: none;
+        }
+        .addMemberIcon{
+            padding: 20px;
+        }
+        .groupMenu, .addMemberIcon, .addGroupIcon{
+            cursor: pointer;
+        }
+        .addMemberIcon:hover {
+            background: rgb(220, 221, 221);
+        }
+        .individualGroup {
+            width: 200px;
+            /* width: 100;
+            height: 100; */
+            }
+        .groupImg{
+            border-radius: 50%;
+            width: 15vw;
+            height: 30vh;
+            object-fit: cover;
+        }
+    </style>
+    <script>
+        $(document).ready( async function(){
+
+        })
+        function showMenu(){
+        $( "#navMenu" ).show( "slow" );
+        };
+        function hideMenu(){
+        // alert('something');
+        $( "#navMenu" ).hide( "slow" );
+        }
+        function showAddGroupWin(){
+        // alert('something');
+        $( "#addGroupWin" ).slideDown( "slow" );
+        $( "#navMenu" ).hide( "slow" );
+        }
+        function hideAddGroupWin(){
+        // alert('something');
+        $( "#addGroupWin" ).hide( "slow" );
+        }
+        function showAddMemberForm(){
+                $( "#memberForm" ).show( 1000 );
+                $('html, body').animate({
+                    scrollTop: $("#memberForm").offset().top
+                }, 1000);
+            }
+        async function addMember(){
+            event.preventDefault();
+            const member = {
+                memberName: $("#inputUserName").val(),
+                memberEmail: $("#inputUserEmail").val()
+            }
+
+            $('#membersListDisplay').append(`<div class="col-md-3">
+                            <div class="mb-2 box-shadow">
+                                <div class="card-body row justify-content-center">
+                                    <img class="groupImg card-img-top" src="https://us.123rf.com/450wm/langstrup/langstrup1609/langstrup160900056/63909093-group-of-eight-happy-muscular-female-and-male-adults-standing-together-as-good-friends-in-gym-with-l.jpg?ver=6" alt="Card image cap">
+                                </div>
+                                <div class="card-body row justify-content-center">
+                                    <p>${member.memberName}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`)
+            //===============================
+            
+
+            //========
+            console.log(member.memberName)
+            // await $.post()
+            $("#inputUserName").val("");
+            $("#inputUserEmail").val("");
+            $( "#memberForm" ).hide();
+
+        }
+        async function createGrp(){
+            event.preventDefault();
+            const group = {
+                groupName: $("#groupName").val(),
+                groupGoal: $("#groupGoal").val(),
+                groupImageUrl: $("#groupImgUrl").val()
+            }
+            $("#groupsRow").append(`
+            <div class="col-md-3">
+                <div class="mb-2 box-shadow">
+                    <img class="groupImg card-img-top" src="${group.groupImageUrl}" alt="Card image cap">
+                    <div class="card-body">
+                        <p class="card-text">${group.groupName}</p>
+                        <p class="card-text">6 people</p>
+                        <div class="d-flex justify-content-center">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                        </div>
+                    </div>
+                    <br>
+                    <small class="text-muted">Created On: 9 mins</small>
+                    </div>
+                </div>
+            </div>
+            `)
+            $( "#addGroupWin" ).hide( "slow" );
+        }
+        function showGroupDetailInfo(idx){
+            $( "#groupDetailInfo" ).show( "slow" );
+            $('html, body').animate({
+                    scrollTop: $("#groupDetailInfo").offset().top
+                }, 1000);
+        }
+    </script>
+    <div class="navBar d-flex justify-content-end">
+        <div id="addGroupWin" class="window container-fluid hide card-body">
+            <div class="d-flex justify-content-end">
+                <i class="fa fa-times" onClick="hideAddGroupWin()" aria-hidden="true"></i>
+            </div>
+            <div class="d-flex justify-content-center">
+                <div class="card mt-4 col-8">
+                <form class="card-body">
+                    <h3>Add your Group</h3>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="groupName">Group Name</label>
+                            <input type="text" class="form-control" id="groupName" placeholder="Insert Group Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="groupGoal">Group Goal</label>
+                        <input type="text" class="form-control" id="groupGoal" placeholder="Insert Your Current Height">
+                    </div>
+                    <div class="form-group">
+                        <label for="groupImgUrl">Group Image</label>
+                        <input type="text" class="form-control" id="groupImgUrl" placeholder="Enter url for the image">
+                    </div>
+                    <div class="form-group disabled">
+                        <label for="inputGroupImg">Upload Group Image Disable for now</label>
+                        <div class="input-group mb-3" id="inputGroupImg">
+                            <div class="custom-file">
+                                <input type="text" class="custom-file-input" id="inputGroupFile02">
+                                <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="">Upload</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" onClick="createGrp()">Create Group</button>
+                </form>
+                </div>
+            </div>
+        </div>
+        <div class="navMenu col-lg-3 card hide" id="navMenu">
+            <ul class="card-body text-center">
+                <div class="text-right" id="menuCloseBtn">
+                <i class="fa fa-times" onClick="hideMenu()" aria-hidden="true"></i>
+                </div>
+                <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 75px;">
+                <li class="navItem"><a class="navLink">view something</a></li>
+                <li class="navItem"><a class="navLink" href="#">My Profile</a></li>
+                <li class="navItem"><a class="navLink" href="#">Log Out</a></li>
+            </ul>
+        </div>
+        <div class="col-lg-11"></div>
+        <div class="col-lg-1 groupMenu" onClick="showMenu()">
+            <img src="assets/download.png" alt="" class="m-2 " style="width: 50px;">
+        </div>
+    </div>
+    <main role="main">
+        <section class="jumbotron text-center container-fluid">
+            <div class="hero card-body d-flex justify-content-center">
+                <h1 class="col-11">My Groups</h1>
+                <div class="col-1">
+                    <img src="assets/plus_gray.png" class="addGroupIcon" alt="" onClick="showAddGroupWin()" style="width: 50px;"> 
+                </div>
+            </div>
+            <div class="groupList card">
+                <div class="card-body">
+                    <h3>Group List</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="groupsRow">
+                        <div class="col-md-3">
+                            <div class="mb-2 box-shadow">
+                                <img class="groupImg card-img-top" src="https://us.123rf.com/450wm/langstrup/langstrup1609/langstrup160900056/63909093-group-of-eight-happy-muscular-female-and-male-adults-standing-together-as-good-friends-in-gym-with-l.jpg?ver=6" alt="Card image cap">
+                                <div class="card-body">
+                                    <p class="card-text">Norma's group</p>
+                                    <p class="card-text">6 people</p>
+                                    <div class="d-flex justify-content-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" onClick="showGroupDetailInfo()">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                    </div>
+                                </div>
+                                <br>
+                                <small class="text-muted">Created On: 9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="groupInfo container hide" id="groupDetailInfo">
+            <div class="d-flex justify-content-center">
+                <div class="text-center">
+                    <h3>Group Name</h3>
+                    <img src="assets/add.png" alt="" class="addMemberIcon" onClick="showAddMemberForm()" style="width: 100px;" >
+                    <p>Add member</p>
+                </div>
+            </div>
+            <div class="card addMemberForm hide" id="memberForm">
+                <div class="form-group card-body" >
+                    <div class="form-group">
+                        <label for="inputUserName">Users</label>
+                        <input type="text" class="form-control" id="inputUserName" placeholder="Insert User Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputUserEmail">Email Adress of the Group Member</label>
+                        <input type="Email" class="form-control" id="inputUserEmail" placeholder="Insert Members Email Address">
+                    </div>
+                    <button type="submit" class="btn btn-primary" onClick="addMember()">Add Member</button>
+                </div>
+            </div>
+            <section class="card-body">
+                <div class="memberList card">
+                    <div class="card-body">
+                        <h3>members List</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="membersListDisplay">
+                            <div class="col-md-3">
+                                <div class="mb-2 box-shadow">
+                                    <div class="card-body row justify-content-center">
+                                        <img class="groupImg card-img-top" src="https://us.123rf.com/450wm/langstrup/langstrup1609/langstrup160900056/63909093-group-of-eight-happy-muscular-female-and-male-adults-standing-together-as-good-friends-in-gym-with-l.jpg?ver=6" alt="Card image cap">
+                                    </div>
+                                    <div class="card-body row justify-content-center">
+                                        <p>Member Name</p>
+                                        <div class="d-flex justify-content-center">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+    <footer class="container d-flex justify-content-around">
+        <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+        </div>
+    </footer>
+</body>
+</html>

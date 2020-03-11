@@ -13,9 +13,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
 </head>
 <body>
     <style>
+        body {
+        height: 100%;
+        color: #100048;
+        background-color: #08144b;
+        font-family: 'Montserrat', sans-serif;
+      }
         .thumbnail-size {
             width: 100%;
             height: 15vw;
@@ -27,26 +34,41 @@
         .profilePicture {
           border-radius: 50%;
         }
+        .jumbotron{
+        color: #cdedf7;
+        background-image: url(assets/LibreOffice_MotifScatter_RGB.png), radial-gradient(
+        rgba(42, 49, 59, 0.1), 
+        #121f3f
+        );
+        background-repeat: no-repeat;
+        background-size:contain;
+        background-color: #121f3f;
+        background-position-x: -20px;
+      }
     </style>
     <script>
     </script>
     <main role="main">
-        <section class="jumbotron text-center container-fluid d-flex justify-content-around">
-            <img src="assets/PossibleGlumAcouchi-small.gif" style="width: 30%;" alt="Flowers in Chania" width="">
-            <div class="col-4">
-                <h3>Total point: 523</h3>
-                <div class="card-body">
-                    <h5>Top 3</h5>
-                    <div class="row card-body">
-                        <img src="assets/download.png" alt="" class="profilePicture" style="width: 20%;">
-                        <h6 class="mt-4">nancy stewar </h6>
-                        <h6 class="mt-4">: 200</h6>
-                    </div>
-                    <div class="card">
+        <section class="jumbotron text-center container-fluid ">
+            <h1 class="text-center">Group Name</h1>
+            <br>
+            <div class="d-flex justify-content-around" >
+                <img src="assets/PossibleGlumAcouchi-small.gif" style="width: 30%;" alt="Flowers in Chania" width="">
+                <div class="col-4">
+                    <h3>Total point: 523</h3>
+                    <div class="card-body">
+                        <h5>Top 3</h5>
                         <div class="row card-body">
                             <img src="assets/download.png" alt="" class="profilePicture" style="width: 20%;">
-                            <h6 class="mt-4">someone name </h6>
-                            <h6 class="mt-4">: 100</h6>
+                            <h6 class="mt-4">nancy stewar </h6>
+                            <h6 class="mt-4">: 200</h6>
+                        </div>
+                        <div class="row card-body">
+                            <div class="row card-body">
+                                <img src="assets/download.png" alt="" class="profilePicture" style="width: 20%;">
+                                <h6 class="mt-4">someone name </h6>
+                                <h6 class="mt-4">: 100</h6>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -71,42 +93,6 @@
                 </div>
                 <div class="userImg col-2">
                     <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePicture" style="width: 100px;"></a>
-                </div>
-            </div>
-        </section>
-        <section class="container card">
-            <div class="card-body d-flex justify-content-around ">
-                <a href="#goal" class="card border-primary col-4">
-                    <div class="card-body text-primary">
-                      <h5 class="card-title">Goal</h5>
-                      <div>
-                        <div class="walk">
-                          <div class="">walk</div>
-                          <div class="progress mt-2">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                        </div>
-                        <div class="lunge mt-2">
-                          lunge
-                          <div class="progress mt-2">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <!-- </div> -->
-                </a>
-                <div class="card border-secondary col-4" style="max-width: 18rem;">
-                  <div class="card-body text-secondary">
-                    <h5 class="card-title">Diet</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  </div>
-                </div>
-                <div class="card border-success col-4" style="max-width: 18rem;">
-                  <div class="card-body text-success">
-                    <h5 class="card-title">Fitness</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  </div>
                 </div>
             </div>
         </section>
