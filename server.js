@@ -10,24 +10,25 @@ app.use(express.urlencoded({ extended: false }));
 //posts user's registration information inside database
 app.post("/api/registration", async function(req, res){
   console.log(req.body);
-  const storeUserInfo = await storeRegistrationInfo(req.body);
-  //   // bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
-  //   //   console.log(hash);
-  //   //   orm.registerUser({
-  //   //       first_name:req.body.first_name,
-  //   //       last_name:req.body.last_name,
-  //   //       email_address:req.body.email_address,
-  //   //       user_password:hash
+  // const storeUserInfo = await storeRegistrationInfo(req.body);
+    // bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
+    //   console.log(hash);
+      // orm.registerUser({
+      //     first_name:req.body.first_name,
+      //     last_name:req.body.last_name,
+      //     email_address:req.body.email_address,
+      //     user_password:hash
 
-  //   //   }).then (function(data){
-  //   //       console.log(hash);
-  //   //       if (data){
-  //   //           res.send('success!')
-  //   //       }
+      // }).then (function(data){
+      //     console.log(hash);
+      //     if (data){
+      //         res.send('success!')
+      //     }
       
-  //   //   })
+      // })
 
   console.log( `[POST api/registration] recieved: `, req.body );
+  res.send({ message: 'success!'})
 })
 
 // //retrieves user's name from the database

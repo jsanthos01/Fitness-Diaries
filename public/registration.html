@@ -59,13 +59,13 @@
                 };
 
                 let apiResult = await $.post( '/api/registration', myUser );
-                
-                alert( apiResult.message );
                 if( apiResult.message ){
-                    // registration worked! redirect to the main page (listing thumbnails)
-                    location.href = '/individual.html';
+                    alert( apiResult.message );
+                    // registration worked! redirect to the main page
+                    location.href = 'individual.html';
+                }else {
+                    alert( apiResult.error );
                 }
-
             })
         })
     </script>
