@@ -149,7 +149,7 @@
       const postInfo = await $.post("/api/userInfo", userDashboardInfo);
       console.log(postInfo);
 
-      const getInfo = await $.get("/api/userInfo");
+      const getInfo = await $.get("/api/userInfo/:");
       console.log("Getting the dashboard info!!!!")
       console.log(getInfo);
 
