@@ -29,7 +29,10 @@ CREATE TABLE member_info(
     FOREIGN KEY (member_id) REFERENCES login_credential(id)
 );
 
-## weight history table
+-- CREATE TABLE weight_history(
+--     weight_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+--     weight_past INTEGER 
+-- );
 
 CREATE TABLE member_goal(
     goal_id INTEGER AUTO_INCREMENT PRIMARY KEY,
