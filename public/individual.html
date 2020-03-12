@@ -136,19 +136,18 @@
       }
     });
 
-     function subBtn(event){
+     async function subBtn(event){
       //  event.preventDefault();
        alert('i am clicked');
-
-    $("#infoButton").on('click', async function() {
       let inputWeight = $("#inputWeight").val();
       let inputHeight = $("#inputHeight").val();
       let profileImg = $("#profileImg").val();
 
 
-      // console.log(inputWeight);
-      // let bmi = inputWeight / Math.pow(inputHeight, 2);
-      // console.log(bmi);
+      console.log(inputWeight);
+      console.log(inputHeight)
+      let bmi = inputWeight / Math.pow(inputHeight, 2);
+      console.log(bmi);
       //weight(kg)/(height(m))sqrt2;
       //add goal in object to insert in the db table
       
@@ -156,7 +155,7 @@
         inputWeight: inputWeight,
         inputHeight: inputHeight,
         user_img: profileImg,
-        // user_bmi: bmi
+        user_bmi: bmi
       };
 
       const postInfo = await $.post("/api/userInfo", userDashboardInfo);
@@ -172,8 +171,8 @@
       $("#appendHeight").html(`Height: ${getInfo.height}`);
       $("#usersMainGoal").html(`${getInfo.goal}`);
 
-    })
-     }
+    };
+     
     function recipeCall(){
       var chosenDiet = $("#inputGroupSelectDiet").val();
       $("#addDietName").html(`Current Diet Following: ${chosenDiet}`)
