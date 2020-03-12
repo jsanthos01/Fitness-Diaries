@@ -11,14 +11,15 @@ CREATE TABLE login_credential(
 );
 
 
-CREATE TABLE member_name(
-    my_name VARCHAR(250) NOT NULL,
-    id INTEGER AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE member_name(
+--     my_name VARCHAR(250) NOT NULL,
+--     id INTEGER AUTO_INCREMENT PRIMARY KEY
+-- );
 
-CREATE TABLE member_info(
+CREATE TABLE personal_info(
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_img VARCHAR(250),
+    username VARCHAR(250),
     my_name VARCHAR(250) NOT NULL,
     my_weight DECIMAL(4,2),
     height DECIMAL(4,2),
@@ -65,7 +66,17 @@ CREATE TABLE group_posts(
 --     FOREIGN KEY (member_id) REFERENCES group_posts(id)
 -- );
 
-
+CREATE TABLE new_group (
+    group_id INT PRIMARY KEY auto_increment,
+    group_name VARCHAR(30) NOT NULL
+);
+CREATE TABLE member_info (
+    member_id INT PRIMARY KEY auto_increment ,
+    member_name VARCHAR(30) NOT NULL,
+    email_id DECIMAL,
+    group_id_fk INT,
+    FOREIGN KEY (group_id_fk) REFERENCES new_group(group_id)
+);
 
 INSERT INTO login_credential(my_name, username, user_password, user_img,) VALUES('Elsa', 'elsausername', 'hashpasswordelsa', 'assets/userdb/user_one.png');
 INSERT INTO login_credential(my_name, username, user_password, user_img,) VALUES('Fiona', 'fionausername', 'hashpasswordfiona', 'assets/userdb/user_two.png');
@@ -77,6 +88,7 @@ INSERT INTO member_name (my_name) VALUES('Daria');
 INSERT INTO member_name (my_name) VALUES('Brave');
 INSERT INTO member_name (my_name) VALUES('Ann');
 INSERT INTO member_name (my_name) VALUES('Jane');
+
 
 
 INSERT INTO member_info (my_name, my_weight, my_height, BMI, goal, diet) VALUES('Elsa', 116, 156, 29, 5, 'loose weight by walk');

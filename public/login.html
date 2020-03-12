@@ -19,34 +19,44 @@
         }
     </style>
     <script>
-
-          //norma's delete
-          // window.onload = function() {
-          //     if(localStorage.getItem("userId")){
-          //         location.href = '/index.html';
-          //     }
-          // };-------------------
-
-          function registerBtn(){
-            location.href = '/registration.html';
-
-          }
+          // function registerBtn(){
+          //   location.href = '/registration.html';
+          // }
           async function loginBtn(){
             console.log('clicked');
             const userInfo = {
                 userEmail : $("#userEmail").val(),
                 userPassword :  $("#userPassword").val()
             }
+
+            //login uses post to keep data secure
             const checkUser = await $.post("/api/checkuser", userInfo);
             console.log(checkUser.id);
+            console.log(checkUser.my_name);
 
             if (checkUser.id){
               console.log('passwords match!')
+              let userData = {
+                userId: checkUser.id,
+                my_name: checkUser.my_name,
+                userName: checkUser.username
+              }  
 
-              localStorage.setItem("userId", checkUser.id);
-
+              localStorage.setItem("myUser", JSON.stringify(userData));
               console.log("local storage workeddd???")
-              location.href = '/index.html';
+              location.href = 'individual.html';
+
+              // if(localStorage != null){
+              //   let localStorageData = localStorage.getItem("myUser");
+              //   localStorageData = JSON.parse(localStorageData);
+              //   console.log(localStorageData.userId);
+
+              //   const idx = localStorageData.userId;
+
+              //   const myUserInfo = await $.get(`/api/dashboardInfo/${idx}`);
+              //   console.log(myUserInfo)
+              // }
+
             }else{
               // alert("PASSWORD IS NOT CORRECT");
               alert( checkUser.error );
@@ -55,8 +65,10 @@
           }
           //norma's add
           $(document).ready(function(){
-            if( localStorage.userId )
-            location.href = '/index.html';
+            let userData = localStorage.getItem("myUser");
+            userData = JSON.parse(userData);
+            if( userData.userId )
+            location.href = '/individual.html';
           });
     </script>
 

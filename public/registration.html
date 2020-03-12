@@ -13,13 +13,18 @@
 
 <body>
     <script>
-        window.onload = function() {
-            if(localStorage.getItem("userId")){
-                location.href = '/individual.html';
-            }
-        };
-        
         $(document).ready( async function(){
+            // if(localStorage !=null){
+            //     let userData = localStorage.getItem("userData");
+            //     userData = JSON.parse(userData);
+            //     if( userData.userId )
+            //     console.log(userData);
+            //     let userName = userData.userName;
+            //     console.log(userName);
+            //     location.href = '/individual.html';
+            // }
+
+            // if username exists in local storage direct to dashboard
             $('#submitUserBtn').click( async function(event){
                 event.preventDefault();
 
@@ -32,44 +37,55 @@
                     $('#userEmail').focus() ;
                     return false;
                 } 
-
                 if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(usersEmail))) {
                     alert( "Please provide valid Email!" );
                     $('#userEmail').focus() ;
                     return false;
                 }
-
                 if( usersPassword == "" ) {
                     alert( "Please provide your Password!" );
                     $('#userPassword').focus() ;
                     return false;
                 }
-
                 if(usersPassword.length <8 ) {
                     alert( "Please provide a password that is atleast 8 character long" );
                     $('#userPassword').focus() ;
                     return false;
                 }
 
-                //user object
-                const myUser = {
+                const storeInLocalStorage = {
                     my_name: $('#myName').val(),
-                    email_address: $('#userEmail').val(),
+                    userName: $('#userEmail').val(),
+                };
+              
+                console.log(storeInLocalStorage);
+                localStorage.setItem("myUser", JSON.stringify(storeInLocalStorage));
+
+
+                
+                const storeInDatabase = {
+                    my_name: $('#myName').val(),
+                    userName: $('#userEmail').val(),
                     user_password: $('#userPassword').val()  
                 };
 
-                let apiResult = await $.post( '/api/registration', myUser );
+                let apiResult = await $.post( '/api/registration', storeInDatabase );
                 // location.href = '/individual.html';
-
-
                 alert( apiResult.message );
                 if( apiResult.message ){
                     location.href = '/individual.html';
                     // registration worked! redirect to the main page (listing thumbnails)
                 }
 
+
+
+
+
+                
             })
         })
+            
+
     </script>
 
     <main role="main">
