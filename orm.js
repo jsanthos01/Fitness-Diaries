@@ -29,7 +29,7 @@ const db = new Database({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "bootcamp2020", //change 
+    password: "1234", //change 
     database: "fitness_diaries"
 });
 
@@ -72,7 +72,54 @@ async function loginUser( email, password ) {
     }
     return userFetch[0]
 }
-   
+
+//==============sara==========
+
+async function getGroupList(){
+    const GroupList = await db.query("SELECT * FROM new_group;");
+    return GroupList;
+}
+async function  getMembListForGrpId( grpId ){
+    const myResult = await db.query( 
+        "SELECT * FROM member_info WHERE group_id_fk = ?",
+        [ grpId ] );
+        console.log(myResult);
+    return myResult;
+}
+async function  getGrpName( grpNameId ){
+    const myGrpName = await db.query( 
+        "SELECT * FROM new_group WHERE group_id = ?",
+        [ grpNameId ] );
+        console.log(` in orm the value of myGrpName ` + myGrpName[0]);
+    return myGrpName[0];
+}
+async function addNewMember( newMember ){
+    const myNewMemberResult = await db.query( 
+        "INSERT INTO member_info (member_name, email_id, group_id_fk) VALUES(?,?,?);",
+        [ newMember.memberName, newMember.memberEmail, newMember.memberFrKey ] );
+    return myNewMemberResult;
+}
+async function addNewGroup( newGroup ){
+    const myNewGroupResult = await db.query( 
+        "INSERT INTO new_group (group_name, group_imageUrl, group_goal) VALUES(?,?,?);",
+        [ newGroup.groupName, newGroup.groupImageUrl, newGroup.groupGoal ] );
+    return myNewGroupResult;
+}
+async function deleteMember( membId, memName ){
+    const myDeletedMember = await db.query( 
+        "DELETE FROM member_info WHERE member_id = ?",
+        [ membId ] );
+    return myDeletedMember;
+}
+async function deleteGroup( grId ){
+    const myDeletedGroup = await db.query( 
+        "DELETE FROM new_group WHERE group_id = ?",
+        [ grId ] );
+    return myDeletedGroup;
+}
+
+
+//===============sara dont delete above============
 
 // //norma's code
 // async function getUsersInfo(myId) {
@@ -107,5 +154,12 @@ module.exports = {
     registrationSql,
     postUsersInfo,
     getUsersInfo,
-    loginUser
+    loginUser,
+    getGroupList,
+    getMembListForGrpId,
+    getGrpName,
+    addNewMember,
+    addNewGroup,
+    deleteMember,
+    deleteGroup
 }
