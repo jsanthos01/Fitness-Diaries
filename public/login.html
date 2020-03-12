@@ -31,21 +31,32 @@
 
             //login uses post to keep data secure
             const checkUser = await $.post("/api/checkuser", userInfo);
-
             console.log(checkUser.id);
             console.log(checkUser.my_name);
 
             if (checkUser.id){
               console.log('passwords match!')
-              // let userData = {
-              //   userId: checkUser.id,
-              //   userName: checkUser.my_name
-              // }  
+              let userData = {
+                userId: checkUser.id,
+                my_name: checkUser.my_name,
+                userName: checkUser.username
+              }  
 
-              // localStorage.setItem("userData", JSON.stringify(userData));
-
-              // console.log("local storage workeddd???")
+              localStorage.setItem("myUser", JSON.stringify(userData));
+              console.log("local storage workeddd???")
               location.href = 'individual.html';
+
+              // if(localStorage != null){
+              //   let localStorageData = localStorage.getItem("myUser");
+              //   localStorageData = JSON.parse(localStorageData);
+              //   console.log(localStorageData.userId);
+
+              //   const idx = localStorageData.userId;
+
+              //   const myUserInfo = await $.get(`/api/dashboardInfo/${idx}`);
+              //   console.log(myUserInfo)
+              // }
+
             }else{
               // alert("PASSWORD IS NOT CORRECT");
               alert( checkUser.error );
@@ -54,7 +65,7 @@
           }
           //norma's add
           $(document).ready(function(){
-            let userData = localStorage.getItem("userData");
+            let userData = localStorage.getItem("myUser");
             userData = JSON.parse(userData);
             if( userData.userId )
             location.href = '/individual.html';

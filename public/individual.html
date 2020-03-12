@@ -25,8 +25,8 @@
   <style>
       body {
         height: 100%;
-        color: #100048;
-        background-color: #08144b;
+        color: #001b48;
+        background-color: #121f3f;
         font-family: 'Montserrat', sans-serif;
       }
       .thumbnail-size {
@@ -44,6 +44,8 @@
         color: rgb(30, 85, 74);
         background-color: rgb(85, 231, 188);
       }
+      /* #fitnessThumbnail{
+      } */
       #fitnessThumbnail:hover{
         text-decoration: none;
         color: rgb(223, 183, 54);
@@ -54,7 +56,7 @@
       }
       .profileName {
         padding: 10px;
-        background-image: linear-gradient(45deg, #f84c00, #f9c724);
+        background-image: linear-gradient(45deg, #49c4cc, #f9c724);
         width: 60%;
         border-radius: 10px;
       }
@@ -78,6 +80,7 @@
       }
       ul {
         list-style: none;
+
       }
       .navMenu{
         /* background: red; */
@@ -94,6 +97,7 @@
         right: 0;
         z-index: 20;
       }
+
       #editInfoWin{
         height: 160vh;
         background-image: linear-gradient(45deg, #0f444ade, #29a37cde);
@@ -120,71 +124,123 @@
   <script>
     //shows the user's name in the dashboard section
      $(document).ready( async function(){
+
+
       if(localStorage != null){
-        let userData = localStorage.getItem("myUser");
+        let userData = localStorage.getItem("userData");
         userData = JSON.parse(userData);
         console.log(userData);
         let myName = userData.my_name;
         console.log(myName);
-
         $("#h1Value").html(myName);
+
+        const idx = userData.userId;
+        const myUserInfo = await $.get(`/api/dashboardInfo/${idx}`);
+        console.log(myUserInfo);
+
+        $("#appendWeight").html(`Weight: ${myUserInfo.my_weight}`);
+        $("#appendHeight").html(`Height: ${myUserInfo.height}`);
+        $("#usersMainGoal").html(`${myUserInfo.goal}`);
+        $("#appendBMI").html(`BMI: ${myUserInfo.BMI}`);
+
       }
-    })
+    });
 
-
-  async function insertInfo() {
+    async function insertInfo() {
+      hideAddInfo();
       console.log("I AM CLICKED")
-      let weight = $("#insertWeight").val();
-      let height = $("#insertHeight").val();
+      let weight = $( "#insertWeight" ).val();
+      let height = $( "#insertHeight" ).val();
+      let goal = $( "#insertGoal" ).val();
+      let bmi = Number(weight) / Math.pow(Number(height), 2);
+
+      console.log(`This is the bmi: ${bmi}`);
+      // let profileImg = $("#profileImg").val();
+
+    $("#infoButton").on('click', async function() {
+      let inputWeight = $("#inputWeight").val();
+      let inputHeight = $("#inputHeight").val();
+      let profileImg = $("#profileImg").val();
+
+      let userDashboardInfo = {
+        userName: userName,
+        inputWeight: weight,
+        inputHeight: height,
+        inputGoal: goal,
+        bmi:bmi
+        // user_img: profileImg
+      };
+
+      const postInfo = await $.post("/api/userInfo", userDashboardInfo);
+      console.log("Getting the Post Info Stuff!!!!");
+      console.log(postInfo);
+
+      //get the info from database so that it can be added to html
+      const getInfo = await $.get("/api/userInfo");
+      console.log("Getting the dashboard info!!!!")
+      console.log(getInfo);
+
+      $("#appendWeight").html(`Weight: ${getInfo.my_weight}`);
+      $("#appendHeight").html(`Height: ${getInfo.height}`);
+      $("#usersMainGoal").html(`${getInfo.goal}`);
+      $("#appendBMI").html(`BMI: ${getInfo.BMI}`);
+
+    }) 
+  }
+    async function editInfo(){
+      hideEditInfo();
+      console.log("Edit Buttpn : I AM CLICKED")
+      let weight = $( "#editWeight" ).val();
+      let height = $( "#editHeight" ).val();
+      let goal = $( "#editGoal" ).val();
+      let bmi = Number(weight) / Math.pow(Number(height), 2);
+
+      console.log(`This is the bmi edited: ${bmi}`);
       // let profileImg = $("#profileImg").val();
 
       //get username and post inside database
-      let userData = localStorage.getItem("userData");
+      let userData = localStorage.getItem( "myUser" );
       userData = JSON.parse(userData);
       let userName = userData.userName;
+      console.log(userName);
+      // let name = userData.my_name;
 
-
-      console.log(userName)
       let userDashboardInfo = {
-        userName:userName,
+        userName: userName,
         inputWeight: weight,
-        inputHeight: height
+        inputHeight: height,
+        inputGoal: goal,
+        bmi:bmi
         // user_img: profileImg
       };
 
       console.log(userDashboardInfo);
 
-
-
       const postInfo = await $.post("/api/userInfo", userDashboardInfo);
+      console.log("Getting the Post Info Stuff from edit function!!!!");
       console.log(postInfo);
 
-      const getInfo = await $.get("/api/userInfo/:");
-      console.log("Getting the dashboard info!!!!")
+      //get the info from database so that it can be added to html
+      const getInfo = await $.get("/api/userInfo");
+      console.log("Getting the dashboard info from edit function !!!!")
       console.log(getInfo);
 
-    } 
+      $("#appendWeight").html(`Weight: ${getInfo.my_weight}`);
+      $("#appendHeight").html(`Height: ${getInfo.height}`);
+      $("#usersMainGoal").html(`${getInfo.goal}`);
+      $("#appendBMI").html(`BMI: ${getInfo.BMI}`);
+    }
 
     function recipeCall(){
       var chosenDiet = $("#inputGroupSelectDiet").val();
-      console.log(chosenDiet);
+      $("#addDietName").html(`Current Diet Following: ${chosenDiet}`);
 
       if (chosenDiet == "Vegan" ){
-        var settings = {
-          "async": true,
-          "crossDomain": true,
-          "url": "https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi",
-          "method": "POST",
-          "headers": {
-              "x-rapidapi-host": "mycookbook-io1.p.rapidapi.com",
-              "x-rapidapi-key": "a2d04f2ce0msh0b395c3746199ebp101c55jsne0e6419c8f94",
-              "content-type": "text/plain",
-              "accept": "text/plain"
-          },
-          "data": `${recipeUrl}`
-        }
-
-        $.ajax(settings).done(showRecipes);
+        $.ajax({
+          url: `https://api.spoonacular.com/recipes/search?apiKey=db254b5cd61744d39a2deebd9c361444&number=3&query=${chosenDiet}`,
+          // url: `https://www.themealdb.com/api/json/v1/1/search.php?s=${chosenDiet}`,
+          method: "GET"
+        }).then(showRecipes);
 
       }else {
         alert("Nothing Available right now !! Sorry")
@@ -192,36 +248,27 @@
     }
 
     function showRecipes(response){
-      console.log(response);
       // $("#dietSections").empty();
-
-      // var dietResponse = JSON.parse(response);
-      // console.log(dietResponse);
-
-      // for(var i = 0; i<3; i++){
-      //   console.log(dietResponse.results[i]);
-      // //   $("#dietSections").append(
-      // //     `
-      // //     <div class="card">
-      // //       <img class="card-img-top thumbnail-size" src="${dietResponse.results[i].thumbnail}" alt="Card image cap">
-      // //       <div class="card-body">
-      // //         <h5 class="card-title">${dietResponse.results[i].title}</h5>
-      // //         <p class="card-text">${dietResponse.results[i].ingredients}</p>
-      // //       </div>
-      // //       <div class="card-body">
-      // //         <a href="${dietResponse.results[i].href}" class="btn btn-primary">Show Recipe</a>
-      // //       </div>
-      // //     </div>
-      // //     `
-      // //   )
-      // // }
-
-    
-
-    
+      console.log(response);
+      // console.log(response.results[0].title);
+      console.log(response.results[0].imageUrls)
+      for(var i = 0; i<3; i++){ 
+        $("#dietSections").append(
+          `
+          <div class="card">
+            <img class="card-img-top thumbnail-size" src="https://spoonacular.com/recipeImages/${response.results[i].imageUrls}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">${response.results[i].title}</h5>
+              <p class="card-text">${response.results[i].readyInMinutes} minutes</p>
+            </div>
+            <div class="card-body">
+              <a id="food${i}"href="https://spoonacular.com/${response.results[i].title}" class="btn btn-primary">Show Recipe</a>
+            </div>
+          </div>
+          `
+        );
+      }
     }
-
-
     function hideMenu(){
       // alert('something');
       $( "#navMenu" ).hide( "slow" );
@@ -288,23 +335,19 @@
         <div class="card mt-4 col-8">
           <form class="card-body">
             <h3>Add your Information</h3>
-            
-            <div class="form-group">
+            <div class="input-group mb-3">
               <label for="profileImg">Add Profile Image</label>
-              <div class="input-group mb-3 ">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="profileImg">
-                    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
-                </div>
-                <div class="input-group-append">
-                    <span class="input-group-text" id="">Upload</span>
-                </div>
+              <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="profileImg">
+                  <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+              </div>
+              <div class="input-group-append">
+                  <span class="input-group-text" id="">Upload</span>
               </div>
             </div>
-        
             <div class="form-group">
               <label for="inputWeight">Weight</label>
-              <input type="text" class="form-control" id="insertWeight" placeholder="Insert Your Current Weight">
+              <input type="text" class="form-control" id="inputWeight" placeholder="Insert Your Current Weight">
             </div>
             <div class="form-group">
               <label for="inputHeight">Height</label>
@@ -312,9 +355,9 @@
             </div>
             <div class="form-group">
               <label for="insertGoal">Goal</label>
-              <input type="text" class="form-control" id="insertGoal" placeholder="Insert Your Current Goal">
+              <input type="text" class="form-control" id="insertGoal" placeholder="Insert how much kg you want to loose">
             </div>
-            <button class="btn btn-primary" type="button" id="insertBtn" onclick="insertInfo()">Submit</button>
+            <button type="submit" class="btn btn-primary" id="infoButton" onclick="subBtn()">Submit</button>
           </form>
         </div>
       </div>
@@ -327,26 +370,32 @@
         <div class="card mt-4 col-8">
           <form class="card-body">
             <h3>Edit your Information</h3>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="firstName">First Name</label>
-                <input type="text" class="form-control" id="firstName" placeholder="First Name">
-              </div>
-              <div class="form-group col-md-6">
-                <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+            <div class="form-group">
+              <label for="editProfileImg">Add Profile Image</label>
+              <div class="input-group mb-3 ">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="editProfileImg">
+                    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                    <span class="input-group-text" id="">Upload</span>
+                </div>
               </div>
             </div>
             <div class="form-group">
               <label for="inputWeight">Weight</label>
-              <input type="text" class="form-control" id="inputWeight" placeholder="Insert Your Current Weight">
+              <input type="text" class="form-control" id="editWeight" placeholder="Insert Your Current Weight">
             </div>
             <div class="form-group">
               <label for="inputHeight">Height</label>
-              <input type="text" class="form-control" id="inputHeight" placeholder="Insert Your Current Height">
+              <input type="text" class="form-control" id="editHeight" placeholder="Insert Your Current Height">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+            <div class="form-group">
+              <label for="insertGoal">Goal</label>
+              <input type="text" class="form-control" id="editGoal" placeholder="Insert how much kg you want to loose">
+            </div>
+            <button class="btn btn-primary" type="button" id="editButton" onclick="editInfo()">Submit</button>
+           </form>
         </div>
       </div>
     </div>
@@ -370,7 +419,7 @@
   <main role="main">
     <section class="jumbotron text-center container-fluid">
       <!-- <img src="assets/LibreOffice_MotifScatter_RGB.png" alt=""> -->
-      <h1 id="h1Value"> Welcome! </h1>
+      <h1 id="h1Value">Welcome!</h1>
       <div>
         <div class="container d-flex justify-content-end ">
           <div class="col-lg-4">
@@ -379,17 +428,19 @@
           <div class="col-lg-8 userInfo">
             <div class="">
               <ul class="text-left card-body">
-                <li class="profileName">Weight:</li>
                 <br>
-                <li class="profileName">Height</li>
+                <li class="profileName">Name: Jonh doe</li> 
                 <br>
-                <li class="profileName">BMI</li>
+                <li class="profileName">Weight:    </li>
+                <br>
+                <li class="profileName" id="appendHeight">Height</li>
+                <br>
+                <li class="profileName" id="appendBMI">BMI</li>
                 <br>
               </ul>
             </div>
           </div>
         </div>
-
         <p class="lead text-muted card" id="usersMainGoal">My goal is to do .....!</p>
       </div>
     </section>
@@ -470,7 +521,7 @@
         <div class="nav-link card-body d-flex justify-content-end" href=""><i class="fa fa-times" onClick="hideDietCard()" aria-hidden="true"></i></div>
         <div class="dietSection card-body">
           <h3>Diet</h3>
-          <h4>Current Diet you are following: keto</h4>
+          <h4 id="addDietName">Current Diet you are following: keto</h4>
           <div class="input-group mb-3">
             <select class="custom-select" id="inputGroupSelectDiet" onchange="recipeCall()">
               <option>Choose a Diet</option>
@@ -564,57 +615,13 @@
             </div>
           </div>
         </div>
-      </footer>
-
-      <script>
-
-        //norma's code
-        //add save button to page
-        //logout
-        function logOut(){  
-            localStorage.clear();
-            location.href = '/login.html';
-        }
-        //populating user dashboard from database
-        $(document).ready( async function(){
-          const userid = localStorage.userId;
-          const showUserInfo = $.get("/api/user/:userid");
-          console.log(showUserInfo);
-            
-        })
-        //------
-        //we should automatically conver weight to metric
-        //if(weight && height){
-        //  getbmi();
-        //} function getbmi = w in kg/(height)square
-
-        //-------------
-        // PUT call add button
-        //---------------
-
-        //--------------
-        // PUT edit button
-        //-----------------
-
-        //---------------
-        //display goal
-        //---------------
-
-
-        //--------------------
-        //diet fitness api call
-        //---------------
-
-      </script>
       </div>
     </section>
   </main>
   <footer class="container d-flex justify-content-around">
     <div>
-      Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
-      
+      Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>      
     </div>
   </footer>
 </body>
 </html>
-
