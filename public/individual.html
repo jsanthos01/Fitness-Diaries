@@ -123,11 +123,23 @@
   </style>
   <script>
 
-    //NORMA WILL DO FROM LOCAL STORAGE
-    // $(document).ready( async function(){
-    //   const getFullName = $.get("api/getName");
-    
-    // })
+    // NORMA WILL DO FROM LOCAL STORAGE
+    $(document).ready( async function(){
+      const getFullName = $.get("api/getName");
+      if(localStorage != null){
+        let userData = localStorage.getItem("userData");
+        userData = JSON.parse(userData);
+        console.log(userData);
+        let userName = userData.userName;
+        console.log(userName);
+        $("#h1Value").html(userName);
+      }
+    });
+
+     function subBtn(event){
+      //  event.preventDefault();
+       alert('i am clicked');
+     }
 
     $("#infoButton").on('click', async function() {
       let inputWeight = $("#inputWeight").val();
@@ -290,7 +302,7 @@
               <label for="inputHeight">Height</label>
               <input type="text" class="form-control" id="inputHeight" placeholder="Insert Your Current Height">
             </div>
-            <button type="submit" class="btn btn-primary" id="infoButton">Submit</button>
+            <button type="submit" class="btn btn-primary" id="infoButton" onclick="subBtn()">Submit</button>
           </form>
         </div>
       </div>
@@ -346,7 +358,7 @@
   <main role="main">
     <section class="jumbotron text-center container-fluid">
       <!-- <img src="assets/LibreOffice_MotifScatter_RGB.png" alt=""> -->
-      <h1>Individual Profile</h1>
+      <h1 id="h1Value">Welcome!</h1>
       <div>
         <div class="container d-flex justify-content-end ">
           <div class="col-lg-4">
