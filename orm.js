@@ -29,7 +29,7 @@ const db = new Database({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "bootcamp2020", //change 
+    password: "root1234", //change 
     database: "fitness_diaries"
 });
 
@@ -77,14 +77,6 @@ async function loginUser( email, password ) {
     }
     return userFetch[0]
 }
-   
-
-// //norma's code
-// async function getUsersInfo(myId) {
-//     const userInfo =await db.query("SELECT * FROM member_info WHERE id=?", [ myId ]);
-//     return userInf0[0];   
-// }
-
 //query to fetch all user image to display
 //whats the order of showing images
 

@@ -25,8 +25,8 @@
   <style>
       body {
         height: 100%;
-        color: #100048;
-        background-color: #08144b;
+        color: #001b48;
+        background-color: #121f3f;
         font-family: 'Montserrat', sans-serif;
       }
       .thumbnail-size {
@@ -44,6 +44,8 @@
         color: rgb(30, 85, 74);
         background-color: rgb(85, 231, 188);
       }
+      /* #fitnessThumbnail{
+      } */
       #fitnessThumbnail:hover{
         text-decoration: none;
         color: rgb(223, 183, 54);
@@ -54,7 +56,7 @@
       }
       .profileName {
         padding: 10px;
-        background-image: linear-gradient(45deg, #f84c00, #f9c724);
+        background-image: linear-gradient(45deg, #49c4cc, #f9c724);
         width: 60%;
         border-radius: 10px;
       }
@@ -78,6 +80,7 @@
       }
       ul {
         list-style: none;
+
       }
       .navMenu{
         /* background: red; */
@@ -94,6 +97,7 @@
         right: 0;
         z-index: 20;
       }
+
       #editInfoWin{
         height: 160vh;
         background-image: linear-gradient(45deg, #0f444ade, #29a37cde);
@@ -118,44 +122,42 @@
       }
   </style>
   <script>
-    //shows the user's name in the dashboard section
-     $(document).ready( async function(){
+
+    // NORMA WILL DO FROM LOCAL STORAGE
+    $(document).ready( async function(){
+      const getFullName = $.get("api/getName");
       if(localStorage != null){
-        let userData = localStorage.getItem("myUser");
+        let userData = localStorage.getItem("userData");
         userData = JSON.parse(userData);
         console.log(userData);
-        let myName = userData.my_name;
-        console.log(myName);
-
-        $("#h1Value").html(myName);
+        let userName = userData.userName;
+        console.log(userName);
+        $("#h1Value").html(userName);
       }
-    })
+    });
+
+     function subBtn(event){
+      //  event.preventDefault();
+       alert('i am clicked');
+
+    $("#infoButton").on('click', async function() {
+      let inputWeight = $("#inputWeight").val();
+      let inputHeight = $("#inputHeight").val();
+      let profileImg = $("#profileImg").val();
 
 
-    async function insertInfo() {
-      console.log("I AM CLICKED")
-      let weight = $( "#insertWeight" ).val();
-      let height = $( "#insertHeight" ).val();
-      let goal = $( "#insertGoal" ).val();
-      // let profileImg = $("#profileImg").val();
-
-      //get username and post inside database
-      let userData = localStorage.getItem( "myUser" );
-      userData = JSON.parse(userData);
-      let userName = userData.userName;
-      console.log(userName);
-      // let name = userData.my_name;
-
-
+      // console.log(inputWeight);
+      // let bmi = inputWeight / Math.pow(inputHeight, 2);
+      // console.log(bmi);
+      //weight(kg)/(height(m))sqrt2;
+      //add goal in object to insert in the db table
+      
       let userDashboardInfo = {
-        userName: userName,
-        inputWeight: weight,
-        inputHeight: height,
-        inputGoal: goal
-        // user_img: profileImg
+        inputWeight: inputWeight,
+        inputHeight: inputHeight,
+        user_img: profileImg,
+        // user_bmi: bmi
       };
-
-      console.log(userDashboardInfo);
 
       const postInfo = await $.post("/api/userInfo", userDashboardInfo);
       console.log("Getting the Post Info Stuff!!!!");
@@ -170,8 +172,8 @@
       $("#appendHeight").html(`Height: ${getInfo.height}`);
       $("#usersMainGoal").html(`${getInfo.goal}`);
 
-    } 
-
+    })
+     }
     function recipeCall(){
       var chosenDiet = $("#inputGroupSelectDiet").val();
       $("#addDietName").html(`Current Diet Following: ${chosenDiet}`)
@@ -285,33 +287,25 @@
         <div class="card mt-4 col-8">
           <form class="card-body">
             <h3>Add your Information</h3>
-            
-            <div class="form-group">
+            <div class="input-group mb-3">
               <label for="profileImg">Add Profile Image</label>
-              <div class="input-group mb-3 ">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="profileImg">
-                    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
-                </div>
-                <div class="input-group-append">
-                    <span class="input-group-text" id="">Upload</span>
-                </div>
+              <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="profileImg">
+                  <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+              </div>
+              <div class="input-group-append">
+                  <span class="input-group-text" id="">Upload</span>
               </div>
             </div>
-        
             <div class="form-group">
               <label for="inputWeight">Weight</label>
-              <input type="text" class="form-control" id="insertWeight" placeholder="Insert Your Current Weight">
+              <input type="text" class="form-control" id="inputWeight" placeholder="Insert Your Current Weight">
             </div>
             <div class="form-group">
               <label for="inputHeight">Height</label>
-              <input type="text" class="form-control" id="insertHeight" placeholder="Insert Your Current Height">
+              <input type="text" class="form-control" id="inputHeight" placeholder="Insert Your Current Height">
             </div>
-            <div class="form-group">
-              <label for="insertGoal">Goal</label>
-              <input type="text" class="form-control" id="insertGoal" placeholder="Insert Your Current Goal">
-            </div>
-            <button class="btn btn-primary" type="button" id="insertBtn" onclick="insertInfo()">Submit</button>
+            <button type="submit" class="btn btn-primary" id="infoButton" onclick="subBtn()">Submit</button>
           </form>
         </div>
       </div>
@@ -367,7 +361,7 @@
   <main role="main">
     <section class="jumbotron text-center container-fluid">
       <!-- <img src="assets/LibreOffice_MotifScatter_RGB.png" alt=""> -->
-      <h1 id="h1Value"> Welcome! </h1>
+      <h1 id="h1Value">Welcome!</h1>
       <div>
         <div class="container d-flex justify-content-end ">
           <div class="col-lg-4">
@@ -376,7 +370,10 @@
           <div class="col-lg-8 userInfo">
             <div class="">
               <ul class="text-left card-body">
-                <li class="profileName" id="appendWeight">Weight:</li>
+                <br>
+                <li class="profileName">Name: Jonh doe</li> 
+                <br>
+                <li class="profileName">Weight:    </li>
                 <br>
                 <li class="profileName" id="appendHeight">Height</li>
                 <br>
@@ -561,57 +558,13 @@
             </div>
           </div>
         </div>
-      </footer>
-
-      <script>
-
-        //norma's code
-        //add save button to page
-        //logout
-        function logOut(){  
-            localStorage.clear();
-            location.href = '/login.html';
-        }
-        //populating user dashboard from database
-        $(document).ready( async function(){
-          const userid = localStorage.userId;
-          const showUserInfo = $.get("/api/user/:userid");
-          console.log(showUserInfo);
-            
-        })
-        //------
-        //we should automatically conver weight to metric
-        //if(weight && height){
-        //  getbmi();
-        //} function getbmi = w in kg/(height)square
-
-        //-------------
-        // PUT call add button
-        //---------------
-
-        //--------------
-        // PUT edit button
-        //-----------------
-
-        //---------------
-        //display goal
-        //---------------
-
-
-        //--------------------
-        //diet fitness api call
-        //---------------
-
-      </script>
       </div>
     </section>
   </main>
   <footer class="container d-flex justify-content-around">
     <div>
-      Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
-      
+      Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>      
     </div>
   </footer>
 </body>
 </html>
-
