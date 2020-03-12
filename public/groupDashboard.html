@@ -52,6 +52,32 @@
                 </div>
             </div>
         </section>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript">
+           function mQuotes(){
+             $.ajax({
+             url: "https://type.fit/api/quotes",
+             method: "GET"
+             }).then(function(response){
+             var motQuotes = JSON.parse(response)
+             console.log(motQuotes);
+
+             var quote = Math.floor(Math.random()*motQuotes.length);
+
+             //console.log("Random quote: "+JSON.stringify(motQuotes[quote]));
+         
+             $("#quotes").text(motQuotes[quote].text);
+            
+             })
+             }    
+             mQuotes();
+        
+        </script>
+        <section class="container card">
+            <div class="card-body">
+                <div class="row" id="quotes" ></div>
+            </div>
+        </section>
         <section class="members container card">
             <div class="card-body d-flex justify-content-around ">
                 <div class="userImg col-2">

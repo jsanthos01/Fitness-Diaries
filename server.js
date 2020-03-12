@@ -39,18 +39,9 @@ app.get("/api/userInfo", async function(){
   
 });
 
-
-
-<<<<<<< HEAD
 app.listen(PORT, function () {
-  console.log(`[fitness_app] RUNNING, http://localhost:${PORT}`);
+  console.log(`[fitness_app] RUNNING, http://localhost:${PRT}`);
 });
-=======
-
->>>>>>> c472ac28a678c86755503bcac4b32cb310397b8c
-
-
-
 
 //norma's code
 // app.get("/api/user/:userid", async function (req, res) {
