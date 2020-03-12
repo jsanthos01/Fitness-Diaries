@@ -144,11 +144,19 @@
       let inputWeight = $("#inputWeight").val();
       let inputHeight = $("#inputHeight").val();
       let profileImg = $("#profileImg").val();
+
+
+      // console.log(inputWeight);
+      // let bmi = inputWeight / Math.pow(inputHeight, 2);
+      // console.log(bmi);
+      //weight(kg)/(height(m))sqrt2;
+      //add goal in object to insert in the db table
       
       let userDashboardInfo = {
         inputWeight: inputWeight,
         inputHeight: inputHeight,
-        user_img: profileImg
+        user_img: profileImg,
+        // user_bmi: bmi
       };
 
       const postInfo = await $.post("/api/userInfo", userDashboardInfo);
@@ -573,7 +581,7 @@
         })
         //------
         //we should automatically conver weight to metric
-        //if(weight && height){
+        //if(weight && height)
         //  getbmi();
         //} function getbmi = w in kg/(height)square
 
