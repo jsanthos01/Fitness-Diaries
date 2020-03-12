@@ -16,7 +16,7 @@ CREATE TABLE login_credential(
 --     id INTEGER AUTO_INCREMENT PRIMARY KEY
 -- );
 
-CREATE TABLE member_info(
+CREATE TABLE personal_info(
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_img VARCHAR(250),
     username VARCHAR(250),

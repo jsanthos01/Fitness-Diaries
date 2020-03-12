@@ -64,6 +64,23 @@ app.get("/api/userInfo", async function(req, res){
   res.send(getBasicInfo);
   
 });
+app.post("/api/fetchID", async function(req, res){
+  const getId = await orm.getId(req.body);
+  res.send(getId)
+  
+  // console.log(getBasicInfo);
+  // res.send(getBasicInfo);
+  
+});
+
+app.get("/api/dashboardInfo/:id", async function(req, res){
+  console.log( `get api/groupName/ ] recieved: `, req.params.id );
+  const dashboardInfo = await orm.getDashboardInfo(req.params.id);
+  res.send(dashboardInfo);
+  
+});
+
+
 
 //=====================================================Joanna ==========================================
 

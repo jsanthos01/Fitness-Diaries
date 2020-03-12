@@ -49,7 +49,7 @@ async function registrationSql(myPost){
 async function postUsersInfo(myPost){
     console.log("This is for the sql posting section");
     console.log(myPost.userName);
-    const postMemberInfo = await db.query("UPDATE personal_info SET my_weight=?, height=?, goal=? WHERE username=?", [ myPost.inputWeight, myPost.inputHeight, myPost.inputGoal, myPost.userName]);
+    const postMemberInfo = await db.query("UPDATE personal_info SET my_weight=?, height=?, goal=?, BMI=? WHERE username=?", [ myPost.inputWeight, myPost.inputHeight, myPost.inputGoal, myPost.bmi, myPost.userName]);
     // const postMemberInfo = await db.query("INSERT INTO personal_info(my_weight, height, goal) VALUES(?,?,?) WHERE username=?", [ myPost.inputWeight, myPost.inputHeight, myPost.inputGoal, myPost.userName]);
     console.log(postMemberInfo);
     return postMemberInfo;
@@ -58,7 +58,7 @@ async function postUsersInfo(myPost){
 async function getUsersInfo() {
     console.log("This is for the sql get section");
 
-    let myInfo = await db.query("SELECT my_weight, height, goal FROM personal_info");
+    let myInfo = await db.query("SELECT my_weight, height, goal, BMI FROM personal_info");
     myInfo = JSON.stringify(myInfo); 
     myInfo = JSON.parse(myInfo); 
     return myInfo[0];
@@ -79,11 +79,27 @@ async function loginUser( email, password ) {
 }
    
 
+async function getId(emailId){
+    let userFetch = await db.query('SELECT * FROM personal_info WHERE username=?', [ emailId ] );
+    userFetch = JSON.stringify(userFetch); 
+    userFetch = JSON.parse(userFetch); 
+    return userFetch[0]
+}
+
+async function getDashboardInfo(id){
+    let putInDashboard = await db.query('SELECT * FROM personal_info WHERE id=?', [ id ] );
+    console.log(putInDashboard)
+    return putInDashboard[0]
+}
+
+
+
 // //norma's code
 // async function getUsersInfo(myId) {
 //     const userInfo =await db.query("SELECT * FROM member_info WHERE id=?", [ myId ]);
 //     return userInf0[0];   
 // }
+
 
 //query to fetch all user image to display
 //whats the order of showing images
@@ -112,5 +128,7 @@ module.exports = {
     registrationSql,
     postUsersInfo,
     getUsersInfo,
-    loginUser
+    loginUser,
+    getId,
+    getDashboardInfo
 }

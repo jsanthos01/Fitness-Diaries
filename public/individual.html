@@ -120,23 +120,38 @@
   <script>
     //shows the user's name in the dashboard section
      $(document).ready( async function(){
+
+
       if(localStorage != null){
         let userData = localStorage.getItem("myUser");
         userData = JSON.parse(userData);
         console.log(userData);
         let myName = userData.my_name;
         console.log(myName);
-
         $("#h1Value").html(myName);
+
+        const idx = userData.userId;
+        const myUserInfo = await $.get(`/api/dashboardInfo/${idx}`);
+        console.log(myUserInfo);
+
+        $("#appendWeight").html(`Weight: ${myUserInfo.my_weight}`);
+        $("#appendHeight").html(`Height: ${myUserInfo.height}`);
+        $("#usersMainGoal").html(`${myUserInfo.goal}`);
+        $("#appendBMI").html(`BMI: ${myUserInfo.BMI}`);
+
       }
     })
 
 
     async function insertInfo() {
+      hideAddInfo();
       console.log("I AM CLICKED")
       let weight = $( "#insertWeight" ).val();
       let height = $( "#insertHeight" ).val();
       let goal = $( "#insertGoal" ).val();
+      let bmi = Number(weight) / Math.pow(Number(height), 2);
+
+      console.log(`This is the bmi: ${bmi}`);
       // let profileImg = $("#profileImg").val();
 
       //get username and post inside database
@@ -146,12 +161,12 @@
       console.log(userName);
       // let name = userData.my_name;
 
-
       let userDashboardInfo = {
         userName: userName,
         inputWeight: weight,
         inputHeight: height,
-        inputGoal: goal
+        inputGoal: goal,
+        bmi:bmi
         // user_img: profileImg
       };
 
@@ -169,8 +184,53 @@
       $("#appendWeight").html(`Weight: ${getInfo.my_weight}`);
       $("#appendHeight").html(`Height: ${getInfo.height}`);
       $("#usersMainGoal").html(`${getInfo.goal}`);
+      $("#appendBMI").html(`BMI: ${getInfo.BMI}`);
 
     } 
+
+    async function editInfo(){
+      hideEditInfo();
+      console.log("Edit Buttpn : I AM CLICKED")
+      let weight = $( "#editWeight" ).val();
+      let height = $( "#editHeight" ).val();
+      let goal = $( "#editGoal" ).val();
+      let bmi = Number(weight) / Math.pow(Number(height), 2);
+
+      console.log(`This is the bmi edited: ${bmi}`);
+      // let profileImg = $("#profileImg").val();
+
+      //get username and post inside database
+      let userData = localStorage.getItem( "myUser" );
+      userData = JSON.parse(userData);
+      let userName = userData.userName;
+      console.log(userName);
+      // let name = userData.my_name;
+
+      let userDashboardInfo = {
+        userName: userName,
+        inputWeight: weight,
+        inputHeight: height,
+        inputGoal: goal,
+        bmi:bmi
+        // user_img: profileImg
+      };
+
+      console.log(userDashboardInfo);
+
+      const postInfo = await $.post("/api/userInfo", userDashboardInfo);
+      console.log("Getting the Post Info Stuff from edit function!!!!");
+      console.log(postInfo);
+
+      //get the info from database so that it can be added to html
+      const getInfo = await $.get("/api/userInfo");
+      console.log("Getting the dashboard info from edit function !!!!")
+      console.log(getInfo);
+
+      $("#appendWeight").html(`Weight: ${getInfo.my_weight}`);
+      $("#appendHeight").html(`Height: ${getInfo.height}`);
+      $("#usersMainGoal").html(`${getInfo.goal}`);
+      $("#appendBMI").html(`BMI: ${getInfo.BMI}`);
+    }
 
     function recipeCall(){
       var chosenDiet = $("#inputGroupSelectDiet").val();
@@ -187,37 +247,28 @@
         alert("Nothing Available right now !! Sorry")
       }
     }
-// sdkajsdiojadiojasdiojas
+
     function showRecipes(response){
       // $("#dietSections").empty();
       console.log(response);
       // console.log(response.results[0].title);
       console.log(response.results[0].imageUrls)
-      // for(var i = 0; i<3; i++){ 
-      //   $("#dietSections").append(
-      //     `
-      //     <div class="card">
-      //       <img class="card-img-top thumbnail-size" src="https://spoonacular.com/recipeImages/${response.results[i].imageUrls}" alt="Card image cap">
-      //       <div class="card-body">
-      //         <h5 class="card-title">${response.results[i].title}</h5>
-      //         <p class="card-text">${response.results[i].readyInMinutes}</p>
-      //       </div>
-      //       <div class="card-body">
-      //         <a id="food${i}"href="https://spoonacular.com/${response.results[i].title}" class="btn btn-primary">Show Recipe</a>
-      //       </div>
-      //     </div>
-      //     `
-      //   )
-
-      //   var id = response.results[i].id
-      //   $.ajax({
-      //     url:"https://api.spoonacular.com/recipes/"+id+"/information?apiKey=db254b5cd61744d39a2deebd9c361444",
-      //     success: function(res) {
-      //       $(`#food${i}`).attr("href", res.sourceUrl);
-      //     }
-      //   });
-
-      // }
+      for(var i = 0; i<3; i++){ 
+        $("#dietSections").append(
+          `
+          <div class="card">
+            <img class="card-img-top thumbnail-size" src="https://spoonacular.com/recipeImages/${response.results[i].imageUrls}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">${response.results[i].title}</h5>
+              <p class="card-text">${response.results[i].readyInMinutes} minutes</p>
+            </div>
+            <div class="card-body">
+              <a id="food${i}"href="https://spoonacular.com/${response.results[i].title}" class="btn btn-primary">Show Recipe</a>
+            </div>
+          </div>
+          `
+        );
+      }
     }
     function hideMenu(){
       // alert('something');
@@ -309,7 +360,7 @@
             </div>
             <div class="form-group">
               <label for="insertGoal">Goal</label>
-              <input type="text" class="form-control" id="insertGoal" placeholder="Insert Your Current Goal">
+              <input type="text" class="form-control" id="insertGoal" placeholder="Insert how much kg you want to loose">
             </div>
             <button class="btn btn-primary" type="button" id="insertBtn" onclick="insertInfo()">Submit</button>
           </form>
@@ -324,26 +375,32 @@
         <div class="card mt-4 col-8">
           <form class="card-body">
             <h3>Edit your Information</h3>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="firstName">First Name</label>
-                <input type="text" class="form-control" id="firstName" placeholder="First Name">
-              </div>
-              <div class="form-group col-md-6">
-                <label for="lastName">Last Name</label>
-                <input type="text" class="form-control" id="lastName" placeholder="Last Name">
+            <div class="form-group">
+              <label for="editProfileImg">Add Profile Image</label>
+              <div class="input-group mb-3 ">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="editProfileImg">
+                    <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                    <span class="input-group-text" id="">Upload</span>
+                </div>
               </div>
             </div>
             <div class="form-group">
               <label for="inputWeight">Weight</label>
-              <input type="text" class="form-control" id="inputWeight" placeholder="Insert Your Current Weight">
+              <input type="text" class="form-control" id="editWeight" placeholder="Insert Your Current Weight">
             </div>
             <div class="form-group">
               <label for="inputHeight">Height</label>
-              <input type="text" class="form-control" id="inputHeight" placeholder="Insert Your Current Height">
+              <input type="text" class="form-control" id="editHeight" placeholder="Insert Your Current Height">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+            <div class="form-group">
+              <label for="insertGoal">Goal</label>
+              <input type="text" class="form-control" id="editGoal" placeholder="Insert how much kg you want to loose">
+            </div>
+            <button class="btn btn-primary" type="button" id="editButton" onclick="editInfo()">Submit</button>
+           </form>
         </div>
       </div>
     </div>
@@ -386,7 +443,6 @@
             </div>
           </div>
         </div>
-+
         <p class="lead text-muted card" id="usersMainGoal">My goal is to do .....!</p>
       </div>
     </section>
