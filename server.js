@@ -28,7 +28,6 @@ app.post("/api/registration", async function(req, res){
       // })
 
   console.log( `[POST api/registration] recieved: `, req.body );
-  res.send({ message: 'success!'})
   let storeUserInfo = await orm.registrationSql(req.body);
   res.send({
     message: "Success!!!"
@@ -48,20 +47,19 @@ app.post("/api/checkuser", async function(req, res){
    });
 
 
-
-//retrieves user's name from the database
-app.get("/api/getName", async function(req,res) {
-  const fullName = await orm.getFullName();
-  console.log(fullName);
-  res.send(fullName);
-});
-
 //posts user's basic dashboard info on database
-app.post("/api/userInfo", async function(){
+app.post("/api/userInfo", async function(req, res){
   console.log(req.body);
-//   const postBasicInfo = await orm.postUsersInfo(req.body);
+  const postBasicInfo = await orm.postUsersInfo(req.body);
 //   console.log( `[POST dashboard info] recieved: `, req.body );
 });
+
+
+
+
+
+
+
 
 //retrieves user's basic dashboard info on database
 app.get("/api/userInfo", async function(){
