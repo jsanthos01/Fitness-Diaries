@@ -235,20 +235,15 @@
       var chosenDiet = $("#inputGroupSelectDiet").val();
       $("#addDietName").html(`Current Diet Following: ${chosenDiet}`);
 
-      if (chosenDiet == "Vegan" ){
-        $.ajax({
-          url: `https://api.spoonacular.com/recipes/search?apiKey=db254b5cd61744d39a2deebd9c361444&number=3&query=${chosenDiet}`,
-          // url: `https://www.themealdb.com/api/json/v1/1/search.php?s=${chosenDiet}`,
-          method: "GET"
-        }).then(showRecipes);
-
-      }else {
-        alert("Nothing Available right now !! Sorry")
-      }
+      $.ajax({
+        url: `https://api.spoonacular.com/recipes/search?apiKey=db254b5cd61744d39a2deebd9c361444&number=3&query=${chosenDiet}`,
+        // url: `https://www.themealdb.com/api/json/v1/1/search.php?s=${chosenDiet}`,
+        method: "GET"
+      }).then(showRecipes);
     }
 
     function showRecipes(response){
-      // $("#dietSections").empty();
+      $("#dietSections").empty();
       console.log(response);
       // console.log(response.results[0].title);
       console.log(response.results[0].imageUrls)

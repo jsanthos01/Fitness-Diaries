@@ -10,12 +10,6 @@ CREATE TABLE login_credential(
     user_img VARCHAR(250)
 );
 
-
--- CREATE TABLE member_name(
---     my_name VARCHAR(250) NOT NULL,
---     id INTEGER AUTO_INCREMENT PRIMARY KEY
--- );
-
 CREATE TABLE personal_info(
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_img VARCHAR(250),
@@ -27,7 +21,9 @@ CREATE TABLE personal_info(
     goal VARCHAR(250),
     diet VARCHAR(250),
     member_id INT,
-    FOREIGN KEY (member_id) REFERENCES login_credential(id)
+    FOREIGN KEY (member_id) REFERENCES login_credential(id),
+    member_id_fk INT,  #to relate table member-info
+    FOREIGN KEY (member_id_fk) REFERENCES member_info(member_id)
 );
 
 -- CREATE TABLE weight_history(
@@ -40,6 +36,29 @@ CREATE TABLE member_goal(
     goal_message VARCHAR(250),
     goalCompleted BOOLEAN DEFAULT false
 );
+
+---------------------------------- groups list html page ---------------------------------------------
+CREATE TABLE new_group (
+    group_id INT PRIMARY KEY auto_increment,
+    group_name VARCHAR(100) NOT NULL,
+    group_goal VARCHAR(350),
+    group_imageUrl VARCHAR(250) 
+);
+CREATE TABLE member_info (
+    member_id INT PRIMARY KEY auto_increment ,
+    member_name VARCHAR(100) NOT NULL,
+    email_id VARCHAR(100) NOT NULL,
+    group_id_fk INT,
+    FOREIGN KEY (group_id_fk) REFERENCES new_group(group_id)
+);
+
+
+
+
+
+
+
+
 CREATE TABLE group_goal(
     goal_id INTEGER AUTO_INCREMENT PRIMARY KEY,
     goal_message VARCHAR(250)
@@ -65,18 +84,6 @@ CREATE TABLE group_posts(
 --     thumbup_id INT,     
 --     FOREIGN KEY (member_id) REFERENCES group_posts(id)
 -- );
-
-CREATE TABLE new_group (
-    group_id INT PRIMARY KEY auto_increment,
-    group_name VARCHAR(30) NOT NULL
-);
-CREATE TABLE member_info (
-    member_id INT PRIMARY KEY auto_increment ,
-    member_name VARCHAR(30) NOT NULL,
-    email_id DECIMAL,
-    group_id_fk INT,
-    FOREIGN KEY (group_id_fk) REFERENCES new_group(group_id)
-);
 
 INSERT INTO login_credential(my_name, username, user_password, user_img,) VALUES('Elsa', 'elsausername', 'hashpasswordelsa', 'assets/userdb/user_one.png');
 INSERT INTO login_credential(my_name, username, user_password, user_img,) VALUES('Fiona', 'fionausername', 'hashpasswordfiona', 'assets/userdb/user_two.png');
