@@ -136,59 +136,56 @@
     })
 
 
-  async function insertInfo() {
+    async function insertInfo() {
       console.log("I AM CLICKED")
-      let weight = $("#insertWeight").val();
-      let height = $("#insertHeight").val();
+      let weight = $( "#insertWeight" ).val();
+      let height = $( "#insertHeight" ).val();
+      let goal = $( "#insertGoal" ).val();
       // let profileImg = $("#profileImg").val();
 
       //get username and post inside database
-      let userData = localStorage.getItem("userData");
+      let userData = localStorage.getItem( "myUser" );
       userData = JSON.parse(userData);
       let userName = userData.userName;
+      console.log(userName);
+      // let name = userData.my_name;
 
 
-      console.log(userName)
       let userDashboardInfo = {
-        userName:userName,
+        userName: userName,
         inputWeight: weight,
-        inputHeight: height
+        inputHeight: height,
+        inputGoal: goal
         // user_img: profileImg
       };
 
       console.log(userDashboardInfo);
 
-
-
       const postInfo = await $.post("/api/userInfo", userDashboardInfo);
+      console.log("Getting the Post Info Stuff!!!!");
       console.log(postInfo);
 
-      const getInfo = await $.get("/api/userInfo/:");
+      //get the info from database so that it can be added to html
+      const getInfo = await $.get("/api/userInfo");
       console.log("Getting the dashboard info!!!!")
       console.log(getInfo);
+
+      $("#appendWeight").html(`Weight: ${getInfo.my_weight}`);
+      $("#appendHeight").html(`Height: ${getInfo.height}`);
+      $("#usersMainGoal").html(`${getInfo.goal}`);
 
     } 
 
     function recipeCall(){
       var chosenDiet = $("#inputGroupSelectDiet").val();
-      console.log(chosenDiet);
+      $("#addDietName").html(`Current Diet Following: ${chosenDiet}`)
 
       if (chosenDiet == "Vegan" ){
-        var settings = {
-          "async": true,
-          "crossDomain": true,
-          "url": "https://mycookbook-io1.p.rapidapi.com/recipes/rapidapi",
-          "method": "POST",
-          "headers": {
-              "x-rapidapi-host": "mycookbook-io1.p.rapidapi.com",
-              "x-rapidapi-key": "a2d04f2ce0msh0b395c3746199ebp101c55jsne0e6419c8f94",
-              "content-type": "text/plain",
-              "accept": "text/plain"
-          },
-          "data": `${recipeUrl}`
-        }
-
-        $.ajax(settings).done(showRecipes);
+        $.ajax({
+          url: `https://api.spoonacular.com/recipes/search?apiKey=db254b5cd61744d39a2deebd9c361444&number=3&query=${chosenDiet}`,
+          // url: `https://www.themealdb.com/api/json/v1/1/search.php?s=${chosenDiet}`,
+          method: "GET"
+        }).then(showRecipes);
 
       }else {
         alert("Nothing Available right now !! Sorry")
@@ -196,36 +193,36 @@
     }
 
     function showRecipes(response){
-      console.log(response);
       // $("#dietSections").empty();
+      console.log(response);
+      // console.log(response.results[0].title);
+      console.log(response.results[0].imageUrls)
+      // for(var i = 0; i<3; i++){ 
+      //   $("#dietSections").append(
+      //     `
+      //     <div class="card">
+      //       <img class="card-img-top thumbnail-size" src="https://spoonacular.com/recipeImages/${response.results[i].imageUrls}" alt="Card image cap">
+      //       <div class="card-body">
+      //         <h5 class="card-title">${response.results[i].title}</h5>
+      //         <p class="card-text">${response.results[i].readyInMinutes}</p>
+      //       </div>
+      //       <div class="card-body">
+      //         <a id="food${i}"href="https://spoonacular.com/${response.results[i].title}" class="btn btn-primary">Show Recipe</a>
+      //       </div>
+      //     </div>
+      //     `
+      //   )
 
-      // var dietResponse = JSON.parse(response);
-      // console.log(dietResponse);
+      //   var id = response.results[i].id
+      //   $.ajax({
+      //     url:"https://api.spoonacular.com/recipes/"+id+"/information?apiKey=db254b5cd61744d39a2deebd9c361444",
+      //     success: function(res) {
+      //       $(`#food${i}`).attr("href", res.sourceUrl);
+      //     }
+      //   });
 
-      // for(var i = 0; i<3; i++){
-      //   console.log(dietResponse.results[i]);
-      // //   $("#dietSections").append(
-      // //     `
-      // //     <div class="card">
-      // //       <img class="card-img-top thumbnail-size" src="${dietResponse.results[i].thumbnail}" alt="Card image cap">
-      // //       <div class="card-body">
-      // //         <h5 class="card-title">${dietResponse.results[i].title}</h5>
-      // //         <p class="card-text">${dietResponse.results[i].ingredients}</p>
-      // //       </div>
-      // //       <div class="card-body">
-      // //         <a href="${dietResponse.results[i].href}" class="btn btn-primary">Show Recipe</a>
-      // //       </div>
-      // //     </div>
-      // //     `
-      // //   )
-      // // }
-
-    
-
-    
+      // }
     }
-
-
     function hideMenu(){
       // alert('something');
       $( "#navMenu" ).hide( "slow" );
@@ -383,17 +380,17 @@
           <div class="col-lg-8 userInfo">
             <div class="">
               <ul class="text-left card-body">
-                <li class="profileName">Weight:</li>
+                <li class="profileName" id="appendWeight">Weight:</li>
                 <br>
-                <li class="profileName">Height</li>
+                <li class="profileName" id="appendHeight">Height</li>
                 <br>
-                <li class="profileName">BMI</li>
+                <li class="profileName" id="appendBMI">BMI</li>
                 <br>
               </ul>
             </div>
           </div>
         </div>
-
++
         <p class="lead text-muted card" id="usersMainGoal">My goal is to do .....!</p>
       </div>
     </section>
@@ -474,7 +471,7 @@
         <div class="nav-link card-body d-flex justify-content-end" href=""><i class="fa fa-times" onClick="hideDietCard()" aria-hidden="true"></i></div>
         <div class="dietSection card-body">
           <h3>Diet</h3>
-          <h4>Current Diet you are following: keto</h4>
+          <h4 id="addDietName">Current Diet you are following: keto</h4>
           <div class="input-group mb-3">
             <select class="custom-select" id="inputGroupSelectDiet" onchange="recipeCall()">
               <option>Choose a Diet</option>

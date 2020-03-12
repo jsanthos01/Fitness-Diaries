@@ -7,6 +7,7 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 
+//=====================================================Joanna ==========================================
 //posts user's registration information inside database
 app.post("/api/registration", async function(req, res){
   console.log(req.body);
@@ -34,6 +35,7 @@ app.post("/api/registration", async function(req, res){
   });
 })
 
+//this is for the login page
 app.post("/api/checkuser", async function(req, res){
     console.log(req.body)
     const userEmail = req.body.userEmail;
@@ -46,36 +48,29 @@ app.post("/api/checkuser", async function(req, res){
     res.send(userData);
    });
 
-
 //posts user's basic dashboard info on database
 app.post("/api/userInfo", async function(req, res){
+  console.log("This is in the post basic function okiii")
   console.log(req.body);
   const postBasicInfo = await orm.postUsersInfo(req.body);
 //   console.log( `[POST dashboard info] recieved: `, req.body );
+  res.send("Basic Info Posted to Database")
 });
 
-
-
-
-
-
-
-
 //retrieves user's basic dashboard info on database
-app.get("/api/userInfo", async function(){
+app.get("/api/userInfo", async function(req, res){
   const getBasicInfo = await orm.getUsersInfo();
+  console.log(getBasicInfo);
   res.send(getBasicInfo);
   
 });
 
+//=====================================================Joanna ==========================================
 
 
 app.listen(PORT, function () {
   console.log(`[fitness_app] RUNNING, http://localhost:${PORT}`);
 });
-
-
-
 
 
 //norma's code
