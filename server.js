@@ -130,13 +130,13 @@ app.delete( '/api/deleteMember/:id/:name', async function( req, res ){
 
   res.send( { message: `Thank you, deleted${req.params.id} ${req.params.name}`} );
 } );
-app.delete( '/api/deleteGroup/:id/:name', async function( req, res ){
+app.delete( '/api/deleteGroup/:id', async function( req, res ){
 
   try {
     console.log( `[Delete api/deleteGroup/] recieved: `, req.body );
   await orm.deleteGroup(req.params.id);
 
-  res.send( { message: `Thank you, deleted group: ${req.params.id} ${req.params.name}`} );
+  res.send( { message: `Thank you, deleted group: ${req.params.id}`} );
   }
   catch(err) {
     res.send( { message: `Sorry, unable to delete group: ${req.params.id} ${req.params.name}. this may be because there are already members assigned to this group`} );

@@ -225,10 +225,10 @@
             })
             appendMemberList(grId);
         }
-        async function deleteGrpBtn(grpId, grpName){
-            console.log('deleting group ' + grpName + ' of id:' + grpId);
+        async function deleteGrpBtn(grpId){
+            console.log('deleting group of id:' + grpId);
             const apiDeleteGroup = await $.ajax({
-                url: `/api/deleteGroup/${grpId}/${grpName}`,
+                url: `/api/deleteGroup/${grpId}`,
                 type: 'DELETE'
             })
             alert( apiDeleteGroup.message );
@@ -272,7 +272,7 @@
                                 <div class="d-flex justify-content-center">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-outline-secondary" onClick="showGroupDetailInfo(${myGroupList[i].group_id})">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="deleteGrpBtn(${myGroupList[i].group_id}, '${myGroupList[i].group_name}')">Delete</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="deleteGrpBtn(${myGroupList[i].group_id})">Delete</button>
                                 </div>
                             </div>
                             <br>
