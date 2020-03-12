@@ -29,7 +29,7 @@ const db = new Database({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "1234", //change 
+    password: "bootcamp2020", //change 
     database: "fitness_diaries"
 });
 
