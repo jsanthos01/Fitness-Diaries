@@ -119,7 +119,7 @@
             /* width: 100;
             height: 100; */
             }
-        .groupImg{
+        .groupImg, .memberImg {
             border-radius: 50%;
             width: 15vw;
             height: 30vh;
@@ -128,8 +128,11 @@
     </style>
     <script>
         $(document).ready( async function(){
+ 
+            appendGroupList()
+//============don't delete below
 
-        })
+})
         function showMenu(){
         $( "#navMenu" ).show( "slow" );
         };
@@ -152,34 +155,19 @@
                     scrollTop: $("#memberForm").offset().top
                 }, 1000);
             }
-        async function addMember(){
+        async function addMember(grpId){
             event.preventDefault();
-            const member = {
+            const newMember = {
                 memberName: $("#inputUserName").val(),
-                memberEmail: $("#inputUserEmail").val()
+                memberEmail: $("#inputUserEmail").val(),
+                memberFrKey: grpId
             }
+            const apiResult = await $.post( `/api/addNewMember`, newMember );
 
-            $('#membersListDisplay').append(`<div class="col-md-3">
-                            <div class="mb-2 box-shadow">
-                                <div class="card-body row justify-content-center">
-                                    <img class="groupImg card-img-top" src="https://us.123rf.com/450wm/langstrup/langstrup1609/langstrup160900056/63909093-group-of-eight-happy-muscular-female-and-male-adults-standing-together-as-good-friends-in-gym-with-l.jpg?ver=6" alt="Card image cap">
-                                </div>
-                                <div class="card-body row justify-content-center">
-                                    <p>${member.memberName}</p>
-                                    <div class="d-flex justify-content-center">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`)
+            appendMemberList(grpId);
+            alert( apiResult.message );
             //===============================
-            
-
             //========
-            console.log(member.memberName)
             // await $.post()
             $("#inputUserName").val("");
             $("#inputUserEmail").val("");
@@ -193,32 +181,111 @@
                 groupGoal: $("#groupGoal").val(),
                 groupImageUrl: $("#groupImgUrl").val()
             }
-            $("#groupsRow").append(`
-            <div class="col-md-3">
-                <div class="mb-2 box-shadow">
-                    <img class="groupImg card-img-top" src="${group.groupImageUrl}" alt="Card image cap">
-                    <div class="card-body">
-                        <p class="card-text">${group.groupName}</p>
-                        <p class="card-text">6 people</p>
-                        <div class="d-flex justify-content-center">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
-                        </div>
-                    </div>
-                    <br>
-                    <small class="text-muted">Created On: 9 mins</small>
-                    </div>
-                </div>
-            </div>
-            `)
+            const apiNewGroup = await $.post( '/api/newGroup', group );
+            alert( apiNewGroup.message );
+            //
+            appendGroupList()
+
             $( "#addGroupWin" ).hide( "slow" );
         }
-        function showGroupDetailInfo(idx){
+        async function showGroupDetailInfo(idx){
             $( "#groupDetailInfo" ).show( "slow" );
+            const myGroupName =await $.get(`/api/groupName/${idx}`);
+            console.log(`my group name is ` + myGroupName);
+            $( "#grpNmRow" ).html('');
+            $( "#grpNmRow" ).append(`
+                <div class="text-center">
+                    <h3>${myGroupName.group_name}</h3>
+                    <img src="assets/add.png" alt="" class="addMemberIcon" onClick="showAddMemberForm(${idx})" style="width: 100px;" >
+                    <p>Add member</p>
+                </div>`)
+            $( "#memberForm" ).html('');
+            $( "#memberForm" ).append(`<div class="form-group card-body" >
+                <div class="form-group">
+                    <label for="inputUserName">Users</label>
+                    <input type="text" class="form-control" id="inputUserName" placeholder="Insert User Name">
+                </div>
+                <div class="form-group">
+                    <label for="inputUserEmail">Email Adress of the Group Member</label>
+                    <input type="Email" class="form-control" id="inputUserEmail" placeholder="Insert Members Email Address">
+                </div>
+                <button type="submit" class="btn btn-primary" onClick="addMember(${idx})">Add Member</button>
+            </div>`)
             $('html, body').animate({
                     scrollTop: $("#groupDetailInfo").offset().top
                 }, 1000);
+            appendMemberList(idx);
+        }
+        async function deleteMemberBtn(memberId, name, grId){
+            // const name = memberName;
+            console.log('deleting member ' + name + ' of id:' + memberId);
+            const apiDeleteMember = await $.ajax({
+                url: `/api/deleteMember/${memberId}/${name}`,
+                type: 'DELETE'
+            })
+            appendMemberList(grId);
+        }
+        async function deleteGrpBtn(grpId, grpName){
+            console.log('deleting group ' + grpName + ' of id:' + grpId);
+            const apiDeleteGroup = await $.ajax({
+                url: `/api/deleteGroup/${grpId}/${grpName}`,
+                type: 'DELETE'
+            })
+            alert( apiDeleteGroup.message );
+            appendGroupList();
+        }
+        async function appendMemberList(grIdx){
+            const myMembersList =await $.get(`/api/membersList/${grIdx}`);
+            console.log(myMembersList);
+            $('#membersListDisplay').html('');
+            myMembersList.forEach( function( member ){
+                $("#membersListDisplay").append(`<div class="col-md-3">
+                    <div class="mb-2 box-shadow">
+                        <div class="card-body row justify-content-center">
+                            <img class="memberImg card-img-top" src="https://us.123rf.com/450wm/langstrup/langstrup1609/langstrup160900056/63909093-group-of-eight-happy-muscular-female-and-male-adults-standing-together-as-good-friends-in-gym-with-l.jpg?ver=6" alt="Card image cap">
+                        </div>
+                        <h5 class="text-center">${member.member_name}</h5>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="showMemberProfile(${member.member_id}, '${member.member_name}')">View Member Profile</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="deleteMemberBtn(${member.member_id}, '${member.member_name}',${member.group_id_fk})"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`)
+            });
+        };
+        async function appendGroupList(){
+            const myGroupList =await $.get("/api/groupList");
+            console.log(myGroupList);
+            $("#groupsRow").html("");
+            for (var i=0; i< myGroupList.length; i++){
+                console.log(myGroupList[i].group_name)
+                $("#groupsRow").append(`
+                    <div class="col-md-3">
+                        <div class="mb-2 box-shadow">
+                            <img class="groupImg card-img-top" src="${myGroupList[i].group_imageUrl}" alt="Card image cap">
+                            <div class="card-body">
+                                <p class="card-text">${myGroupList[i].group_name}</p>
+                                <div class="d-flex justify-content-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="showGroupDetailInfo(${myGroupList[i].group_id})">View</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="deleteGrpBtn(${myGroupList[i].group_id}, '${myGroupList[i].group_name}')">Delete</button>
+                                </div>
+                            </div>
+                            <br>
+                            <small class="text-muted">Created On: 9 mins</small>
+                            </div>
+                        </div>
+                    </div>`)
+            }
+        }
+
+        async function showMemberProfile(membId, membName){
+            console.log('loading profile of  ' + membName + ' ' + membId);
+            location.href = '/individual.html#'+ membId;
         }
     </script>
     <div class="navBar d-flex justify-content-end">
@@ -291,71 +358,24 @@
                 </div>
                 <div class="card-body">
                     <div class="row" id="groupsRow">
-                        <div class="col-md-3">
-                            <div class="mb-2 box-shadow">
-                                <img class="groupImg card-img-top" src="https://us.123rf.com/450wm/langstrup/langstrup1609/langstrup160900056/63909093-group-of-eight-happy-muscular-female-and-male-adults-standing-together-as-good-friends-in-gym-with-l.jpg?ver=6" alt="Card image cap">
-                                <div class="card-body">
-                                    <p class="card-text">Norma's group</p>
-                                    <p class="card-text">6 people</p>
-                                    <div class="d-flex justify-content-center">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" onClick="showGroupDetailInfo()">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
-                                    </div>
-                                </div>
-                                <br>
-                                <small class="text-muted">Created On: 9 mins</small>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </section>
         <section class="groupInfo container hide" id="groupDetailInfo">
-            <div class="d-flex justify-content-center">
-                <div class="text-center">
-                    <h3>Group Name</h3>
-                    <img src="assets/add.png" alt="" class="addMemberIcon" onClick="showAddMemberForm()" style="width: 100px;" >
-                    <p>Add member</p>
-                </div>
+            <div class="d-flex justify-content-center" id="grpNmRow">
+                
             </div>
             <div class="card addMemberForm hide" id="memberForm">
-                <div class="form-group card-body" >
-                    <div class="form-group">
-                        <label for="inputUserName">Users</label>
-                        <input type="text" class="form-control" id="inputUserName" placeholder="Insert User Name">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputUserEmail">Email Adress of the Group Member</label>
-                        <input type="Email" class="form-control" id="inputUserEmail" placeholder="Insert Members Email Address">
-                    </div>
-                    <button type="submit" class="btn btn-primary" onClick="addMember()">Add Member</button>
-                </div>
+                
             </div>
-            <section class="card-body">
+            <section class="card-body members_list">
                 <div class="memberList card">
                     <div class="card-body">
                         <h3>members List</h3>
                     </div>
                     <div class="card-body">
                         <div class="row" id="membersListDisplay">
-                            <div class="col-md-3">
-                                <div class="mb-2 box-shadow">
-                                    <div class="card-body row justify-content-center">
-                                        <img class="groupImg card-img-top" src="https://us.123rf.com/450wm/langstrup/langstrup1609/langstrup160900056/63909093-group-of-eight-happy-muscular-female-and-male-adults-standing-together-as-good-friends-in-gym-with-l.jpg?ver=6" alt="Card image cap">
-                                    </div>
-                                    <div class="card-body row justify-content-center">
-                                        <p>Member Name</p>
-                                        <div class="d-flex justify-content-center">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
