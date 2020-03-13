@@ -29,6 +29,7 @@ class Database {
 // at top INIT DB connection
 if(process.env.JAWSB_URL){
      db = new Database(process.env.JAWSBD_URL);
+     console.log('jaws db is connected');
 }else{
      db = new Database({
         host: "localhost",
@@ -42,6 +43,7 @@ if(process.env.JAWSB_URL){
 //store registration info 
 
 async function registrationSql(myPost){
+    console.log(myPost);
     const postUserLogin = await db.query( 
         "INSERT INTO login_credential(my_name,username,user_password) VALUES(?,?,?)",
         [ myPost.my_name, myPost.userName, myPost.user_password]);
