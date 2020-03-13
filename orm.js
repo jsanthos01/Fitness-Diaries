@@ -1,5 +1,5 @@
 const mysql = require("mysql");
-
+const db;
 class Database {
     constructor( config ) {
         this.connection = mysql.createConnection( config );
@@ -24,11 +24,13 @@ class Database {
     }
 }
 
+
+
 // at top INIT DB connection
 if(process.env.JAWSB_URL){
-    const db = new Database(process.env.JAWSBD_URL);
+     db = new Database(process.env.JAWSBD_URL);
 }else{
-    const db = new Database({
+     db = new Database({
         host: "localhost",
         port: 3306,
         user: "root",
