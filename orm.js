@@ -27,9 +27,9 @@ class Database {
 
 
 // at top INIT DB connection
-let db;
-if(process.env.JAWSB_URL){
-     db = new Database(process.env.JAWSBD_URL);
+var db;
+if(process.env.JAWSDB_URL){
+     db = new Database(process.env.JAWSDB_URL);
      console.log('jaws db is connected');
 }else{
      db = new Database({
