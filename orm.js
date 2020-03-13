@@ -51,7 +51,6 @@ async function postUsersInfo(myPost){
     console.log(myPost.userName);
     const postMemberInfo = await db.query("UPDATE personal_info SET my_weight=?, height=?, goal=?, BMI=? WHERE username=?", [ myPost.inputWeight, myPost.inputHeight, myPost.inputGoal, myPost.bmi, myPost.userName]);
     // const postMemberInfo = await db.query("INSERT INTO personal_info(my_weight, height, goal) VALUES(?,?,?) WHERE username=?", [ myPost.inputWeight, myPost.inputHeight, myPost.inputGoal, myPost.userName]);
-    console.log(postMemberInfo);
     return postMemberInfo;
 }
 
@@ -100,7 +99,7 @@ async function  getGrpName( grpNameId ){
 }
 async function addNewMember( newMember ){
     const myNewMemberResult = await db.query( 
-        "INSERT INTO member_info (member_name, email_id, group_id_fk) VALUES(?,?,?);",
+        "INSERT INTO member_info (member_name, email_id, group_id_fk) VALUES(?,?,?)",
         [ newMember.memberName, newMember.memberEmail, newMember.memberFrKey ] );
     return myNewMemberResult;
 }
@@ -139,199 +138,28 @@ async function getDashboardInfo(id){
     return putInDashboard[0]
 }
 
-
-
-// //norma's code
-// async function getUsersInfo(myId) {
-//     const userInfo =await db.query("SELECT * FROM member_info WHERE id=?", [ myId ]);
-//     return userInf0[0];   
-// }
-
-
-//query to fetch all user image to display
-//whats the order of showing images
-
-//------
-//query to get group post
-//get last 10 posts from the database
-//get username, imag, timestamp
-//----
-
-//like button 
-
-//query to get top 3 data 
-//from weight table
-
-//winners of last week, winners of last month
-
-//==========================================Joanna ==================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//===========================Joanna ended============================================
-
-//===========================Sara ============================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//===========================Sara ============================================
-
-
-
-
-//-----------------
+async function postGoalInfo(myGoals){
+    console.log("INSIDE ORM FILE FOR POST GOAL");
+    const postGoalSql = await db.query("INSERT INTO personal_goal(goal_range,goal_message, goalCompleted) VALUES(?,?,?) ", [myGoals.goalRange,myGoals.goalInput, myGoals.goalCompleted]);
+    return postGoalSql;
+}
+
+async function getGoalInfo(){
+    let getGoalSql = await db.query("SELECT * FROM personal_goal WHERE goalCompleted=0");
+    getGoalSql = JSON.stringify(getGoalSql);
+    getGoalSql = JSON.parse(getGoalSql);
+
+    console.log(getGoalSql);
+    
+    return getGoalSql;
+}
+
+async function updateGoalStatus(goalId){
+    const updateGoal = await db.query("UPDATE personal_goal SET goalCompleted=? WHERE goal_id=?", [true, goalId]);
+    console.log("Goal is updated")
+    console.log(updateGoal);    
+
+}
 
 module.exports = {
     registrationSql,
@@ -346,5 +174,8 @@ module.exports = {
     deleteMember,
     deleteGroup,
     getId,
-    getDashboardInfo
+    getDashboardInfo,
+    postGoalInfo,
+    getGoalInfo,
+    updateGoalStatus
 }

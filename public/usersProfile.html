@@ -489,10 +489,6 @@
     async function saveGoal(){
       var saveGoalInput = $("#inputSaveText").val();
       var goalRange = $("#goalRangeChoice option:selected").val();
-      $("#dailyGoals").empty();
-      $("#WeeklyGoals").empty();
-      $("#MonthlyGoals").empty();
-
       console.log(goalRange);
 
       var goalInfoStore = {

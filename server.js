@@ -54,29 +54,25 @@ app.post("/api/userInfo", async function(req, res){
   console.log(req.body);
   const postBasicInfo = await orm.postUsersInfo(req.body);
 //   console.log( `[POST dashboard info] recieved: `, req.body );
-  res.send("Basic Info Posted to Database")
+  console.log("Basic Info Posted to Database");
+  res.send('Text here!')
 });
 
 //retrieves user's basic dashboard info on database
-// app.get("/api/userInfo", async function(){
-//   const getBasicInfo = await orm.getUsersInfo();
-//   res.send(getBasicInfo);
-  
-// });
+
 app.get("/api/userInfo", async function(req, res){
   const getBasicInfo = await orm.getUsersInfo();
   console.log(getBasicInfo);
   res.send(getBasicInfo);
   
 });
+
 app.post("/api/fetchID", async function(req, res){
   const getId = await orm.getId(req.body);
-  res.send(getId)
-  
-  // console.log(getBasicInfo);
-  // res.send(getBasicInfo);
+  res.send(getId);
   
 });
+
 
 app.get("/api/dashboardInfo/:id", async function(req, res){
   console.log( `get api/groupName/ ] recieved: `, req.params.id );
@@ -93,6 +89,7 @@ app.get("/api/groupList", async function(req, res){
   res.send(getGroupList);
   
 });
+
 app.get("/api/membersList/:id", async function(req, res){
   console.log( `[get api/membersList/ ] recieved: `, req.params.id );
   const membersList = await orm.getMembListForGrpId(req.params.id);
@@ -124,6 +121,7 @@ app.post( '/api/newGroup', async function( req, res ){
 
   res.send( { message: `Thank you, saved group: ${req.body.groupName}` } );
 } );
+
 app.delete( '/api/deleteMember/:id/:name', async function( req, res ){
   console.log( `[Delete api/deleteMember/] recieved: `, req.body );
   await orm.deleteMember( req.params.id, req.params.name );
@@ -179,9 +177,26 @@ app.listen(PORT, function () {
 
 // ===================================== Joanna=======================================================================
 
+app.post("/api/postGoal", async function(req, res){
+  console.log(req.body);
+  const postGoal = await orm.postGoalInfo(req.body);
+  res.send("Success Posted Goal")
+});
 
+app.get("/api/getGoal", async function(req, res){
+  const getGoal = await orm.getGoalInfo();
+  console.log("GET GOAL SECTION")
+  console.log(getGoal);
+  res.send(getGoal);
+});
 
+app.put("/api/goalUpdate/:id", async function(req, res){
+  console.log(req.params.id)
+  const updateGoal = await orm.updateGoalStatus(req.params.id);
 
+  res.send("Success!!")
+
+});
 
 
 
