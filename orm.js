@@ -25,13 +25,17 @@ class Database {
 }
 
 // at top INIT DB connection
-const db = new Database({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "bootcamp2020", //change 
-    database: "fitness_diaries"
-});
+if(process.env.JAWSB_URL){
+    const db = new Database(process.env.JAWSBD_URL);
+}else{
+    const db = new Database({
+        host: "localhost",
+        port: 3306,
+        user: "root",
+        password: "bootcamp2020", //change 
+        database: "fitness_diaries"
+    });
+};
 
 //store registration info 
 
