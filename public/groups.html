@@ -4,7 +4,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Pictures</title>
-
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -13,14 +12,11 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
-        <link href="https://fonts.googleapis.com/css?family=Alegreya|Alegreya+Sans|Lato&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
 
 
     </head>
-        <!-- background #121f3f // 
-        gradient from #49c4cc to #40e0d0 //#cdedf7//
-        leaf colors #0f444a // // #29a37d //   
-        button gradient from #f84c00  to #f9c724 -->
+
     <body>
     <style>
         body {
@@ -119,16 +115,26 @@
             /* width: 100;
             height: 100; */
             }
-        .groupImg, .memberImg {
+        .groupImg {
             border-radius: 50%;
-            width: 15vw;
+            width: 40vh;
+            height: 40vh;
+            object-fit: cover;
+        }
+        .memberImg {
+            border-radius: 50%;
+            width: 30vh;
             height: 30vh;
             object-fit: cover;
+        }
+        .userImgThumb{
+            border-radius: 50%;
+            width: 30px;
         }
     </style>
     <script>
         $(document).ready( async function(){
- 
+
             appendGroupList()
 //============don't delete below
 
@@ -155,24 +161,29 @@
                     scrollTop: $("#memberForm").offset().top
                 }, 1000);
             }
-        async function addMember(grpId){
+        async function addMemberBtn(grpId){
             event.preventDefault();
-            const newMember = {
-                memberName: $("#inputUserName").val(),
-                memberEmail: $("#inputUserEmail").val(),
-                memberFrKey: grpId
-            }
-            const apiResult = await $.post( `/api/addNewMember`, newMember );
+            const addMemberVal = $("#inputGroupSelect02").val();
+            const MemberValArray = addMemberVal.split(" ");
+            const memberId = MemberValArray[0];
+            const memberFirstName = MemberValArray[1];
+            const memberLastName = MemberValArray[2];
 
+            const newMember = {
+                memberName: memberFirstName + memberLastName,
+                memberId: memberId,
+                groupId: grpId
+            }
+
+            const apiResult = await $.post( `/api/addNewMember`, newMember );
             appendMemberList(grpId);
             alert( apiResult.message );
             //===============================
             //========
             // await $.post()
-            $("#inputUserName").val("");
-            $("#inputUserEmail").val("");
+            // $("#inputUserName").val("");
+            $("#inputGroupSelect02").val("Choose a User to add to your group");
             $( "#memberForm" ).hide();
-
         }
         async function createGrp(){
             event.preventDefault();
@@ -190,43 +201,47 @@
         }
         async function showGroupDetailInfo(idx){
             $( "#groupDetailInfo" ).show( "slow" );
+            
             const myGroupName =await $.get(`/api/groupName/${idx}`);
             console.log(`my group name is ` + myGroupName);
             $( "#grpNmRow" ).html('');
             $( "#grpNmRow" ).append(`
                 <div class="text-center">
                     <h3>${myGroupName.group_name}</h3>
-                    <img src="assets/add.png" alt="" class="addMemberIcon" onClick="showAddMemberForm(${idx})" style="width: 100px;" >
-                    <p>Add member</p>
+            <img src="assets/add.png" alt="" class="addMemberIcon" onClick="showAddMemberForm(${idx})" style="width: 100px;" ><p>Add member</p>
                 </div>`)
+            $( "#addShowGrpBtn" ).html( `<button type="button" class="btn btn-outline-primary" onClick="showGrpDshbrd(${idx})">Show Group Dashboard</button>` )
+                
             $( "#memberForm" ).html('');
-            $( "#memberForm" ).append(`<div class="form-group card-body" >
-                <div class="form-group">
-                    <label for="inputUserName">Users</label>
-                    <input type="text" class="form-control" id="inputUserName" placeholder="Insert User Name">
+            $( "#memberForm" ).append(`
+                <div class="input-group mb-3">
+                    <select class="custom-select" id="inputGroupSelect02">
+                        <option selected>Choose a User to add to your group</option>
+                    </select>
+                    <div class="input-group-append">
+                        <label class="input-group-text" for="inputGroupSelect02">Options</label>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="inputUserEmail">Email Adress of the Group Member</label>
-                    <input type="Email" class="form-control" id="inputUserEmail" placeholder="Insert Members Email Address">
-                </div>
-                <button type="submit" class="btn btn-primary" onClick="addMember(${idx})">Add Member</button>
-            </div>`)
+                <button type="button" class="btn btn-primary btn-lg" onClick="addMemberBtn(${idx})">Add Member to Group</button>
+                `)
+                appendAllMemberToSelect()
+
             $('html, body').animate({
                     scrollTop: $("#groupDetailInfo").offset().top
                 }, 1000);
             appendMemberList(idx);
         }
-        async function deleteMemberBtn(memberId, name, grId){
+        async function deleteMemberBtn(grpMemberId, name, grId){
             // const name = memberName;
-            console.log('deleting member ' + name + ' of id:' + memberId);
+            console.log('deleting member ' + name + ' of id:' + grpMemberId);
             const apiDeleteMember = await $.ajax({
-                url: `/api/deleteMember/${memberId}/${name}`,
+                url: `/api/deleteMember/${grpMemberId}/${name}`,
                 type: 'DELETE'
             })
             appendMemberList(grId);
         }
         async function deleteGrpBtn(grpId){
-            console.log('deleting group of id:' + grpId);
+            console.log('deleting group ' + ' of id:' + grpId);
             const apiDeleteGroup = await $.ajax({
                 url: `/api/deleteGroup/${grpId}`,
                 type: 'DELETE'
@@ -236,26 +251,34 @@
         }
         async function appendMemberList(grIdx){
             const myMembersList =await $.get(`/api/membersList/${grIdx}`);
+            
             console.log(myMembersList);
-            $('#membersListDisplay').html('');
-            myMembersList.forEach( function( member ){
-                $("#membersListDisplay").append(`<div class="col-md-3">
-                    <div class="mb-2 box-shadow">
-                        <div class="card-body row justify-content-center">
-                            <img class="memberImg card-img-top" src="https://us.123rf.com/450wm/langstrup/langstrup1609/langstrup160900056/63909093-group-of-eight-happy-muscular-female-and-male-adults-standing-together-as-good-friends-in-gym-with-l.jpg?ver=6" alt="Card image cap">
-                        </div>
-                        <h5 class="text-center">${member.member_name}</h5>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="showMemberProfile(${member.member_id}, '${member.member_name}')">View Member Profile</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="deleteMemberBtn(${member.member_id}, '${member.member_name}',${member.group_id_fk})"><i class="fa fa-trash" aria-hidden="true"></i></button>
+            if( myMembersList !== null && myMembersList !== '') {
+            // do something
+                $('#membersListDisplay').html('');
+                myMembersList.forEach( function( member ){
+                    $("#membersListDisplay").append(`<div class="col-md-3">
+                        <div class="mb-2 box-shadow">
+                            <div class="card-body row justify-content-center">
+                                <img class="memberImg card-img-top" src="${member.user_img}" alt="Card image cap">
+                            </div> 
+                            <h5 class="text-center">${member.my_name}</h5>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" onClick="showMemberProfile(${member.id})">View Member Profile</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" onClick="deleteMemberBtn(${member.grp_mbr_id}, '${member.my_name}', ${member.group_id})"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>`)
-            });
+                    </div>`)
+                });
+                return ;
+            }
+            console.log('something!!')
+
+                $("#membersListDisplay").append('<div class="d-flex justify-content-center"><h6>You do not have any members available. Add members</h6></div>')
         };
         async function appendGroupList(){
             const myGroupList =await $.get("/api/groupList");
@@ -272,7 +295,7 @@
                                 <div class="d-flex justify-content-center">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-outline-secondary" onClick="showGroupDetailInfo(${myGroupList[i].group_id})">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="deleteGrpBtn(${myGroupList[i].group_id})">Delete</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="deleteGrpBtn(${myGroupList[i].group_id}, '${myGroupList[i].group_name}')">Delete</button>
                                 </div>
                             </div>
                             <br>
@@ -282,12 +305,24 @@
                     </div>`)
             }
         }
-
-        async function showMemberProfile(membId, membName){
-            console.log('loading profile of  ' + membName + ' ' + membId);
+        async function appendAllMemberToSelect(){
+            const allMembersList =await $.get(`/api/getAllRegisteredMembersList`);
+            console.log(allMembersList.my_name);
+            allMembersList.forEach( function(member){
+                $('#inputGroupSelect02').append(`
+                    <option value="${member.id} ${member.my_name}">${member.my_name}</option>`)
+            })
+        }
+        async function showMemberProfile(membId){
+            console.log('loading profile of ' + membId);
             location.href = '/individual.html#'+ membId;
         }
+        async function showGrpDshbrd(grpId){
+            console.log('loading group dashboard of group with id of ' + grpId);
+            location.href = '/groupDashboard.html#'+ grpId;
+        }
     </script>
+    
     <div class="navBar d-flex justify-content-end">
         <div id="addGroupWin" class="window container-fluid hide card-body">
             <div class="d-flex justify-content-end">
@@ -305,7 +340,7 @@
                     </div>
                     <div class="form-group">
                         <label for="groupGoal">Group Goal</label>
-                        <input type="text" class="form-control" id="groupGoal" placeholder="Insert Your Current Height">
+                        <input type="text" class="form-control" id="groupGoal" placeholder="Insert Your Group Goal">
                     </div>
                     <div class="form-group">
                         <label for="groupImgUrl">Group Image</label>
@@ -341,7 +376,7 @@
         </div>
         <div class="col-lg-11"></div>
         <div class="col-lg-1 groupMenu" onClick="showMenu()">
-            <img src="assets/download.png" alt="" class="m-2 " style="width: 50px;">
+            <img src="assets/download.png" alt="" class="userImgThumb m-2" style="width: 50px;">
         </div>
     </div>
     <main role="main">
@@ -363,19 +398,19 @@
             </div>
         </section>
         <section class="groupInfo container hide" id="groupDetailInfo">
-            <div class="d-flex justify-content-center" id="grpNmRow">
-                
-            </div>
-            <div class="card addMemberForm hide" id="memberForm">
-                
-            </div>
+            <div class="d-flex justify-content-center" id="grpNmRow"></div>
+            <div id="selectMemberForm"></div>
+            <div class="addMemberForm hide card-body" id="memberForm"></div>
             <section class="card-body members_list">
                 <div class="memberList card">
-                    <div class="card-body">
+                    <div class="card-body d-flex justify-content-between">
                         <h3>members List</h3>
+                        <div id="addShowGrpBtn">
+                            <button type="button" class="btn btn-outline-primary">Show Group Dashboard</button>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <div class="row" id="membersListDisplay">
+                        <div class="d-flex justify-content-center" id="membersListDisplay">
                         </div>
                     </div>
                 </div>

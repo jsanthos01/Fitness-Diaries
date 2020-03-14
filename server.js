@@ -81,7 +81,14 @@ app.get("/api/dashboardInfo/:id", async function(req, res){
   
 });
 
+//----------------------Joanna ended ===========================//
 //=============sara==============
+
+app.get("/api/getAllRegisteredMembersList", async function(req, res){
+  const registeredMemberList = await orm.getAllRegisMember();
+  console.log(registeredMemberList)
+  res.send(registeredMemberList);
+});
 
 app.get("/api/groupList", async function(req, res){
   const getGroupList = await orm.getGroupList();
@@ -89,11 +96,10 @@ app.get("/api/groupList", async function(req, res){
   res.send(getGroupList);
   
 });
-
 app.get("/api/membersList/:id", async function(req, res){
   console.log( `[get api/membersList/ ] recieved: `, req.params.id );
   const membersList = await orm.getMembListForGrpId(req.params.id);
-  console.log(membersList)
+  // console.log(membersList)
   res.send(membersList);
   
 });
@@ -103,6 +109,22 @@ app.get("/api/groupName/:id", async function(req, res){
   const groupNameList = await orm.getGrpName(req.params.id);
   console.log(groupNameList)
   res.send(groupNameList);
+  
+});
+app.get("/api/userProfile/:id", async function(req, res){
+  console.log( `[/api/userProfile/] recieved: `, req.params.id );
+  const userProfile = await orm.getUserProfile(req.params.id);
+  console.log(userProfile)
+  res.send(userProfile);
+  
+});
+
+//==== for TOP 3 ON group dashboard
+app.get("/api/top3List/:id", async function(req, res){
+  console.log( `[/api/top3List/] recieved: `, req.params.id );
+  const top3List = await orm.getTop3(req.params.id);
+  console.log(top3List);
+  res.send(top3List);
   
 });
 
@@ -121,10 +143,9 @@ app.post( '/api/newGroup', async function( req, res ){
 
   res.send( { message: `Thank you, saved group: ${req.body.groupName}` } );
 } );
-
 app.delete( '/api/deleteMember/:id/:name', async function( req, res ){
   console.log( `[Delete api/deleteMember/] recieved: `, req.body );
-  await orm.deleteMember( req.params.id, req.params.name );
+  await orm.deleteGrpMember( req.params.id, req.params.name );
 
   res.send( { message: `Thank you, deleted${req.params.id} ${req.params.name}`} );
 } );
@@ -141,42 +162,10 @@ app.delete( '/api/deleteGroup/:id', async function( req, res ){
     }
   
 } );
+
+
 ///==========sara ending dont delet below ============
 //=====================================================Joanna ==========================================
-
-
-app.listen(PORT, function () {
-  console.log(`[fitness_app] RUNNING, http://localhost:${PORT}`);
-});
-
-
-//norma's code
-// app.get("/api/user/:userid", async function (req, res) {
-//   const userId = req.params.userid;
-//   console.log('[GET /api/user/user]' + (`the user id is ${userId}`))
-//   const displayUserInfo = await orm.getUsersInfo(userId);
-//   console.log(displayUserInfo);
-//   res.send(displayUserInfo);
-// });
-
-//app.get("/api/goal/", async function (req, res) {
-  // let goal = [];
-  // const groupGoal = await orm.groupGoal('SELECT member_info.my_weight FROM member_info');
-  // for ( let i = 0; i < groupGoal.length; i++){
-  //   goal.push(groupGoal[i].my_weight);
-  //   console.log(goal);
-  //   const sum = goal.reduce((total, amount) => total + amount);
-  //   console.log(sum)
-  // }
-
-  // res.send(sum)
-//----------------------------
-
-
-
-
-// ===================================== Joanna=======================================================================
-
 app.post("/api/postGoal", async function(req, res){
   console.log(req.body);
   const postGoal = await orm.postGoalInfo(req.body);
@@ -198,10 +187,42 @@ app.put("/api/goalUpdate/:id", async function(req, res){
 
 });
 
+//--------------------------------Norma's Code ----------------------------//
+
+app.get("/api/profilepic", async function(req, res){
+  const profilePicDb = await orm.profilePicDbQuery();
+  // console.log("the server profile pic" + { profilePicDb });
+  res.send(profilePicDb); 
+});
+
+app.post("/api/postinfo", async function(req, res){
+  console.log("This is in the user post!")
+  // console.log(req.body);
+  const postUserInfo = await orm.postUserDbQuery(req.body);
+//   console.log( `[POST dashboard info] recieved: `, req.body );
+  // console.log(postUserInfo);
+  res.send("success!")
+}); 
+
+app.get("/api/getposts", async function(req, res){
+  const getPostDbQuery = await orm.getPostDbQueryFn();
+  // console.log("the server response pic" + { getPostDbQuery });
+  res.send(getPostDbQuery); 
+});
+
+app.get("/api/thumbsup/:id", async function(req, res){
+  const changeThumbs = await orm.changeThumbsupNum(req.params.id);
+  res.send(changeThumbs);
+});
+
+//--------------------------------Norma's Code Ended ----------------------------//
 
 
 
 
+app.listen(PORT, function () {
+  console.log(`[fitness_app] RUNNING, http://localhost:${PORT}`);
+});
 
 
 

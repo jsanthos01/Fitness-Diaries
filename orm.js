@@ -24,9 +24,6 @@ class Database {
     }
 }
 
-
-
-// at top INIT DB connection
 var db;
 if(process.env.JAWSDB_URL){
      db = new Database(process.env.JAWSDB_URL);
@@ -42,7 +39,6 @@ if(process.env.JAWSDB_URL){
 };
 
 //store registration info 
-
 async function registrationSql(myPost){
     console.log(myPost);
     const postUserLogin = await db.query( 
@@ -88,13 +84,17 @@ async function loginUser( email, password ) {
 
 //==============sara==========
 
+async function getAllRegisMember(){
+    const regisMembList = await db.query("SELECT * FROM personal_info;");
+    return regisMembList;
+}
 async function getGroupList(){
     const GroupList = await db.query("SELECT * FROM new_group;");
     return GroupList;
 }
 async function  getMembListForGrpId( grpId ){
     const myResult = await db.query( 
-        "SELECT * FROM member_info WHERE group_id_fk = ?",
+        "SELECT new_group.group_name,new_group.group_id,personal_info.id,personal_info.user_img, personal_info.username, personal_info.my_name, personal_info.my_weight, personal_info.height, personal_info.BMI, personal_info.diet, group_member.grp_mbr_id FROM new_group, personal_info, group_member WHERE new_group.group_id=group_member.group_id_fk AND personal_info.id=group_member.member_id_frk AND new_group.group_id = ? ;",
         [ grpId ] );
         console.log(myResult);
     return myResult;
@@ -106,10 +106,18 @@ async function  getGrpName( grpNameId ){
         console.log(` in orm the value of myGrpName ` + myGrpName[0]);
     return myGrpName[0];
 }
+
+async function  getUserProfile( userId ){
+    const userProfile = await db.query( 
+        "SELECT * FROM personal_info WHERE id = ?",
+        [ userId ] );
+        console.log(` in orm the value of myGrpName ` + userProfile[0]);
+    return userProfile[0];
+}
 async function addNewMember( newMember ){
     const myNewMemberResult = await db.query( 
-        "INSERT INTO member_info (member_name, email_id, group_id_fk) VALUES(?,?,?)",
-        [ newMember.memberName, newMember.memberEmail, newMember.memberFrKey ] );
+        "INSERT INTO group_member (member_name, member_id_frk, group_id_fk) VALUES(?,?,?);",
+        [ newMember.memberName, newMember.memberId, newMember.groupId ] );
     return myNewMemberResult;
 }
 async function addNewGroup( newGroup ){
@@ -118,9 +126,9 @@ async function addNewGroup( newGroup ){
         [ newGroup.groupName, newGroup.groupImageUrl, newGroup.groupGoal ] );
     return myNewGroupResult;
 }
-async function deleteMember( membId, memName ){
+async function deleteGrpMember( membId, memName ){
     const myDeletedMember = await db.query( 
-        "DELETE FROM member_info WHERE member_id = ?",
+        "DELETE FROM group_member WHERE grp_mbr_id = ?",
         [ membId ] );
     return myDeletedMember;
 }
@@ -131,9 +139,19 @@ async function deleteGroup( grId ){
     return myDeletedGroup;
 }
 
+        //=============top 3 sara=======
 
-//===============sara dont delete above============
+async function getTop3( grpNameId ){
+    const myGrpName = await db.query( 
+        "SELECT new_group.group_name,new_group.group_id,personal_info.id,personal_info.user_img, personal_info.my_name, personal_info.my_weight, group_member.grp_mbr_id FROM new_group, personal_info, group_member WHERE new_group.group_id=group_member.group_id_fk AND personal_info.id=group_member.member_id_frk AND new_group.group_id = ? ORDER BY my_weight ASC LIMIT 3;",
+        [ grpNameId ] );
+        console.log(` in orm the value of myGrpName ` + myGrpName);
+    return myGrpName;
+}
 
+//===============sara dont delete above sara============
+
+//====================Joanna --------------------------------
 async function getId(emailId){
     let userFetch = await db.query('SELECT * FROM personal_info WHERE username=?', [ emailId ] );
     userFetch = JSON.stringify(userFetch); 
@@ -170,6 +188,39 @@ async function updateGoalStatus(goalId){
 
 }
 
+//====================Joanna ended --------------------------------
+
+//------------------------- Norma's code------------------------------//
+
+async function profilePicDbQuery(){
+    let profileImage = await db.query('SELECT user_img FROM personal_info limit 10')
+    // console.log( `[loadUser] profileImage:`, profileImage );
+    return profileImage;
+    
+}
+
+async function postUserDbQuery(userPost){
+    let postDbRes = await db.query("INSERT INTO group_posts(my_name, info, member_id) VALUES(?,?,?)", [userPost.name, userPost.inputpost, userPost.member_id]);
+    // console.log( `[loadUser] profileImage:`, postDbRes );
+    return postDbRes;
+}
+
+async function getPostDbQueryFn(Post){
+    let postRes = await db.query("SELECT user_img, info, creation_time, group_posts.my_name from group_posts LEFT JOIN personal_info ON group_posts.member_id = personal_info.id");
+    // console.log( `[loadUser] userPost:`, postRes );
+    return postRes;
+}
+
+async function changeThumbsupNum(id){
+    let thumbsupSql = await db.query("UPDATE group_posts SET thumbs_up = thumbs_up + 1 WHERE id = ?",[id]);
+    let getThumbsUpVal = await db.query("SELECT thumbs_up, group_posts.my_name FROM group_posts WHERE id = ?", [id]);
+
+    // console.log( `[loadUser] thumbsupSql:`, getThumbsUpVal );
+    return getThumbsUpVal;
+}
+
+//==================Norma code ended ============================
+
 module.exports = {
     registrationSql,
     postUsersInfo,
@@ -180,11 +231,19 @@ module.exports = {
     getGrpName,
     addNewMember,
     addNewGroup,
-    deleteMember,
+    deleteGrpMember,
     deleteGroup,
     getId,
     getDashboardInfo,
     postGoalInfo,
     getGoalInfo,
-    updateGoalStatus
+    updateGoalStatus,
+    getTop3,
+    getAllRegisMember,
+    getUserProfile,
+    profilePicDbQuery,
+    postUserDbQuery,
+    getPostDbQueryFn,
+    changeThumbsupNum
+    
 }

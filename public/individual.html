@@ -70,6 +70,9 @@
 
       }
       .profilePicture {
+        width: 20vw;
+        height: 20vw;
+        object-fit: cover;
         border-radius: 50%;
       }
       .profileName {
@@ -157,6 +160,19 @@
   <script>
     //shows the user's name in the dashboard section
      $(document).ready( async function(){
+      const editId = location.hash.substr(1)
+      if ( editId && editId > 0){
+        const result = await $.get(`/api/userProfile/${editId}`);
+        console.log(result)
+
+        $("#userProfilePicture").html(`<img src="${result.user_img}" alt="" class="profilePicture">`)
+        
+        $("#h1Value").html(`${result.my_name}`);
+        $("#appendWeight").html(`Weight: ${result.my_weight}`);
+        $("#appendHeight").html(`Height: ${result.height}`);
+        $("#usersMainGoal").html(`${result.goal}`);
+        $("#appendBMI").html(`BMI: ${result.BMI}`);
+      } 
 
       if(localStorage != null){
 
@@ -181,7 +197,8 @@
 
       }
       
-      
+  
+
     });
 
     async function insertInfo() {
@@ -648,15 +665,16 @@
         <div class="text-right" id="menuCloseBtn">
           <i class="fa fa-times" onClick="hideMenu()" aria-hidden="true"></i>
         </div>
-        <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 75px;">
+        <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">
         <li class="navItem"><a class="navLink" onClick="showAddInfo()" >Add Info</a></li>
         <li class="navItem"><a class="navLink" onClick="showEditInfo()" >Edit Info</a></li>
+        <li class="navItem"><a class="navLink" href="groups.html" >View Groups</a></li>
         <li class="navItem"><a class="navLink" onclick="logOutBtn()">Log Out</a></li>
       </ul>
     </div>
     <div class="col-lg-11"></div>
     <div class="col-lg-1 menuProImg" onClick="showMenu()" >
-      <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 50px;">
+      <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">
     </div>
   </div>
 
@@ -666,7 +684,7 @@
       <h1 id="h1Value">Welcome!</h1>
       <div>
         <div class="container d-flex justify-content-end ">
-          <div class="col-lg-4">
+          <div class="col-lg-4" id="userProfilePicture">
             <img src="assets/download.png" alt="" class="profilePicture">
           </div>
           <div class="col-lg-8 userInfo">

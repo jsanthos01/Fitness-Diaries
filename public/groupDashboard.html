@@ -27,7 +27,7 @@
         h1 {
             font-family: 'Alegreya', serif;
         }
-
+        
         .thumbnail-size {
             width: 100%;
             height: 15vw;
@@ -38,123 +38,190 @@
             text-decoration: none;
         }
         
-        .profilePicture {
+        .profilePictureLink {
+            cursor: pointer;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
+            object-fit: cover;
+
+        }
+        
+        .profilePictureLink2 {
+            cursor: pointer;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
         }
     </style>
+    
     <script>
+        //===========akanksha=====
+        function mQuotes(){
+            $.ajax({
+                url: "https://type.fit/api/quotes",
+                method: "GET"
+            }).then(function(response){
+            var motQuotes = JSON.parse(response)
+            console.log(motQuotes);
+
+            var quote = Math.floor(Math.random()*motQuotes.length);
+
+            //console.log("Random quote: "+JSON.stringify(motQuotes[quote]));
+        
+            $("#quotes").text(motQuotes[quote].text);
+        
+            })
+        }  
+
+        $(document).ready( async function(){
+             mQuotes();
+
+            //==========sara======
+
+            const groupId = location.hash.substr(1);
+            const myMembersList = await $.get(`/api/membersList/${groupId}`);
+            console.log(myMembersList);
+            $('#groupName').html(`${myMembersList[0].group_name}`);
+            $('#membersList').html('');
+            myMembersList.forEach(function( group ){
+
+                $('#membersList').append(`<div class="userImg col-2">
+                    <img src="${group.user_img}" alt="" class="profilePictureLink" style="width: 100px;" onClick="showMemberProfile('${group.id}')">
+                </div>`)     
+            })
+            const myTop3List = await $.get(`/api/top3List/${groupId}`);
+            console.log(myTop3List);
+            $('#top3List').html('');
+            myTop3List.forEach( function( top3 ){
+
+                $('#top3List').append(`
+                <div class="d-flex justify-content-around card-body">
+                    <img src="${top3.user_img}" alt="" class="profilePictureLink2">
+                    <h6 class="mt-4">${top3.my_name}</h6>
+                    <h6 class="mt-4">Weight: ${top3.my_weight}</h6>
+                </div>`)
+            })
+
+            //============ saraaaaa don't delete below=====//
+            //Norma's Code Added //
+            const fetchProfilePic = await $.get("/api/profilepic");
+            console.log("Getting the profile pics!!!!")
+            console.log(fetchProfilePic);
+            for ( let i=1; i<fetchProfilePic.length; i++){
+                $("#profileimg").append(
+                    `<div class="userImg col-2">
+                        <a href="individual.html/${i}" class="hoverProfile"><img src="${fetchProfilePic[i].user_img}" alt="" class="profilePicture" style="width: 100px;"></a>
+                    </div>
+                    `
+                );
+            }
+            showInfo();
+
+        })
+
+
+            //--=================Norma Code====================//
+        async function showInfo(){
+            const fetchPosts = await $.get("/api/getposts");
+            console.log("Getting the posts from server!!!!") 
+            console.log(fetchPosts);
+            $("#userpostid").empty();
+            let arrLength = fetchPosts.length-1;
+            for ( let i = arrLength; i >= 0; i--){
+                $("#userpostid").append(
+                    `<section id="${i+1}" class="userPost container mt-4 card">
+                    <div class="progressSection card-body">
+                        <div class="input-group mb-3 ">
+                            <div class="form-control d-flex align-items-start card-body">
+                                <div class="userImg col-2">
+                                    <img src="${fetchPosts[i].user_img}" alt="" class="profilePicture" style="width: 100px;">
+                                </div>
+                                <div class="text-left col-10">
+                                    <h3>${fetchPosts[i].my_name}</h3>
+                                    <p class="text-left">${fetchPosts[i].info}</p>
+                                    <div class="">${fetchPosts[i].creation_time}</div>  
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="nav justify-content-start">
+                            <li class="nav-item">
+                                <button><i onclick="thumbsupFunc(${i+1})" id="thumbsupid${i+1}" class="fa fa-thumbs-o-up fa-lg" aria-hidden="true"></i></button>
+                                <span id="number${i+1}" class="pl-2"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>`
+                )
+            } 
+        }
+
+
+        async function thumbsupFunc(idx){
+            const thumbsUp = await $.get(`/api/thumbsup/${idx}`);   
+            console.log(thumbsUp);
+            console.log(thumbsUp[0].thumbs_up); 
+            // // event.preventDefault();
+            // console.log(thumbsUp);
+            $(`#number${idx}`).html(thumbsUp[0].thumbs_up);
+        }
+
+
+            //================sara===========
+
+        function showMemberProfile(id){
+            console.log('loading profile of ' + id);
+            location.href = '/individual.html#'+ id;
+        }
+
+            //================sara===========
+
         
     </script>
     <main role="main">
-        <section class="jumbotron text-center container-fluid ">
-            <h1 class="text-center">Group Name</h1>
-            <br>
-            <div class="d-flex justify-content-around" >
+        <section class="jumbotron text-center container-fluid">
+            <div class="text-center mb-5">
+                <h1 id="groupName">Group Name</h1>
+            </div>
+            <div class="d-flex justify-content-around">
                 <img src="assets/PossibleGlumAcouchi-small.gif" style="width: 30%;" alt="Flowers in Chania" width="">
                 <div class="col-4">
                     <h3>Total point: 523</h3>
-                    <div class="card-body">
-                        <h5>Top 3</h5>
-                        <div class="row card-body">
-                            <img src="assets/download.png" alt="" class="profilePicture" style="width: 20%;">
-                            <h6 class="mt-4">nancy stewar </h6>
-                            <h6 class="mt-4">: 200</h6>
-                        </div>
-                        <div class="row card-body">
-                            <div class="row card-body">
-                                <img src="assets/download.png" alt="" class="profilePicture" style="width: 20%;">
-                                <h6 class="mt-4">someone name </h6>
-                                <h6 class="mt-4">: 100</h6>
-                            </div>
-                        </div>
+                    <h5>Top 3</h5>
+                    <div class="card-body" id="top3List">
                     </div>
                 </div>
             </div>
         </section>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script type="text/javascript">
-           function mQuotes(){
-             $.ajax({
-             url: "https://type.fit/api/quotes",
-             method: "GET"
-             }).then(function(response){
-             var motQuotes = JSON.parse(response)
-             console.log(motQuotes);
-
-             var quote = Math.floor(Math.random()*motQuotes.length);
-
-             //console.log("Random quote: "+JSON.stringify(motQuotes[quote]));
-         
-             $("#quotes").text(motQuotes[quote].text);
-            
-             })
-             }    
-             mQuotes();
-        
-        </script>
         <section class="container card">
             <div class="card-body">
                 <div class="row" id="quotes" ></div>
             </div>
         </section>
         <section class="members container card">
-            <div class="card-body d-flex justify-content-around ">
+            <div class="card-body d-flex justify-content-around" id="membersList">
                 <div class="userImg col-2">
-                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePicture" style="width: 100px;"></a>
+                    <img src="assets/download.png" alt="" class="profilePictureLink" style="width: 100px;" >
                 </div>
                 <div class="userImg col-2">
-                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePicture" style="width: 100px;"></a>
+                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePictureLink" style="width: 100px;"></a>
                 </div>
                 <div class="userImg col-2">
-                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePicture" style="width: 100px;"></a>
+                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePictureLink" style="width: 100px;"></a>
                 </div>
                 <div class="userImg col-2">
-                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePicture" style="width: 100px;"></a>
+                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePictureLink" style="width: 100px;"></a>
                 </div>
                 <div class="userImg col-2">
-                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePicture" style="width: 100px;"></a>
+                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePictureLink" style="width: 100px;"></a>
                 </div>
                 <div class="userImg col-2">
-                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePicture" style="width: 100px;"></a>
+                    <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePictureLink" style="width: 100px;"></a>
                 </div>
             </div>
         </section>
-        <section class="container card">
-            <div class="card-body d-flex justify-content-around ">
-                <a href="#goal" class="card border-primary col-4">
-                    <div class="card-body text-primary">
-                    <h5 class="card-title">Goal</h5>
-                    <div>
-                        <div class="walk">
-                        <div class="">walk</div>
-                        <div class="progress mt-2">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        </div>
-                        <div class="lunge mt-2">
-                        lunge
-                        <div class="progress mt-2">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                <!-- </div> -->
-                </a>
-                <div class="card border-secondary col-4" style="max-width: 18rem;">
-                <div class="card-body text-secondary">
-                    <h5 class="card-title">Diet</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                </div>
-                <div class="card border-success col-4" style="max-width: 18rem;">
-                <div class="card-body text-success">
-                    <h5 class="card-title">Fitness</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                </div>
-            </div>
-        </section>
+
         <section class="postSome container card">
             <div class="card-body">
                 <h4>Post Something</h4>
