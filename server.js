@@ -97,3 +97,230 @@ app.listen(PORT, function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// =================================== norma code============================
+app.get("/api/profilepic", async function(req, res){
+  const profilePicDb = await orm.profilePicDbQuery();
+  // console.log("the server profile pic" + { profilePicDb });
+  res.send(profilePicDb); 
+});
+
+app.post("/api/postinfo", async function(req, res){
+  console.log("This is in the user post!")
+  // console.log(req.body);
+  const postUserInfo = await orm.postUserDbQuery(req.body);
+//   console.log( `[POST dashboard info] recieved: `, req.body );
+  // console.log(postUserInfo);
+  res.send("success!")
+}); 
+
+app.get("/api/getposts", async function(req, res){
+  const getPostDbQuery = await orm.getPostDbQueryFn();
+  // console.log("the server response pic" + { getPostDbQuery });
+  res.send(getPostDbQuery); 
+});
+
+app.get("/api/thumbsup/:id", async function(req, res){
+  const changeThumbs = await orm.changeThumbsupNum(req.params.id);
+  res.send(changeThumbs);
+});

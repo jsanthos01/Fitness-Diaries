@@ -53,9 +53,10 @@ CREATE TABLE group_posts(
     id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
     my_name VARCHAR(250),
     info VARCHAR(250),
-    picture VARCHAR(250),
-    thumbs_up INTEGER DEFAULT 0,
-    update_time DATETIME ON UPDATE CURRENT_TIMESTAMP
+    update_time DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    member_id,
+    FOREIGN KEY (member_id) REFERENCES personal_info(id)
+
 );
 
 -- CREATE TABLE thumbs_up(

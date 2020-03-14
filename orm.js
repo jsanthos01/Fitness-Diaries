@@ -77,6 +77,33 @@ async function loginUser( email, password ) {
     }
     return userFetch[0]
 }
+
+async function profilePicDbQuery(){
+    let profileImage = await db.query('SELECT user_img FROM personal_info limit 10')
+    // console.log( `[loadUser] profileImage:`, profileImage );
+    return profileImage;
+    
+}
+
+async function postUserDbQuery(userPost){
+    let postDbRes = await db.query("INSERT INTO group_posts(my_name, info, member_id) VALUES(?,?,?)", [userPost.name, userPost.inputpost, userPost.member_id]);
+    // console.log( `[loadUser] profileImage:`, postDbRes );
+    return postDbRes;
+}
+
+async function getPostDbQueryFn(Post){
+    let postRes = await db.query("SELECT user_img, info, creation_time, group_posts.my_name from group_posts LEFT JOIN personal_info ON group_posts.member_id = personal_info.id");
+    // console.log( `[loadUser] userPost:`, postRes );
+    return postRes;
+}
+
+async function changeThumbsupNum(id){
+    let thumbsupSql = await db.query("UPDATE group_posts SET thumbs_up = thumbs_up + 1 WHERE id = ?",[id]);
+    let getThumbsUpVal = await db.query("SELECT thumbs_up, group_posts.my_name FROM group_posts WHERE id = ?", [id]);
+
+    // console.log( `[loadUser] thumbsupSql:`, getThumbsUpVal );
+    return getThumbsUpVal;
+}
 //query to fetch all user image to display
 //whats the order of showing images
 
@@ -104,5 +131,10 @@ module.exports = {
     registrationSql,
     postUsersInfo,
     getUsersInfo,
-    loginUser
+    loginUser,
+    profilePicDbQuery,
+    postUserDbQuery,
+    getPostDbQueryFn,
+    changeThumbsupNum
 }
+
