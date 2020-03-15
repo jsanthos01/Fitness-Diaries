@@ -64,35 +64,25 @@ app.post("/api/registration", async function(req, res){
 
 //this is for the login page=====norma bcrypt==============
 app.post("/api/checkuser", async function(req, res){
-    console.log(req.body)
+    // console.log(req.body)
     const userEmail = req.body.userEmail;
     const userPassword = req.body.userPassword;
-    
-    bcrypt.hash(req.body.userPassword, saltRounds, async function(err,hash){
-      console.log(`[hash password is] recieved:`, hash);
-      const userData = await orm.loginUser(userEmail, userPassword);
-      console.log(`[POST userData] recieved: `, userData)
-      bcrypt.compare(req.body.userPassword, userData.user_password, async function (err, result) {
-        if (result == true) {
-            // console.log(result);
-            console.log(user.id)
-            res.send(user);
-        } else {
-            console.log(result)
-            res.send('Incorrect password');
-        }
-
-    }).then (function(data){
-        console.log(hash);
-        if (data){
-          res.send('success!')
-        }
-    });  
-    if( !userData ){
-      res.send( { error: 'Sorry unknown user or wrong password' } );
+    console.log(req.body.userPassword);
+    const userData = await orm.loginUser(userEmail, userPassword);
+    // console.log(`[POST ] recieved: `,userData);
+    console.log(userData.user_password);
+    bcrypt.compare(req.body.userPassword, userData.user_password, function (err, result) {
+      if (result == true) {
+        // console.log(result);
+        res.send(userData);
+    } else {
+        console.log(result)
+        res.send('Incorrect password');
     }
-      res.send(userData);
-    });  
+    });
+    
+  });
+    
   
 
  //==========================norma bcrypt=================  
