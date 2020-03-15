@@ -3,21 +3,42 @@ const orm = require('./orm');
 
 const PORT = process.env.PORT || 8080;
 const app = express();
-
+const saltRounds = 10;
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
+const bcrypt = require ("bcrypt");
 
-//=====================================================Joanna ==========================================
+
+//=====================================================Joanna / norma bcrypt ==========================================
 //posts user's registration information inside database
 app.post("/api/registration", async function(req, res){
   console.log(req.body);
+  bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
+    console.log(hash);
+    orm.registrationSql({
+          my_name:req.body.my_name,
+          userName:req.body.userName,
+          user_password:hash
+
+      }).then (function(data){
+          console.log(hash);
+          if (data){
+              res.send('success!')
+          }
+      
+      });
+    }); 
+  });
+  // const saltRounds = 10;
+  // const bcrypt = require ("bcrypt");
+  //============================== norma bcrypt end works fine add require bcrypt & salt = 10 =============================
   // const storeUserInfo = await storeRegistrationInfo(req.body);
+  // let storeUserInfo = await orm.registrationSql(req.body);//different line
     // bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
     //   console.log(hash);
       // orm.registerUser({
-      //     first_name:req.body.first_name,
-      //     last_name:req.body.last_name,
-      //     email_address:req.body.email_address,
+      //     my_name:req.body.my_name,
+      //     userName:req.body.userName,
       //     user_password:hash
 
       // }).then (function(data){
@@ -28,25 +49,53 @@ app.post("/api/registration", async function(req, res){
       
       // })
 
-  console.log( `[POST api/registration] recieved: `, req.body );
-  let storeUserInfo = await orm.registrationSql(req.body);
-  res.send({
-    message: "Success!!!"
-  });
-})
+      //----------------obj---------------
+      //my_name: $('#myName').val(),
+      //userName: $('#userEmail').val(),
+      //user_password: $('#userPassword').val()  
+      //----------------------------end of obj delete--------------
 
-//this is for the login page
+  // console.log( `[POST api/registration] recieved: `, req.body );
+  // let storeUserInfo = await orm.registrationSql(req.body);
+  // res.send({
+  //   message: "Success!!!"
+  // });
+
+
+//this is for the login page=====norma bcrypt==============
 app.post("/api/checkuser", async function(req, res){
     console.log(req.body)
     const userEmail = req.body.userEmail;
     const userPassword = req.body.userPassword;
-    const userData = await orm.loginUser(userEmail, userPassword);
-    console.log(userData)
-    // if( !userData ){
-    // res.send( { error: 'Sorry unknown user or wrong password' } );
-    // }
-    res.send(userData);
-   });
+    
+    bcrypt.hash(req.body.userPassword, saltRounds, async function(err,hash){
+      console.log(`[hash password is] recieved:`, hash);
+      const userData = await orm.loginUser(userEmail, userPassword);
+      console.log(`[POST userData] recieved: `, userData)
+      bcrypt.compare(req.body.userPassword, userData.user_password, async function (err, result) {
+        if (result == true) {
+            // console.log(result);
+            console.log(user.id)
+            res.send(user);
+        } else {
+            console.log(result)
+            res.send('Incorrect password');
+        }
+
+    }).then (function(data){
+        console.log(hash);
+        if (data){
+          res.send('success!')
+        }
+    });  
+    if( !userData ){
+      res.send( { error: 'Sorry unknown user or wrong password' } );
+    }
+      res.send(userData);
+    });  
+  
+
+ //==========================norma bcrypt=================  
 
 //posts user's basic dashboard info on database
 app.post("/api/userInfo", async function(req, res){

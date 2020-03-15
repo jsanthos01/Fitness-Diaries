@@ -22,6 +22,16 @@
           // function registerBtn(){
           //   location.href = '/registration.html';
           // }
+          $(document).ready(function(){
+            let userData = localStorage.getItem("userData");
+            userData = JSON.parse(userData);
+            if( userData.userId ){
+              location.href = 'individual.html';
+            } else{
+              loginBtn();
+            }
+            
+          });
           async function loginBtn(){
             console.log('clicked');
             const userInfo = {
@@ -53,12 +63,7 @@
 
           }
           //norma's add
-          $(document).ready(function(){
-            let userData = localStorage.getItem("userData");
-            userData = JSON.parse(userData);
-            if( userData.userId )
-            location.href = 'individual.html';
-          });
+         
     </script>
 
     <main role="main">

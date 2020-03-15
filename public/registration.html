@@ -71,7 +71,8 @@
 
                 let apiResult = await $.post( '/api/registration', storeInDatabase );
                 // location.href = '/individual.html';
-                alert( apiResult.message );
+                alert( apiResult);
+                console.log(apiResult);
                 if( apiResult.message ){
                     location.href = '/individual.html';
                     // registration worked! redirect to the main page (listing thumbnails)
