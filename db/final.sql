@@ -87,10 +87,14 @@ CREATE TABLE group_posts(
     id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
     my_name VARCHAR(250),
     info VARCHAR(250),
-    picture VARCHAR(250),
-    thumbs_up INTEGER DEFAULT 0,
+    creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     update_time DATETIME ON UPDATE CURRENT_TIMESTAMP,
+	member_id INT,
+    thumbs_up INT DEFAULT 0,
+    user_comments VARCHAR(1000),
+    FOREIGN KEY (member_id) REFERENCES personal_info(id)
     createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
+
 );
 
 -- CREATE TABLE weight_tracker(

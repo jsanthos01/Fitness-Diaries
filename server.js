@@ -143,12 +143,14 @@ app.post( '/api/newGroup', async function( req, res ){
 
   res.send( { message: `Thank you, saved group: ${req.body.groupName}` } );
 } );
+
 app.delete( '/api/deleteMember/:id/:name', async function( req, res ){
   console.log( `[Delete api/deleteMember/] recieved: `, req.body );
   await orm.deleteGrpMember( req.params.id, req.params.name );
 
   res.send( { message: `Thank you, deleted${req.params.id} ${req.params.name}`} );
 } );
+
 app.delete( '/api/deleteGroup/:id', async function( req, res ){
 
   try {
@@ -159,7 +161,7 @@ app.delete( '/api/deleteGroup/:id', async function( req, res ){
   }
   catch(err) {
     res.send( { message: `Sorry, unable to delete group: ${req.params.id} ${req.params.name}. this may be because there are already members assigned to this group`} );
-    }
+  }
   
 } );
 
@@ -215,8 +217,8 @@ app.get("/api/thumbsup/:id", async function(req, res){
   res.send(changeThumbs);
 });
 
-//--------------------------------Norma's Code Ended ----------------------------//
 
+//--------------------------------Norma's Code Ended ----------------------------//
 
 
 

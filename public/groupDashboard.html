@@ -106,6 +106,7 @@
 
             //============ saraaaaa don't delete below=====//
             //Norma's Code Added //
+
             const fetchProfilePic = await $.get("/api/profilepic");
             console.log("Getting the profile pics!!!!")
             console.log(fetchProfilePic);
@@ -123,7 +124,31 @@
 
 
             //--=================Norma Code====================//
-        async function showInfo(){
+            async function getPosts() {
+                alert('i am clicked');
+                
+                    let userData = localStorage.getItem("myUser");
+                    userData = JSON.parse(userData);
+                    const userName = userData.userName;
+                    const userId = userData.userId;
+                
+                let inputPost = $("#postinput").val();
+                    console.log(inputPost)
+                let userPostInfo = {
+                    inputpost: inputPost,
+                    name: userData.userName,
+                    member_id: userData.userId
+                };
+                    console.log(userPostInfo);
+
+                const userPost = await $.post("/api/postinfo", userPostInfo);
+                console.log("Getting the Post Info Stuff!!!!");
+                // console.log(postInfo);
+                showInfo();
+                
+            };
+        
+            async function showInfo(){
             const fetchPosts = await $.get("/api/getposts");
             console.log("Getting the posts from server!!!!") 
             console.log(fetchPosts);
@@ -201,7 +226,7 @@
         </section>
         <section class="members container card">
             <div class="card-body d-flex justify-content-around" id="membersList">
-                <div class="userImg col-2">
+                <!-- <div class="userImg col-2">
                     <img src="assets/download.png" alt="" class="profilePictureLink" style="width: 100px;" >
                 </div>
                 <div class="userImg col-2">
@@ -218,22 +243,25 @@
                 </div>
                 <div class="userImg col-2">
                     <a href="#" class="hoverProfile"><img src="assets/download.png" alt="" class="profilePictureLink" style="width: 100px;"></a>
-                </div>
+                </div> -->
             </div>
         </section>
 
-        <section class="postSome container card">
+        <<section class="postSome container card mt-3">
             <div class="card-body">
                 <h4>Post Something</h4>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <input type="text" id="postinput" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button">Button</button>
+                        <button class="btn btn-outline-secondary" type="button" onclick="getPosts()" >Post</button>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="userPost container mt-4 card">
+        <div id="userpostid">
+            
+        </div>    
+        <!-- <section class="userPost container mt-4 card">
             <div class="progressSection card-body">
                 <div class="input-group mb-3 ">
                     <div class="form-control d-flex align-items-start card-body">
@@ -295,7 +323,7 @@
                     </li>
                 </ul>
             </div>
-        </section>
+        </section> -->
     </main>
     
 </body>
