@@ -24,6 +24,9 @@ class Database {
     }
 }
 
+
+
+// at top INIT DB connection
 var db;
 if(process.env.JAWSDB_URL){
      db = new Database(process.env.JAWSDB_URL);
@@ -39,6 +42,7 @@ if(process.env.JAWSDB_URL){
 };
 
 //store registration info 
+
 async function registrationSql(myPost){
     console.log(myPost);
     const postUserLogin = await db.query( 
@@ -64,7 +68,8 @@ async function getUsersInfo() {
 
     let myInfo = await db.query("SELECT my_weight, height, goal, BMI FROM personal_info");
     myInfo = JSON.stringify(myInfo); 
-    myInfo = JSON.parse(myInfo); 
+    myInfo = JSON.parse(myInfo);
+    console.log("From sql get section"); 
     return myInfo[0];
 }
 
@@ -73,11 +78,10 @@ async function loginUser( email, password ) {
     let userFetch = await db.query('SELECT * FROM login_credential WHERE username=?', [ email ] );
     userFetch = JSON.stringify(userFetch); 
     userFetch = JSON.parse(userFetch); 
-    
     console.log( `[loadUser] email='${email}' userFetch:`, userFetch );
 
     if( !userFetch ) {
-       return false;
+        return false;
     }
     return userFetch[0]
 }
@@ -139,7 +143,7 @@ async function deleteGroup( grId ){
     return myDeletedGroup;
 }
 
-        //=============top 3 sara=======
+        //=============top 3=======
 
 async function getTop3( grpNameId ){
     const myGrpName = await db.query( 
@@ -149,9 +153,12 @@ async function getTop3( grpNameId ){
     return myGrpName;
 }
 
-//===============sara dont delete above sara============
+async function getCompletedGoal(){
+    let getCompletedGoalSql = await db.query("SELECT * FROM personal_goal WHERE goalCompleted= 1 ORDER BY updatedTime DESC LIMIT 20;");    
+    return getCompletedGoalSql;
+}
+//===============sara dont delete above============
 
-//====================Joanna --------------------------------
 async function getId(emailId){
     let userFetch = await db.query('SELECT * FROM personal_info WHERE username=?', [ emailId ] );
     userFetch = JSON.stringify(userFetch); 
@@ -167,7 +174,7 @@ async function getDashboardInfo(id){
 
 async function postGoalInfo(myGoals){
     console.log("INSIDE ORM FILE FOR POST GOAL");
-    const postGoalSql = await db.query("INSERT INTO personal_goal(goal_range,goal_message, goalCompleted) VALUES(?,?,?) ", [myGoals.goalRange,myGoals.goalInput, myGoals.goalCompleted]);
+    const postGoalSql = await db.query("INSERT INTO personal_goal(goal_range,goal_message, goalCompleted,userId) VALUES(?,?,?,?) ", [myGoals.goalRange,myGoals.goalInput, myGoals.goalCompleted, myGoals.userId]);
     return postGoalSql;
 }
 
@@ -180,15 +187,28 @@ async function getGoalInfo(){
     
     return getGoalSql;
 }
+async function getOthersGoalInfo(otherId){
+    let getOthersGoalSql = await db.query("SELECT * FROM personal_goal WHERE goalCompleted = 0 and userId=?", [otherId]);
+    
 
+    console.log('otherId is ' + otherId + ' getOthersGoalSql ' + getOthersGoalSql);
+    
+    return getOthersGoalSql;
+}
+
+//-----------sara
+
+async function getCompletedOthersGoal(Id){
+    let getCompletedGoalSql = await db.query("SELECT * FROM personal_goal WHERE goalCompleted= 1 AND userId=? ORDER BY updatedTime DESC LIMIT 20;", [Id]);    
+    return getCompletedGoalSql;
+}
+//------
 async function updateGoalStatus(goalId){
     const updateGoal = await db.query("UPDATE personal_goal SET goalCompleted=? WHERE goal_id=?", [true, goalId]);
     console.log("Goal is updated")
-    console.log(updateGoal);    
-
+    console.log(updateGoal);
 }
 
-//====================Joanna ended --------------------------------
 
 //------------------------- Norma's code------------------------------//
 
@@ -206,7 +226,7 @@ async function postUserDbQuery(userPost){
 }
 
 async function getPostDbQueryFn(Post){
-    let postRes = await db.query("SELECT user_img, info, creation_time, group_posts.my_name from group_posts LEFT JOIN personal_info ON group_posts.member_id = personal_info.id");
+    let postRes = await db.query("SELECT user_img, info, creation_time, thumbs_up, group_posts.my_name from group_posts LEFT JOIN personal_info ON group_posts.member_id = personal_info.id");
     // console.log( `[loadUser] userPost:`, postRes );
     return postRes;
 }
@@ -220,7 +240,6 @@ async function changeThumbsupNum(id){
 }
 
 //==================Norma code ended ============================
-
 module.exports = {
     registrationSql,
     postUsersInfo,
@@ -241,9 +260,14 @@ module.exports = {
     getTop3,
     getAllRegisMember,
     getUserProfile,
-    profilePicDbQuery,
-    postUserDbQuery,
+    getOthersGoalInfo,
+    getCompletedOthersGoal,
+    //=============sara
+    getCompletedGoal,
+    //--------norma
+    changeThumbsupNum,
     getPostDbQueryFn,
-    changeThumbsupNum
+    postUserDbQuery,
+    profilePicDbQuery
     
 }

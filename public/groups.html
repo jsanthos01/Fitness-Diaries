@@ -3,7 +3,7 @@
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Pictures</title>
+        <title>Group List Page</title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -134,33 +134,48 @@
     </style>
     <script>
         $(document).ready( async function(){
+            appendGroupList();
+            
+            let userData = localStorage.getItem("myUser");
+            userData = JSON.parse(userData);
+            console.log(userData);
+            let myName = userData.my_name;
+            const id = userData.userId;
 
-            appendGroupList()
-//============don't delete below
+            console.log(myName);
+            
+            const myUserInfo = await $.get(`/api/dashboardInfo/${id}`);
+            console.log('my user is ' + myUserInfo[0]);
+            $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">`);
+        })
 
-})
         function showMenu(){
-        $( "#navMenu" ).show( "slow" );
+            $( "#navMenu" ).show( "slow" );
         };
+
         function hideMenu(){
-        // alert('something');
-        $( "#navMenu" ).hide( "slow" );
+            // alert('something');
+            $( "#navMenu" ).hide( "slow" );
         }
+
         function showAddGroupWin(){
-        // alert('something');
-        $( "#addGroupWin" ).slideDown( "slow" );
-        $( "#navMenu" ).hide( "slow" );
+            // alert('something');
+            $( "#addGroupWin" ).slideDown( "slow" );
+            $( "#navMenu" ).hide( "slow" );
         }
+
         function hideAddGroupWin(){
-        // alert('something');
-        $( "#addGroupWin" ).hide( "slow" );
+            // alert('something');
+            $( "#addGroupWin" ).hide( "slow" );
         }
+
         function showAddMemberForm(){
-                $( "#memberForm" ).show( 1000 );
-                $('html, body').animate({
-                    scrollTop: $("#memberForm").offset().top
-                }, 1000);
-            }
+            $( "#memberForm" ).show( 1000 );
+            $('html, body').animate({
+                scrollTop: $("#memberForm").offset().top
+            }, 1000);
+        }
+
         async function addMemberBtn(grpId){
             event.preventDefault();
             const addMemberVal = $("#inputGroupSelect02").val();
@@ -175,7 +190,7 @@
                 groupId: grpId
             }
 
-            const apiResult = await $.post( `/api/addNewMember`, newMember );
+            const apiResult = await $.post(`/api/addNewMember`, newMember );
             appendMemberList(grpId);
             alert( apiResult.message );
             //===============================
@@ -184,6 +199,7 @@
             // $("#inputUserName").val("");
             $("#inputGroupSelect02").val("Choose a User to add to your group");
             $( "#memberForm" ).hide();
+
         }
         async function createGrp(){
             event.preventDefault();
@@ -199,6 +215,7 @@
 
             $( "#addGroupWin" ).hide( "slow" );
         }
+
         async function showGroupDetailInfo(idx){
             $( "#groupDetailInfo" ).show( "slow" );
             
@@ -208,8 +225,9 @@
             $( "#grpNmRow" ).append(`
                 <div class="text-center">
                     <h3>${myGroupName.group_name}</h3>
-            <img src="assets/add.png" alt="" class="addMemberIcon" onClick="showAddMemberForm(${idx})" style="width: 100px;" ><p>Add member</p>
-                </div>`)
+                    <img src="assets/add.png" alt="" class="addMemberIcon" onClick="showAddMemberForm(${idx})" style="width: 100px;" ><p>Add member</p>
+                </div>`
+            )
             $( "#addShowGrpBtn" ).html( `<button type="button" class="btn btn-outline-primary" onClick="showGrpDshbrd(${idx})">Show Group Dashboard</button>` )
                 
             $( "#memberForm" ).html('');
@@ -223,14 +241,16 @@
                     </div>
                 </div>
                 <button type="button" class="btn btn-primary btn-lg" onClick="addMemberBtn(${idx})">Add Member to Group</button>
-                `)
-                appendAllMemberToSelect()
+            `)
+            appendAllMemberToSelect()
 
             $('html, body').animate({
-                    scrollTop: $("#groupDetailInfo").offset().top
-                }, 1000);
+                scrollTop: $("#groupDetailInfo").offset().top
+            }, 1000);
+
             appendMemberList(idx);
         }
+
         async function deleteMemberBtn(grpMemberId, name, grId){
             // const name = memberName;
             console.log('deleting member ' + name + ' of id:' + grpMemberId);
@@ -249,6 +269,7 @@
             alert( apiDeleteGroup.message );
             appendGroupList();
         }
+
         async function appendMemberList(grIdx){
             const myMembersList =await $.get(`/api/membersList/${grIdx}`);
             
@@ -276,14 +297,16 @@
                 });
                 return ;
             }
-            console.log('something!!')
 
-                $("#membersListDisplay").append('<div class="d-flex justify-content-center"><h6>You do not have any members available. Add members</h6></div>')
+            console.log('something!!')
+            $("#membersListDisplay").append('<div class="d-flex justify-content-center"><h6>You do not have any members available. Add members</h6></div>')
         };
+
         async function appendGroupList(){
             const myGroupList =await $.get("/api/groupList");
             console.log(myGroupList);
             $("#groupsRow").html("");
+            
             for (var i=0; i< myGroupList.length; i++){
                 console.log(myGroupList[i].group_name)
                 $("#groupsRow").append(`
@@ -302,25 +325,37 @@
                             <small class="text-muted">Created On: 9 mins</small>
                             </div>
                         </div>
-                    </div>`)
+                    </div>`
+                )
             }
         }
+
         async function appendAllMemberToSelect(){
             const allMembersList =await $.get(`/api/getAllRegisteredMembersList`);
             console.log(allMembersList.my_name);
+
             allMembersList.forEach( function(member){
                 $('#inputGroupSelect02').append(`
-                    <option value="${member.id} ${member.my_name}">${member.my_name}</option>`)
+                    <option value="${member.id} ${member.my_name}">${member.my_name}</option>`
+                )
             })
         }
+
         async function showMemberProfile(membId){
             console.log('loading profile of ' + membId);
             location.href = '/individual.html#'+ membId;
         }
+
         async function showGrpDshbrd(grpId){
             console.log('loading group dashboard of group with id of ' + grpId);
             location.href = '/groupDashboard.html#'+ grpId;
         }
+        
+        function logOutBtn(){
+            localStorage.clear();
+            location.href = '/login.html';
+        }
+
     </script>
     
     <div class="navBar d-flex justify-content-end">
@@ -366,7 +401,7 @@
         <div class="navMenu col-lg-3 card hide" id="navMenu">
             <ul class="card-body text-center">
                 <div class="text-right" id="menuCloseBtn">
-                <i class="fa fa-times" onClick="hideMenu()" aria-hidden="true"></i>
+                    <i class="fa fa-times" onClick="hideMenu()" aria-hidden="true"></i>
                 </div>
                 <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 75px;">
                 <li class="navItem"><a class="navLink">view something</a></li>
@@ -418,7 +453,8 @@
         </section>
     </main>
     <footer class="container d-flex justify-content-around">
-        <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+        <div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">
+            Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
         </div>
     </footer>
 </body>

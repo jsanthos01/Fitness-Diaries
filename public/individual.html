@@ -11,63 +11,45 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Alegreya|Alegreya+Sans|Lato&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Alegreya|Alegreya+Sans|Lato&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Rubik&display=swap" rel="stylesheet">
 
 
 </head>
-      <!-- background #121f3f // 
-      gradient from #49c4cc to #40e0d0 //#cdedf7//
-      leaf colors #0f444a // // #29a37d //   
-      button gradient from #f84c00  to #f9c724 -->
 <body>
   <style>
       body {
         height: 100%;
         color: #001b48;
-        background-color: #0e0342;
-        font-family: 'Lato', sans-serif;
-
+        background-image: linear-gradient(to right, #c04848, #480048);
+        font-family: 'Montserrat', sans-serif;
       }
-
       h1 {
-        font-family: 'Alegreya', serif;
+        font-family: 'Rubik', sans-serif;
       }
-
       #h1Value {
+        text-align: center;
         font-weight: bold;
         font-size: 50px;
         text-transform: uppercase;
         letter-spacing: 3px;
       }
+      .jumbotron2{
+        margin: 20px auto;
+        display: flex;
+        flex-direction: row;
+        /* height: 60vh; */
 
-      .thumbnail-size {
-          width: 100%;
-          height: 15vw;
-          object-fit: cover;
+        /* border: 1px solid yellow; */
       }
-      #goalThumbnail:hover {
-        text-decoration: none;
-        color: #001b48;
-        background-color: #dde8f0;
-        font-weight: bold;
-
-      }
-      #dietThumbnail:hover{
-        text-decoration: none;
-        color: rgb(30, 85, 74);
-        background-color: rgb(85, 231, 188);
-        font-weight: bold;
-      }
-      /* #fitnessThumbnail{
-      } */
-      #fitnessThumbnail:hover{
-        text-decoration: none;
-        color: black;
-        background-color: #97cbdc;
-        font-weight: bold;
-
+      .proImgBckg{
+        width: 35%;
+        padding: 50px 0;
+        background-image: linear-gradient(to right, #c04848, #480048); 
+        position: relative;       
       }
       .profilePicture {
         width: 20vw;
@@ -75,43 +57,48 @@
         object-fit: cover;
         border-radius: 50%;
       }
-      .profileName {
+      .profilePictureBig {
+        width: 22vw;
+        height: 22vw;
+        object-fit: cover;
+        border-radius: 50%;
+        position: absolute;
+        right: -115px;
+        z-index: 10;
+      }
+      .userInfo{
+        width: 65%;
+        padding: 50px 0;
+        background-color: white;
+        /* height: 80vh; */
+      }
+      .profileInfo {
         padding: 10px;
-        background-image: linear-gradient(45deg, #f12711, #f5af19);
         width: 60%;
         border-radius: 10px;
         text-align: center;
         font-size: 20px;
       }
-
       #usersMainGoal{
         text-decoration: none;
-        padding: 10px;
-        background-image: linear-gradient(45deg, #f12711, #f5af19);
+        padding: 30px 10px;
+        background: white;
         border-radius: 10px;
         text-align: center;
         font-size: 30px;
-      }
-
-      
-      .jumbotron{
-        color: #cdedf7;
-        background-image: url(assets/LibreOffice_MotifScatter_RGB.png), radial-gradient(
-          rgba(42, 49, 59, 0.1), 
-          #0e0342
-        );
-        background-repeat: no-repeat;
-        background-size:contain;
-        background-color: #0e0342;
-        background-position-x: -20px;
+        margin: 20px 0;
       }
       .navBar{
         width: 100%;
-        /* background: navy; */
-        position: absolute;
         z-index: 200;
-        
+        position: relative;
       }
+
+      .menuProImg {
+        cursor: pointer;
+        position: relative;
+      }
+
       ul {
         list-style: none;
 
@@ -131,8 +118,6 @@
         right: 0;
         z-index: 20;
       }
-
-
       #editInfoWin{
         height: 160vh;
         background-image: linear-gradient(45deg, #0f444ade, #29a37cde);
@@ -141,7 +126,6 @@
         right: 0;
         z-index: 20;
       }
-
       .navLink {
         padding: 10px;
         display: block;
@@ -153,26 +137,202 @@
       .hide {
         display: none;
       }
-      .menuProImg {
-        cursor: pointer;
+      .thumbnail-size {
+          width: 100%;
+          height: 15vw;
+          object-fit: cover;
+      }
+      #goalThumbnail:hover {
+        text-decoration: none;
+        color: #001b48;
+        background-color: #dde8f0;
+        font-weight: bold;
+
+      }
+      #dietThumbnail:hover{
+        text-decoration: none;
+        color: rgb(30, 85, 74);
+        background-color: rgb(85, 231, 188);
+        font-weight: bold;
+      }      
+      #fitnessThumbnail:hover{
+        text-decoration: none;
+        color: black;
+        background-color: #97cbdc;
+        font-weight: bold;
+
+      }   
+      @media only screen and (max-width: 900px) {
+        .profilePictureBig {
+        width: 25vw;
+        height: 25vw;
+      }
+      }
+      @media only screen and (max-width: 850px) {
+          .profilePictureBig {
+          width: 35vw;
+          height: 35vw;
+          position: absolute;
+          right: -100px;
+          z-index: 10;
+        }
+      }
+      @media only screen and (max-width: 750px) {   
+        .jumbotron2{
+        /* margin: 20px auto;
+        display: flex; */
+        flex-direction: column;
+      }
+        .profilePictureBig {
+        width: 35vw;
+        height: 35vw;
+        position: absolute;
+        right: 31%;
+        z-index: 10;
+        top: -20px;
+        }
+        .proImgBckg{
+          width: 100%;
+          height: 17vh;
+        }
+        .userInfo{
+          padding-top: 140px;
+          width: 100%;
+        }
+      }
+      @media only screen and (max-width: 550px) {   
+
+        .profilePictureBig {
+        width: 40vw;
+        height: 40vw;
+        
+        }
+        .proImgBckg{
+          width: 100%;
+          height: 17vh;
+        }
+        .userInfo{
+          padding-top: 140px;
+          width: 100%;
+        }
+      }
+      @media only screen and (max-width: 550px) {   
+
+      .profilePictureBig {
+        top: 25px;
+
+      }
+      #h1Value{
+        font-size: 2.5rem;
+      }
+      .proImgBckg{
+        width: 100%;
+        height: 17vh;
+      }
+      .userInfo{
+        padding-top: 140px;
+        width: 100%;
+      }
       }
   </style>
   <script>
     //shows the user's name in the dashboard section
-     $(document).ready( async function(){
+    $(document).ready( async function(){
+      // const getCompletedGoalInfo = await $.get("/api/getCompletedGoal");
+      // console.log('checking what ' +  getCompletedGoalInfo)
+      // if(getCompletedGoalInfo != null){
+      // $(`#completedDailyGoals`).show();
+      
+      // }
       const editId = location.hash.substr(1)
       if ( editId && editId > 0){
+
+        //fetching my profile img
+        let userData = localStorage.getItem("myUser");
+        userData = JSON.parse(userData);
+        console.log(userData);
+        let myName = userData.my_name;
+        console.log(myName);
+        const idx = userData.userId;
+
+        const myUserInfo = await $.get(`/api/dashboardInfo/${idx}`);
+        console.log('my user is ' + myUserInfo[0]);
+        // $("#appendWeight").html(`Weight: ${myUserInfo.my_weight}`);
+        // $("#userProfilePicture").html(`<img src="${myUserInfo.user_img}" alt="" class="profilePictureBig">`);
+        
+        $("#navMenu").empty();
+        $("#navMenu").html(`
+            <ul class="card-body text-center">
+              <div class="text-right" id="menuCloseBtn">
+                <i class="fa fa-times" onClick="hideMenu()" aria-hidden="true"></i>
+              </div>
+              <img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">
+              <li class="navItem"><a class="navLink" href="individual.html">My Profile</a></li>
+              <li class="navItem"><a class="navLink" href="groups.html" >View Groups</a></li>
+              <li class="navItem"><a class="navLink" onclick="logOutBtn()">Log Out</a></li>
+          </ul>`)
+        $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+
+        //fetching others profile
+
         const result = await $.get(`/api/userProfile/${editId}`);
         console.log(result)
-
-        $("#userProfilePicture").html(`<img src="${result.user_img}" alt="" class="profilePicture">`)
-        
-        $("#h1Value").html(`Welcome ${result.my_name}`);
+        $("#userProfilePicture").html(`<img src="${result.user_img}" alt="" class="profilePictureBig">`)
+        $("#h1Value").html(`${result.my_name}`);
         $("#appendWeight").html(`Weight: ${result.my_weight}`);
         $("#appendHeight").html(`Height: ${result.height}`);
         $("#usersMainGoal").html(`${result.goal}`);
         $("#appendBMI").html(`BMI: ${result.BMI}`);
-      } 
+        $("#appendBMI").html(`BMI: ${result.BMI}`);
+
+        $("#thumbnailList").remove();
+        $("#goalCard").removeClass('hide');
+        $("#visitorGoalBar").remove();
+        $(".disableCrossBtn").remove();
+
+      const getGoalInfoForOtherProfile = await $.get(`/api/getGoal/${editId}`);
+        console.log('why is it not appending the goal: what :' + getGoalInfoForOtherProfile + ' editId: ' + editId )
+        getGoalInfoForOtherProfile.forEach( (message) => {
+        if(message.goal_range == "Daily"){
+          $("#dailyGoals").append(
+            `<div class="card-body input-group mb-3" id="goal${message.goal_id}">
+              <p class="list-group-item form-control">${message.goal_message}</p>
+              <div class="input-group-append">
+                <div class="input-group-text bg-success">
+
+                </div>
+              </div>
+            </div>`)
+        }else if (message.goal_range == "Weekly"){
+          $("#weeklyGoals").append(
+            `<div class="card-body input-group mb-3" id="goal${message.goal_id}">
+              <p class="list-group-item form-control">${message.goal_message}</p>
+              <div class="input-group-append">
+                <div class="input-group-text bg-success">
+                </div>  
+              </div>
+            </div>`
+          )
+        }else if(message.goal_range == "Monthly") {
+          $("#monthlyGoals").append(
+            `<div class="card-body input-group mb-3" id="goal${message.goal_id}">
+              <p class="list-group-item form-control">${message.goal_message}</p>
+              <div class="input-group-append">
+                <div class="input-group-text bg-success">
+                </div>
+              </div>
+            </div>`
+          )
+        }
+      });
+    
+
+        appendCompletedGoalList(editId)
+
+
+
+
+      } else {
 
       if(localStorage != null){
 
@@ -184,29 +344,39 @@
         console.log(myName);
         $("#h1Value").html(myName);
 
+        
+        
+
         //===================== working code ===========================
 
         const idx = userData.userId;
-        const myUserInfo = await $.get(`/api/dashboardInfo/${idx}`);
-        console.log(myUserInfo);
+        appendGoals(idx)
+        appendCompletedGoalList(idx)
 
+        const myUserInfo = await $.get(`/api/dashboardInfo/${idx}`);
+        console.log('my user is ' + myUserInfo[0]);
         $("#appendWeight").html(`Weight: ${myUserInfo.my_weight}`);
+        $("#userProfilePicture").html(`<img src="${myUserInfo.user_img}" alt="" class="profilePictureBig">`);
         $("#appendHeight").html(`Height: ${myUserInfo.height}`);
         $("#usersMainGoal").html(`${myUserInfo.goal}`);
         $("#appendBMI").html(`BMI: ${myUserInfo.BMI}`);
+        ;
+        $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+
+        // groupMenuImg
 
       }
       
-  
+    }
 
-    });
+  });
 
     async function insertInfo() {
       
-      let userData = localStorage.getItem("myUser");
-      userData = JSON.parse(userData);
-      console.log(userData.userName);
-      userName = userData.userName;
+      let userData3 = localStorage.getItem("myUser");
+      userData3 = JSON.parse(userData3);
+      console.log(userData3.userName);
+      userName = userData3.userName;
 
       hideAddInfo();
       console.log("I AM CLICKED")
@@ -252,7 +422,6 @@
       let bmi = Number(weight) / Math.pow(Number(height), 2);
 
       console.log(`This is the bmi edited: ${bmi}`);
-      // let profileImg = $("#profileImg").val();
 
       //get username and post inside database
       let userData = localStorage.getItem( "myUser" );
@@ -286,7 +455,6 @@
       $("#usersMainGoal").html(`${getInfo.goal}`);
       $("#appendBMI").html(`BMI: ${getInfo.BMI}`);
     }
-
     function logOutBtn(){
       localStorage.clear();
       location.href = '/login.html';
@@ -324,8 +492,6 @@
         );
       }
     }
-
-
     function fitnessWorkoutCall(){
       var chosenFitnessCategory = $("#inputGroupSelectFitness").val();
       $("#currentFitness").html(`Focusing on ${chosenFitnessCategory} today`);
@@ -342,7 +508,6 @@
             method: "GET"
           }).then(absWorkout);
         })
-       
       }else if(chosenFitnessCategory == "Arms"){
         fitnessNames = ["Back Squat", "Axe Hold", "Barbell Squat"]
         
@@ -406,9 +571,7 @@
     function absWorkout(response){
       console.log(response.results);
       console.log(response.results[0].description);
-      $("#fitnessSections").append(
-        `
-        <div class="card">
+      $("#fitnessSections").append(`<div class="card">
           <img class="card-img-top thumbnail-size" src="https://previews.123rf.com/images/logo3in1/logo3in11609/logo3in1160900004/62275155-step-instruction-for-push-up-of-woman-cartoon-illustration-about-work-out-.jpg" alt="Card image cap" class="img-fluid">
           <div class="card-body">
             <h5 class="card-title">${response.results[0].name}</h5>
@@ -416,25 +579,17 @@
           <div class="card-body">
             <a href="#" class="btn btn-primary">Show Workout</a>
           </div>
-        </div>
-        
-        `
-      )
-
+        </div>`)
     }
     function hideMenu(){
-      // alert('something');
       $( "#navMenu" ).hide( "slow" );
     }
     function hideAddInfo(){
-      // alert('something');
       $( "#addInfoWin" ).hide( "slow" );
     }
-
     function hideEditInfo(){
       $( "#editInfoWin" ).hide( "slow" );
     }
-
     function showAddInfo(){
       // alert('something');
       $( "#addInfoWin" ).slideDown( "slow" );
@@ -445,7 +600,6 @@
       $( "#editInfoWin" ).slideDown( "slow" );
       $( "#navMenu" ).hide( "slow" );
     }
-    
     function showMenu(){
       $( "#navMenu" ).show( "slow" );
     };
@@ -454,12 +608,18 @@
       $('html, body').animate({
         scrollTop: $("#goalCard").offset().top
     }, 1500);
+    let usersDataId = localStorage.getItem("myUser");
+        usersData = JSON.parse(usersDataId);
+        console.log(usersData);
+        let myName = usersData.my_name;
+        let myId = usersData.userId; 
+    appendGoals(myId);
+    appendCompletedGoalList(myId);
     }
     function hidegoalCard(){
       $( "#goalCard" ).hide( "slow" );
     }
     function showDietCard(){
-      
       $( "#dietCard" ).show( 1500 );
       $('html, body').animate({
         scrollTop: $("#dietCard").offset().top
@@ -477,7 +637,6 @@
     function hidefitnessCard(){
       $( "#fitnessCard" ).hide( "slow" );
     }
-
     function addGoalInfo(){
       $("#addGoalInsideCard").empty();
       $("#addGoalInsideCard").append(
@@ -502,7 +661,6 @@
         `
       )
     }
-
     async function saveGoal(){
       var saveGoalInput = $("#inputSaveText").val();
       var goalRange = $("#goalRangeChoice option:selected").val();
@@ -512,79 +670,171 @@
 
       console.log(goalRange);
 
+      let user2Data = localStorage.getItem("myUser");
+      user2Data = JSON.parse(user2Data);
+        console.log(user2Data);
+        let myName = user2Data.my_name;
+        let myId = user2Data.userId; 
+        console.log(myName);
+
       var goalInfoStore = {
         goalRange: goalRange,
         goalInput: saveGoalInput,
-        goalCompleted: 0
+        goalCompleted: 0,
+        userId: myId
       }
       //post the goal to db 
       const postGoalInfo = await $.post("/api/postGoal", goalInfoStore);
 
       //get the goal from db and append to correct div
-      const getGoalInfo = await $.get("/api/getGoal");
-      getGoalInfo.forEach( (message) => {
+      $("#addGoalInsideCard").empty();
+      appendGoals(myId);
+    }
 
+    async function appendGoals(editId){
+      const getGoalInfoForOtherProfile = await $.get(`/api/getGoal/${editId}`);
+      console.log('why is it not appending the goal: what :' + getGoalInfoForOtherProfile + ' editId: ' + editId )
+      $("#dailyGoals").empty()
+      $("#weeklyGoals").empty()
+      $("#monthlyGoals").empty()
+
+        getGoalInfoForOtherProfile.forEach( (message) => {
         if(message.goal_range == "Daily"){
           $("#dailyGoals").append(
-            `
-            <div class="input-group mb-3" id="goal${message.goal_id}">
+            `<div class="card-body input-group mb-3" id="goal${message.goal_id}">
               <p class="list-group-item form-control">${message.goal_message}</p>
               <div class="input-group-append">
-                  <button class="btn btn-outline-success" type="button" onClick="goalCompleted('${message.goal_id}')">
-                      Completed
-                  </button>
+                <div class="input-group-text bg-success">
+                  <input type="checkbox" aria-label="Checkbox for following text input" onchange="goalChanged(${message.goal_id}, ${message.userId})">
+                </div>
               </div>
-            </div> 
-            `
-          )
+            </div>`)
         }else if (message.goal_range == "Weekly"){
           $("#weeklyGoals").append(
-            `
-            <div class="input-group mb-3" id="goal${message.goal_id}">
+            `<div class="card-body input-group mb-3" id="goal${message.goal_id}">
               <p class="list-group-item form-control">${message.goal_message}</p>
               <div class="input-group-append">
-                  <button class="btn btn-outline-success" type="button" onClick="goalCompleted('${message.goal_id}')">
-                      Completed
-                  </button>
+                <div class="input-group-text bg-success">
+                  <input type="checkbox" aria-label="Checkbox for following text input" onchange="goalChanged(${message.goal_id}, ${message.userId})">
+                </div>
               </div>
-            </div> 
-            `
+            </div>`
           )
         }else if(message.goal_range == "Monthly") {
           $("#monthlyGoals").append(
-            `
-            <div class="input-group mb-3" id="goal${message.goal_id}">
+            `<div class="card-body input-group mb-3" id="goal${message.goal_id}">
               <p class="list-group-item form-control">${message.goal_message}</p>
               <div class="input-group-append">
-                  <button class="btn btn-outline-success" type="button" onClick="goalCompleted('${message.goal_id}')">
-                      Completed
-                  </button>
+                <div class="input-group-text bg-success">
+                  <input type="checkbox" aria-label="Checkbox for following text input" onchange="goalChanged(${message.goal_id}, ${message.userId})">
+                </div>
               </div>
-            </div> 
-            `
+            </div>`
           )
         }
       });
-     
-
-      $("#addGoalInsideCard").empty();
-
     }
 
-    async function goalCompleted(id){
-      $(`#goal${id}`).remove();
+    async function goalChanged(goalId, personalId){
+      $(`#goal${goalId}`).remove();
+      console.log('why is it not deleeting  personalId ' + personalId )
+      console.log('why is it not deleeting  goalId ' + goalId )
+      
       const goalUpdate = await $.ajax({
-        url: `/api/goalUpdate/${id}`,
+        url: `/api/goalUpdate/${goalId}`,
         type: "PUT"
       });
-
-
-
+      console.log('did it work ' + personalId)
+      
+      //======================Sara
+      appendCompletedGoalList(personalId);
+      //=======================Sara
     }
+    function showDailyList(){
+      $('.detailDailyList').removeClass('hide');
+      $('#showHideDaily').html('<i class="fa fa-angle-up" aria-hidden="true" onClick="hideDailyList()"></i>')
+    }
+    function hideDailyList(){
+      $('.detailDailyList').addClass('hide');
+      $('#showHideDaily').html('<i class="fa fa-angle-down" aria-hidden="true" onClick="showDailyList()"></i>')
+    }
+    function showWeeklyList(){
+      $('.detailWeeklyList').removeClass('hide');
+      $('#showHideWeekly').html('<i class="fa fa-angle-up" aria-hidden="true" onClick="hideWeeklyList()"></i>')
+    }
+    function hideWeeklyList(){
+      $('.detailWeeklyList').addClass('hide');
+      $('#showHideWeekly').html('<i class="fa fa-angle-down" aria-hidden="true" onClick="showWeeklyList()"></i>')
+    }
+    function showMonthlyList(){
+      $('.detailMonthlyList').removeClass('hide');
+      $('#showHideMonthly').html('<i class="fa fa-angle-up" aria-hidden="true" onClick="hideMonthlyList()"></i>')
+    }
+    function hideMonthlyList(){
+      $('.detailMonthlyList').addClass('hide');
+      $('#showHideMonthly').html('<i class="fa fa-angle-down" aria-hidden="true" onClick="showMonthlyList()"></i>')
+    }
+    async function appendCompletedGoalList(personalId){
+      const getCompletedGoalInfo = await $.get(`/api/getCompletedGoalOthers/${personalId}`);
+        
+        $(`#appendCompltedDailyGoal`).empty();
+        $(`#appendCompltedWeeklyGoal`).empty();
+        $(`#appendCompltedMonthlyGoal`).empty();
 
-      // $( "#addInfoWin" ).show( "slow" );
+        getCompletedGoalInfo.forEach( (message) => {
+          var calendar = message.updatedTime
+          var time = moment(calendar).fromNow();
+          if(message.goal_range == "Daily"){
+            $(`#appendCompltedDailyGoal`).append(`
+            <div class="input-group mb-2 mt-2 ">
+            <div class="form-control ">
+              <h5>${message.goal_message}</h5>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <p class="text-muted font-weight-light">finished ${time}</p>
+            </div>
+            <div class="input-group-append">
+              <span class="btn btn-success btn-lg disabled"><i class="fa fa-check" aria-hidden="true"></i></span>
+            </div>
+          </div>`)
+          }else if (message.goal_range == "Weekly"){
+            $("#appendCompltedWeeklyGoal").append(
+              `
+            <div class="input-group mb-2 mt-2 ">
+            <div class="form-control ">
+              <h5>${message.goal_message}</h5>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <p class="text-muted font-weight-light">finished ${time}</p>
+            </div>
+            <div class="input-group-append">
+              <span class="btn btn-success btn-lg disabled"><i class="fa fa-check" aria-hidden="true"></i></span>
+            </div>
+          </div>`
+            )
+          }else if(message.goal_range == "Monthly") {
+            $("#appendCompltedMonthlyGoal").append(
+              `
+            <div class="input-group mb-2 mt-2 ">
+            <div class="form-control ">
+              <h5>${message.goal_message}</h5>
+              <div class="progress ">
+                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <p class="text-muted font-weight-light">finished ${time}</p>
+            </div>
+            <div class="input-group-append">
+              <span class="btn btn-success btn-lg disabled"><i class="fa fa-check" aria-hidden="true"></i></span>
+            </div>
+          </div>`
+            )
+          }
+        });
+    }
   </script>
-  <div class="navBar d-flex justify-content-end">
+  <div class="navBar d-flex justify-content-end" id="visitingNavBar">
     <div id="addInfoWin" class="window container-fluid hide card-body">
       <div class="d-flex justify-content-end">
         <i class="fa fa-times" onClick="hideAddInfo()" aria-hidden="true"></i>
@@ -620,7 +870,6 @@
         </div>
       </div>
     </div>
-
     <div id="editInfoWin" class="window container-fluid hide card-body">
       <div class="d-flex justify-content-end">
         <i class="fa fa-times" onClick="hideEditInfo()" aria-hidden="true"></i>
@@ -658,53 +907,46 @@
         </div>
       </div>
     </div>
-
-    
     <div class="navMenu col-lg-3 card hide" id="navMenu">
       <ul class="card-body text-center">
         <div class="text-right" id="menuCloseBtn">
           <i class="fa fa-times" onClick="hideMenu()" aria-hidden="true"></i>
         </div>
-        <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">
+        <div class="thumbProfileimg">
+          <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">
+        </div>
         <li class="navItem"><a class="navLink" onClick="showAddInfo()" >Add Info</a></li>
         <li class="navItem"><a class="navLink" onClick="showEditInfo()" >Edit Info</a></li>
         <li class="navItem"><a class="navLink" href="groups.html" >View Groups</a></li>
-        <li class="navItem"><a class="navLink" onclick="logOutBtn()">Log Out</a></li>
+        <li class="navItem"><a class="navLink" onClick="logOutBtn()">Log Out</a></li>
       </ul>
     </div>
-    <div class="col-lg-11"></div>
-    <div class="col-lg-1 menuProImg" onClick="showMenu()" >
+    <div class="menuProImg thumbProfileimg" onClick="showMenu()" >
       <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">
     </div>
   </div>
-
   <main role="main">
-    <section class="jumbotron text-center container-fluid">
-      <!-- <img src="assets/LibreOffice_MotifScatter_RGB.png" alt=""> -->
-      <h1 id="h1Value">Welcome!</h1>
-      <div>
-        <div class="container d-flex justify-content-end ">
-          <div class="col-lg-4" id="userProfilePicture">
-            <img src="assets/download.png" alt="" class="profilePicture">
-          </div>
-          <div class="col-lg-8 userInfo">
-            <div class="">
-              <ul class="text-left card-body">
-                <li class="profileName" id="appendWeight">Weight: </li>
-                <br>
-                <li class="profileName" id="appendHeight">Height</li>
-                <br>
-                <li class="profileName" id="appendBMI">BMI</li>
-                <br>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <p id="usersMainGoal">My goal is to do .....!</p>
+    <section class="jumbotron2">
+      <div class="col4 proImgBckg" id="userProfilePicture">
+        <img src="assets/download.png" alt="" class="profilePictureBig">
+      </div>
+      <div class="col8 userInfo ">
+          <h1 class="tex-center" id="h1Value">Welcome!</h1>
+          <ul class="mx-auto profileInfo">
+            <li class="" id="appendWeight">Weight: </li>
+            <br>
+            <li class="" id="appendHeight">Height</li>
+            <br>
+            <li class="" id="appendBMI">BMI</li>
+            <br>
+          </ul>
       </div>
     </section>
-    <section class="container allThumbNails">
-      <div class="card-deck">
+    <section class="container">
+      <p id="usersMainGoal" >My goal is to do .....!</div>
+    </section>
+    <section class="container allThumbNails" id="thumbnailList">
+      <div class="card-deck" >
         <div class="card" id="goalThumbnail" onclick="showGoalCard()">
           <div class="card-body d-flex justify-content-around">
               <h5 class="card-title">Mini Goals</h5>
@@ -726,37 +968,85 @@
       </div>
     </section>
     <section class="goal container mt-4 hide" id="goalCard">
-      <div class="card goalSection">
-        <div class="navBAr">
-          <ul class="nav justify-content-end">
-            <li class="nav-item"><button class="nav-link btn btn-outline-warning" onClick="addGoalInfo()">Add goal</button></li>
-            <li class="nav-item"><a class="nav-link disabled" href="#">Disabled</a></li>
-            <li class="nav-item"><div class="nav-link " href=""><i class="fa fa-times" onClick="hidegoalCard()" aria-hidden="true"></i></div></li>
-            
-          </ul>
+      <div class="card card-body goalSection">
+        <div class="card-body text-right disableCrossBtn">
+          <i class="fa fa-times" onClick="hidegoalCard()" aria-hidden="true"></i>
         </div>
-        <div class="progressSection card-body">
-          <h3>Mini Goals</h3>
-          <div id="addGoalInsideCard">
-
+        <div class="card-body d-flex justify-content-between" id="visitorGoalBar">
+          <h3><img src="assets/mission.png" alt=""> Mini Goals</h3>
+          <div class="navBAr">
+            <ul class="nav justify-content-end">
+              <li class="nav-item"><button class="nav-link btn btn-outline-warning" onClick="addGoalInfo()"><i class="fa fa-plus-circle" aria-hidden="true"></i>  Add goal</button></li>
+            </ul>
           </div>
-          <div class="card">
-            <div class="card-body " >
-              <h3>Daily</h3>
-              <div class="card-deck" id="dailyGoals">
+        </div>
+        <div id="addGoalInsideCard">
+        </div>
+          <div class="card-body">
+            <div class="card card-body mb-3">
+              <div class="row">
+                <h3 class="col-11"><img src="assets/monday.png" alt="" style="width: 25px;"> Daily</h3>
+                <h3 class="col-1" id="showHideDaily"><i class="fa fa-angle-down" aria-hidden="true" onClick="showDailyList()"></i></h3>
+              </div>
+              <hr>
+              <div class="row detailDailyList hide">
+                <div class="col-lg-8" >
+                  <div class="card-deck" id="dailyGoals">
+                  </div>
+                </div>
+                <div class="col-lg-4" id="completedDailyGoals" style="border-left: outset;">
+                  <h5><img src="assets/list.png" alt=""> Completed Tasks</h5>
+                  <hr>
+                  <div class="card-body" id="appendCompltedDailyGoal">
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="card-body ">
-              <h3>Weekly</h3>
-              <div class="card-deck" id="weeklyGoals">
+            <div class="card card-body mb-3">
+              <div class="row">
+                <h3 class="col-11"><img src="assets/calendar.png" alt="" style="width: 25px;"> Weekly</h3>
+                <h3 class="col-1" id="showHideWeekly"><i class="fa fa-angle-down" aria-hidden="true" onClick="showWeeklyList()"></i></h3>
+              </div>
+              <hr>
+              <div class="row detailWeeklyList hide">
+                <div class="col-lg-8" >
+                  <div class="card-deck" id="weeklyGoals">
+                  </div>
+                </div>
+                <div class="col-lg-4" id="completedWeeklyGoals" style="border-left: outset;">
+                  <h5><img src="assets/list.png" alt=""> Completed Tasks</h5>
+                  <hr>
+                  <div class="card-body" id="appendCompltedWeeklyGoal">
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="card-body ">
-              <h3>Monthly</h3>
-              <div class="card-deck" id="monthlyGoals">
+            <div class="card card-body mb-3">
+              <div class="row">
+                <h3 class="col-11"><img src="assets/monthly.png" alt="" style="width: 25px;"> Monthly</h3>
+                <h3 class="col-1" id="showHideMonthly"><i class="fa fa-angle-down" aria-hidden="true" onClick="showMonthlyList()"></i></h3>
+              </div>
+              <hr>
+              <div class="row detailMonthlyList hide">
+                <div class="col-lg-8" >
+                  <div class="card-deck" id="monthlyGoals">
+                  </div>
+                </div>
+                <div class="col-lg-4" id="completedMonthlyGoals" style="border-left: outset;">
+                  <h5><img src="assets/list.png" alt=""> Completed Tasks</h5>
+                  <hr>
+                  <div class="card-body" id="appendCompltedMonthlyGoal">
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+            <!-- <div class="card mt-4">
+              <div class="card-body ">
+                <h3><img src="assets/monthly.png" alt="">Monthly</h3>
+                <div class="card-deck" id="monthlyGoals">
+                </div>
+              </div>
+            </div> -->
         </div>
       </div>
     </section>
@@ -772,8 +1062,7 @@
               <option value="Paleo">The Paleo Diet</option>
               <option value="Vegan">The Vegan Diet</option>
               <option value="Low Carb ">Low-Carb Diets</option>
-              <option value="Dukan">The Dukan Diet</option>
-              <option value="Ultra Low Fat">The Ultra-Low-Fat Diet</option>
+               <option value="Ultra Low Fat">The Ultra-Low-Fat Diet</option>
               <option value="Atkins">The Atkins Diet</option>
               <option value="Zone">The Zone Diets</option>
             </select>
