@@ -34,8 +34,8 @@ Fitness Diaries is a full-stack web application that uses MVC design pattern wit
 * Upload Images (multer)
 
 ## Preview Work
-![Demo1](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
+![Demo1](public/assets/gifs/Demo1.gif)
 
 
-![Demo2](assets/gifs/Demo2.gif)
+![Demo2](public/assets/gifs/Demo2.gif)
 
