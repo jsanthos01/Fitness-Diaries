@@ -66,10 +66,9 @@ async function postUsersInfo(myPost){
 async function getUsersInfo() {
     console.log("This is for the sql get section");
 
-    let myInfo = await db.query("SELECT my_weight, height, goal, BMI FROM personal_info");
+    let myInfo = await db.query("SELECT id, my_weight, height, goal, BMI FROM personal_info");
     myInfo = JSON.stringify(myInfo); 
-    myInfo = JSON.parse(myInfo);
-    console.log("From sql get section"); 
+    myInfo = JSON.parse(myInfo); 
     return myInfo[0];
 }
 
@@ -109,6 +108,13 @@ async function  getGrpName( grpNameId ){
         [ grpNameId ] );
         console.log(` in orm the value of myGrpName ` + myGrpName[0]);
     return myGrpName[0];
+}
+async function  getGrpInfo( grpId ){
+    const myGrpId = await db.query( 
+        "SELECT new_group.group_id,new_group.group_name,new_group.group_imageUrl,new_group.group_goal,new_group.createdAt, personal_info.id, personal_info.user_img, personal_info.username, personal_info.my_name, personal_info.my_weight, personal_info.height, personal_info.goal, group_member.grp_mbr_id FROM new_group, personal_info, group_member WHERE new_group.group_id=group_member.group_id_fk AND personal_info.id=group_member.member_id_frk AND new_group.group_id = ?;",
+        [ grpId ] );
+        console.log(` in orm the value of myGrpId ` + myGrpId);
+    return myGrpId;
 }
 
 async function  getUserProfile( userId ){
@@ -263,6 +269,7 @@ module.exports = {
     getOthersGoalInfo,
     getCompletedOthersGoal,
     //=============sara
+    getGrpInfo,
     getCompletedGoal,
     //--------norma
     changeThumbsupNum,

@@ -14,7 +14,6 @@
     
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
-    <!-- <link href="https://fonts.googleapis.com/css?family=Alegreya|Alegreya+Sans|Lato&display=swap" rel="stylesheet"> -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Rubik&display=swap" rel="stylesheet">
 
 
@@ -335,8 +334,6 @@
       } else {
 
       if(localStorage != null){
-
-        //==================== working code
         let userData = localStorage.getItem("myUser");
         userData = JSON.parse(userData);
         console.log(userData);
@@ -344,26 +341,35 @@
         console.log(myName);
         $("#h1Value").html(myName);
 
-        
-        
-
-        //===================== working code ===========================
-
         const idx = userData.userId;
         appendGoals(idx)
         appendCompletedGoalList(idx)
 
         const myUserInfo = await $.get(`/api/dashboardInfo/${idx}`);
-        console.log('my user is ' + myUserInfo[0]);
-        $("#appendWeight").html(`Weight: ${myUserInfo.my_weight}`);
-        $("#userProfilePicture").html(`<img src="${myUserInfo.user_img}" alt="" class="profilePictureBig">`);
-        $("#appendHeight").html(`Height: ${myUserInfo.height}`);
-        $("#usersMainGoal").html(`${myUserInfo.goal}`);
-        $("#appendBMI").html(`BMI: ${myUserInfo.BMI}`);
-        ;
-        $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+        console.log('my user is ' + myUserInfo.height);
 
-        // groupMenuImg
+        if( myUserInfo.height == null || myUserInfo.my_weight  == null || myUserInfo.goal  == null || myUserInfo.BMI  == null){
+          console.log("helloooooooooooooooooooo")
+          $("#appendWeight").html(`Weight:`);
+          $("#appendHeight").html(`Height:`);
+          $("#usersMainGoal").html(`Goal:`);
+          $("#appendBMI").html(`BMI:`);
+
+        }else {
+          $("#appendWeight").html(`Weight: ${myUserInfo.my_weight}`);
+          $("#appendHeight").html(`Height: ${myUserInfo.height}`);
+          $("#usersMainGoal").html(`${myUserInfo.goal}`);
+          $("#appendBMI").html(`BMI: ${myUserInfo.BMI}`);
+          
+          if (myUserInfo.user_img != null){
+
+            $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+
+            $("#userProfilePicture").html(`<img src="${myUserInfo.user_img}" alt="" class="profilePictureBig">`);
+          }
+        }
+
+       
 
       }
       
@@ -399,6 +405,7 @@
       }
       console.log(myDashboardInfo)
 
+      userId = userData3.userId;
       const postInfo = await $.post("/api/userInfo", myDashboardInfo);
       console.log(`this is the response ${postInfo}`);
 
@@ -407,11 +414,16 @@
       console.log("Getting the dashboard info!!!!")
       console.log(getInfo);
 
-      $("#appendWeight").html(`Weight: ${getInfo.my_weight} kg`);
-      $("#appendHeight").html(`Height: ${getInfo.height} m`);
-      $("#usersMainGoal").html(`${getInfo.goal}`);
-      $("#appendBMI").html(`BMI: ${getInfo.BMI}`);
-
+      for (var i = 0; i < getInfo.length; i++){
+        if(getInfo[i].id == userId){
+          $("#appendWeight").html(`Weight: ${getInfo[i].my_weight} kg`);
+          $("#appendHeight").html(`Height: ${getInfo[i].height} m`);
+          $("#usersMainGoal").html(`${getInfo[i].goal}`);
+          $("#appendBMI").html(`BMI: ${getInfo[i].BMI}`);
+        }
+        break;
+      }
+      
     }
     async function editInfo(){
       hideEditInfo();
@@ -515,7 +527,7 @@
           $.ajax({
             url: `https://wger.de/api/v2/exerciseinfo/?name=${names}`,
             method: "GET"
-          }).then(absWorkout);
+          }).then(armsWorkout);
         })
         
       }else if(chosenFitnessCategory == "Back"){
@@ -525,7 +537,7 @@
           $.ajax({
             url: `https://wger.de/api/v2/exerciseinfo/?name=${names}`,
             method: "GET"
-          }).then(absWorkout);
+          }).then(backWorkout);
         })
 
       }else if(chosenFitnessCategory == "Calves"){
@@ -534,7 +546,7 @@
           $.ajax({
             url: `https://wger.de/api/v2/exerciseinfo/?name=${names}`,
             method: "GET"
-          }).then(absWorkout);
+          }).then(calvesWorkout);
         })
 
       }else if(chosenFitnessCategory == "Chest"){
@@ -543,7 +555,7 @@
           $.ajax({
             url: `https://wger.de/api/v2/exerciseinfo/?name=${names}`,
             method: "GET"
-          }).then(absWorkout);
+          }).then(chestWorkout);
         })
 
       }else if(chosenFitnessCategory == "Legs"){
@@ -552,16 +564,7 @@
           $.ajax({
             url: `https://wger.de/api/v2/exerciseinfo/?name=${names}`,
             method: "GET"
-          }).then(absWorkout);
-        })
-
-      }else{
-        fitnessNames = ["Arnold Shoulder Press", "Bent-over Lateral Raises", "Bent High Pulls" ]
-        fitnessNames.forEach( (names) => {
-          $.ajax({
-            url: `https://wger.de/api/v2/exerciseinfo/?name=${names}`,
-            method: "GET"
-          }).then(absWorkout);
+          }).then(legsWorkout);
         })
 
       }
@@ -569,10 +572,169 @@
     }
 
     function absWorkout(response){
-      console.log(response.results);
-      console.log(response.results[0].description);
-      $("#fitnessSections").append(`<div class="card">
-          <img class="card-img-top thumbnail-size" src="https://previews.123rf.com/images/logo3in1/logo3in11609/logo3in1160900004/62275155-step-instruction-for-push-up-of-woman-cartoon-illustration-about-work-out-.jpg" alt="Card image cap" class="img-fluid">
+      if(response.results[0].name == "Ankle Taps"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/ankletaps.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://sworkit.com/exercise/ankle-taps" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }else if(response.results[0].name == "Crunches"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/crunches.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://www.dummies.com/health/exercise/how-to-do-crunches/" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }else if(response.results[0].name == "Arch Hold"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/archhold.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://holycitycrossfit.com/arch-and-hollow-body-positions-in-movement/" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }
+    }
+    function armsWorkout(response){
+      if(response.results[0].name == "Back Squat"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/backsquat.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://www.crossfit.com/essentials/the-back-squat" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }else if(response.results[0].name == "Axe Hold"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/axehold.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://www.health.com/fitness/how-to-do-axe-chop-exercise" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }else if(response.results[0].name == "Barbell Squat"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/barbelsquat.png" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://www.coachmag.co.uk/barbell-exercises/6705/how-to-master-the-barbell-back-squat" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }
+    }
+    function backWorkout(response){
+      if(response.results[0].name == "Back, Shoulder, And Leg Stretching."){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/stretches.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://www.webmd.com/fitness-exercise/features/how-to-stretch" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }else if(response.results[0].name == "Arch Hold"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/archhold.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://holycitycrossfit.com/arch-and-hollow-body-positions-in-movement/" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }else if(response.results[0].name == "Bent Over Barbell Row"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/bentoverbarbel.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://www.muscleandstrength.com/exercises/bent-over-barbell-row.html" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }
+    }
+
+    function legsWorkout(response){
+      fitnessNames = ["Barbell Hip Thrust", "Barbell Lunges", "Barbell Reverse Lunge - Clean Grip"]
+
+      if(response.results[0].name == "Barbell Hip Thrust"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/Barbell-Hip-Thrust.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://www.menshealth.com/uk/fitness/a753444/barbell-lunge/" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }else if(response.results[0].name == "Barbell Lunges"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/barbelLunge.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://www.menshealth.com/uk/fitness/a753444/barbell-lunge/" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }else if(response.results[0].name == "Barbell Reverse Lunge - Clean Grip"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/reverseLunges.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://www.menshealth.com/uk/fitness/a753444/barbell-lunge/" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }
+    }
+
+    function calvesWorkout(response){
+      if(response.results[0].name == "2 Handed Kettlebell Swing"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/2-handed-swing.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://www.onnit.com/academy/kettlebell-exercise-2-hand-swing/" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }else if(response.results[0].name == "Arch Hold"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/archhold.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="https://holycitycrossfit.com/arch-and-hollow-body-positions-in-movement/" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }
+    }
+    function chestWorkout(response){
+
+      if(response.results[0].name == "Benchpress Dumbbells"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/benchpress.jpg" alt="Card image cap" class="img-fluid">
           <div class="card-body">
             <h5 class="card-title">${response.results[0].name}</h5>
           </div>
@@ -580,7 +742,19 @@
             <a href="#" class="btn btn-primary">Show Workout</a>
           </div>
         </div>`)
+      }else if(response.results[0].name == "Bear Walk"){
+        $("#fitnessSections").append(`<div class="card">
+          <img class="card-img-top thumbnail-size" src="assets/fitnessImg/Bear-Walk.jpg" alt="Card image cap" class="img-fluid">
+          <div class="card-body">
+            <h5 class="card-title">${response.results[0].name}</h5>
+          </div>
+          <div class="card-body">
+            <a href="#" class="btn btn-primary">Show Workout</a>
+          </div>
+        </div>`)
+      }
     }
+
     function hideMenu(){
       $( "#navMenu" ).hide( "slow" );
     }
@@ -973,7 +1147,7 @@
           <i class="fa fa-times" onClick="hidegoalCard()" aria-hidden="true"></i>
         </div>
         <div class="card-body d-flex justify-content-between" id="visitorGoalBar">
-          <h3><img src="assets/mission.png" alt=""> Mini Goals</h3>
+          <h3><img src="assets/individualPg/mission.png" alt=""> Mini Goals</h3>
           <div class="navBAr">
             <ul class="nav justify-content-end">
               <li class="nav-item"><button class="nav-link btn btn-outline-warning" onClick="addGoalInfo()"><i class="fa fa-plus-circle" aria-hidden="true"></i>  Add goal</button></li>
@@ -985,7 +1159,7 @@
           <div class="card-body">
             <div class="card card-body mb-3">
               <div class="row">
-                <h3 class="col-11"><img src="assets/monday.png" alt="" style="width: 25px;"> Daily</h3>
+                <h3 class="col-11"><img src="assets/individualPg/monday.png" alt="" style="width: 25px;"> Daily</h3>
                 <h3 class="col-1" id="showHideDaily"><i class="fa fa-angle-down" aria-hidden="true" onClick="showDailyList()"></i></h3>
               </div>
               <hr>
@@ -995,7 +1169,7 @@
                   </div>
                 </div>
                 <div class="col-lg-4" id="completedDailyGoals" style="border-left: outset;">
-                  <h5><img src="assets/list.png" alt=""> Completed Tasks</h5>
+                  <h5><img src="assets/individualPg/list.png" alt=""> Completed Tasks</h5>
                   <hr>
                   <div class="card-body" id="appendCompltedDailyGoal">
                   </div>
@@ -1004,7 +1178,7 @@
             </div>
             <div class="card card-body mb-3">
               <div class="row">
-                <h3 class="col-11"><img src="assets/calendar.png" alt="" style="width: 25px;"> Weekly</h3>
+                <h3 class="col-11"><img src="assets/individualPg/calendar.png" alt="" style="width: 25px;"> Weekly</h3>
                 <h3 class="col-1" id="showHideWeekly"><i class="fa fa-angle-down" aria-hidden="true" onClick="showWeeklyList()"></i></h3>
               </div>
               <hr>
@@ -1014,7 +1188,7 @@
                   </div>
                 </div>
                 <div class="col-lg-4" id="completedWeeklyGoals" style="border-left: outset;">
-                  <h5><img src="assets/list.png" alt=""> Completed Tasks</h5>
+                  <h5><img src="assets/individualPg/list.png" alt=""> Completed Tasks</h5>
                   <hr>
                   <div class="card-body" id="appendCompltedWeeklyGoal">
                   </div>
@@ -1023,7 +1197,7 @@
             </div>
             <div class="card card-body mb-3">
               <div class="row">
-                <h3 class="col-11"><img src="assets/monthly.png" alt="" style="width: 25px;"> Monthly</h3>
+                <h3 class="col-11"><img src="assets/individualPg/monthly.png" alt="" style="width: 25px;"> Monthly</h3>
                 <h3 class="col-1" id="showHideMonthly"><i class="fa fa-angle-down" aria-hidden="true" onClick="showMonthlyList()"></i></h3>
               </div>
               <hr>
@@ -1033,7 +1207,7 @@
                   </div>
                 </div>
                 <div class="col-lg-4" id="completedMonthlyGoals" style="border-left: outset;">
-                  <h5><img src="assets/list.png" alt=""> Completed Tasks</h5>
+                  <h5><img src="assets/individualPg/list.png" alt=""> Completed Tasks</h5>
                   <hr>
                   <div class="card-body" id="appendCompltedMonthlyGoal">
                   </div>
@@ -1088,7 +1262,7 @@
         <div class="card-body">
           <h2>Fitness</h2>
           <div class="card-body">
-            <h5 id="currentFitness">Current Fitness you are following: 100 Squats a day</h5>
+            <h5 id="currentFitness">Fitness Regime: </h5>
             <br>
             <div class="input-group mb-3">
               <select class="custom-select" id="inputGroupSelectFitness" onchange="fitnessWorkoutCall()">

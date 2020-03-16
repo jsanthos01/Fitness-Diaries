@@ -27,32 +27,34 @@
           background: linear-gradient(to right, #c04848, #480048); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
         }
         .login {
-        background-color: white;
-        border-radius: 10px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+          width: 80%;
+          margin: 60px auto;
+          background-color: white;
+          border-radius: 10px;
+          display: flex;
+          /* position: absolute;
+          top: 50%;
+          left: 50%; */
+          /* margin-right: -50%;
+          transform: translate(-50%, -50%); */
+          box-shadow: 0 15px 40px rgba(0,0,0,0.5);
         }
         .image {
-          float: left;
-          width: 50%;
+          /* float: left; */
+          width: 100%;
           height: 400px;
-          background: url(assets/login/exercise2.jpg);
+          background: url(assets/login/loginImg.jpg);
+          /* object-fit: cover; */
+          border-top-left-radius: 10px;
+          border-bottom-left-radius: 10px;
           background-size: cover;
           box-sizing: border-box;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-direction: column;
-        }
+          background-position-y: -100px;
 
-       
+        }
+        
         .textSection {
-          float: right;
-          width: 50%;
+          width: 100%;
           height: 400px;
           box-sizing: border-box;
           display: flex;
@@ -82,13 +84,26 @@
         .formBox input:focus {
           border-bottom: purple;
         }
-        
-        @media screen and (max-width: 700px) {
-          .column {
-          width: 100%;
-          }
+
+        @media only screen and (max-width: 700px) {
+          .login{
+          flex-direction: column;
+          
+        }
+
+        .image {
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+          border-bottom-left-radius: 0;
+
         }
         
+        .textSection {
+          width: 100%;
+          height: 400px;
+          
+        }
+      }
     </style>
     <script>
           // function registerBtn(){
@@ -139,27 +154,27 @@
         }
     </script>
     
-    <div class="container login">
-      <div class="row">
-        <div class="column image">
-        </div>
-        <div class="column textSection">
-          <div class="formBox">
-            <form role="form">
-              <div class="form-group">
-                <p>Username or Email</p>
-                <input type="text" class="form-control"placeholder=" Add your username or email" id="userEmail">
-              </div>
-              <div class="form-group">
-                <p>Password</p>
-                <input type="password" class="form-control"  placeholder=" Add your password" id="userPassword">
-              </div>
-              <button id='submitUserBtn' type="button" class="btn btn-primary submit" onClick="loginBtn()">Login</button>
-              <button id='submitUserBtn' type="button" class="btn btn-primary submit" onClick="registerBtn()">Create an Account</button>
-            </form>
-          </div>
+    <div class="login">
+      <div class="image">
+      </div>
+      <div class="textSection">
+        <div class="formBox">
+          <form role="form">
+            <div class="form-group">
+              <p>Username or Email</p>
+              <input type="text" class="form-control"placeholder=" Add your username or email" id="userEmail">
+            </div>
+            <div class="form-group">
+              <p>Password</p>
+              <input type="password" class="form-control"  placeholder=" Add your password" id="userPassword">
+            </div>
+            <button id='submitUserBtn' type="button" class="btn btn-primary submit" onClick="loginBtn()">Login</button>
+            <button id='submitUserBtn' type="button" class="btn btn-primary submit" onClick="registerBtn()">Create an Account</button>
+          </form>
         </div>
       </div>
+      <!-- <div class="loginSection">
+      </div> -->
     </div>
 </body>
 </html>

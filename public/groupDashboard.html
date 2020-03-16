@@ -13,19 +13,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Alegreya|Alegreya+Sans|Lato&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Rubik&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="loading-bar.css"/>
+    <script type="text/javascript" src="loading-bar.js"></script>
 </head>
 <body>
     <style>
         body {
             height: 100%;
-            color: #100048;
-            background-color: #08144b;
-            font-family: 'Lato', sans-serif;
-        }
+            color: #ececec;
+            font-family: 'Montserrat', sans-serif;
+            background-image: linear-gradient(45deg, #773030, #381238, #270127);
+            /* background: #3b003b; */
 
+        }
         h1 {
-            font-family: 'Alegreya', serif;
+            font-family: 'Montserrat', sans-serif;
+            color: rgb(255, 115, 0);;
+            font-weight: lighter;
+            text-transform: capitalize;
+            font-size: 2rem;
+        }
+        
+        h5 {
+            color: rgb(255, 202, 55);;
+
         }
         .thumbnail-size {
             width: 100%;
@@ -50,11 +62,91 @@
             border-radius: 50%;
             object-fit: cover;
         }
+        .hide {
+            display: none;
+        }
+        .navLink {
+            padding: 10px;
+            display: block;
+        }
+        ul {
+            list-style: none;
+        }
+        .navMenu{
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 100;
+        }
+        .thumbProfileimg{
+            position: absolute;
+            z-index: 50;
+        }
+        .profilePicture {
+            border-radius: 50%;
+        }
+        .ldBar path.baseline {
+            stroke-width: 4;
+            stroke: #d6d6d6;
+            stroke-linecap: round;
+            /* filter:url(#custom-shadow); */
+        }
+        .ldBar path.mainline {
+            stroke-width: 10;
+            stroke: #c75454;
+            stroke-linecap: round;
+        }
+        .ldBar{
+            width: 50px;
+            height: 50px;
+        }
+        .myCards{
+            /* display: block; */
+            /* background-image: linear-gradient(to right, #480048, #c04848); */
+            background: #5c245c91;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 #1f0d1f, 0 6px 20px 0 #1f0d1f;
+            margin: 20px auto;
+        }
+        hr {
+            color: #1f0d1f;
+        }
+        .thumbsUp {
+            color: rgb(148, 148, 148);
+            font-size: 1.7rem;
+        }
+        .thumbsUp:hover {
+            color: rgb(255, 115, 0);
+            font-weight: bolder;
+        }
+        .pl-2{
+            color: rgb(44, 44, 44);
+        }
+        
     </style>
     <script>
-        $(document).ready( async function(){
+    $(document).ready( async function(){
             //===========akanksha=====
+
+
+            //========FOR MENU WHO EVER IS LOGGED IN
+
+            let userData = localStorage.getItem("myUser");
+            userData = JSON.parse(userData);
+            console.log(userData);
+            let myName = userData.my_name;
+            const id = userData.userId;
+
+            console.log(myName);
             
+            const myUserInfo = await $.get(`/api/dashboardInfo/${id}`);
+            console.log('my user is ' + myUserInfo);
+            if (myUserInfo.user_img != null){
+            $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+            $( ".appendThumbnailMenu" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">`);
+            }
+            //=================== FOR QUOTES
             function mQuotes(){
                 $.ajax({
                 url: "https://type.fit/api/quotes",
@@ -66,31 +158,69 @@
                 var quote = Math.floor(Math.random()*motQuotes.length);
 
                 //console.log("Random quote: "+JSON.stringify(motQuotes[quote]));
-            
                 $("#quotes").text(motQuotes[quote].text);
-                
+                $("#quotes").html(`<i class="fa fa-quote-left" aria-hidden="true"></i>   ${motQuotes[quote].text}   <i class="fa fa-quote-right" aria-hidden="true"></i>`);
                 })
                 }    
             mQuotes();
 
-            //==========sara======
+            //==========sara======FOR getting group info
 
             const groupId = location.hash.substr(1);
-            const myMembersList = await $.get(`/api/membersList/${groupId}`);
-            console.log(myMembersList);
-            $('#groupName').html(`${myMembersList[0].group_name}`);
+            const getGroupInfo = await $.get(`/api/groupInfo/${groupId}`);
+            console.log(' getting group info ' + getGroupInfo[0])
+            //group_id INT PRIMARY KEY AUTO_INCREMENT,
+            // group_name VARCHAR(100) NOT NULL,
+            // group_goal INT,
+            // group_imageUrl VARCHAR(250),
+            // createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
+
+            $('#appendGroupGoal').html(`
+            <h3>Group Goal to lose : ${getGroupInfo[0].group_goal}</h3>
+            `);
+
+            //FOR PRINTING OUT THE MEMBERS OF THE LIST
+            // const myMembersList = await $.get(`/api/membersList/${groupId}`);
+            // console.log(myMembersList);
+
+            let  currentTime= moment().format('MMMM Do YYYY');;   
+
+            $('#groupName').html(`${getGroupInfo[0].group_name} Dashboard `);
+            $('#currentTime').html(`${currentTime}`);
+
             $('#membersList').html('');
-            myMembersList.forEach(function( group ){
+            
+            var sumOfGoalLost = 0;
+            var groupsGoal =  parseInt(getGroupInfo[0].group_goal);
+
+            getGroupInfo.forEach(function( group ){
+                console.log('printing out the goals: ' + group.goal)
+                let newNumber = parseInt(group.goal);
+                
+                sumOfGoalLost = sumOfGoalLost + newNumber;
+                console.log('printing out sum of goals: ' + sumOfGoalLost)
 
                 $('#membersList').append(`<div class="userImg col-2">
                     <img src="${group.user_img}" alt="" class="profilePictureLink" style="width: 100px;" onClick="showMemberProfile('${group.id}')">
-                </div>`)     
+                </div>`)
             })
+            console.log(' sum Of Goal Lost is ' + sumOfGoalLost)
+            $('#appendGroupGoal').append(`
+                <h4>Total lost : ${sumOfGoalLost}</h4>
+            `)
+
+            var completedPercentage = Math.round((sumOfGoalLost*100)/groupsGoal);
+            console.log(completedPercentage);
+
+            var bar1 = new ldBar("#myItem1");
+            /* ldBar stored in the element */
+            var bar2 = document.getElementById('myItem1').ldBar;
+            bar1.set(completedPercentage);
+
             const myTop3List = await $.get(`/api/top3List/${groupId}`);
             console.log(myTop3List);
             $('#top3List').html('');
             myTop3List.forEach( function( top3 ){
-
                 $('#top3List').append(`
                 <div class="d-flex justify-content-around card-body">
                     <img src="${top3.user_img}" alt="" class="profilePictureLink2">
@@ -118,15 +248,13 @@
             })
             //================sara===========
 
-            function showMemberProfile(id){
-            console.log('loading profile of ' + id);
-            location.href = '/individual.html#'+ id;
-            }
-
-            //================sara===========
+        function showMemberProfile(id){
+        console.log('loading profile of ' + id);
+        location.href = '/individual.html#'+ id;
+        }
+        //================sara===========
 
              //--============Norma Code====================//
-
         async function getPosts() {
             alert('i am clicked');
             
@@ -150,78 +278,134 @@
             showInfo();
             
         };
-    async function showInfo(){
-        const fetchPosts = await $.get("/api/getposts");
-        console.log("Getting the posts from server!!!!") 
-        console.log( 'what is this: ' + fetchPosts[0].thumbs_up);
+        async function showInfo(){
+            const fetchPosts = await $.get("/api/getposts");
+            console.log("Getting the posts from server!!!!") 
+            console.log( 'what is this: ' + fetchPosts[0].thumbs_up);
 
-        
-        $("#userpostid").empty();
+            
+            $("#userpostid").empty();
 
-        let arrLength = fetchPosts.length-1;
-        for ( let i = arrLength; i >= 0; i--){
-            $("#userpostid").append(
-                `<section id="${i+1}" class="userPost container mt-4 card">
-                <div class="progressSection card-body">
-                    <div class="input-group mb-3 ">
-                        <div class="form-control d-flex align-items-start card-body">
-                            <div class="userImg col-2">
-                                <img src="${fetchPosts[i].user_img}" alt="" class="profilePicture" style="width: 100px;">
-                            </div>
-                            <div class="text-left col-10">
-                                <h3>${fetchPosts[i].my_name}</h3>
-                                <p class="text-left">${fetchPosts[i].info}</p>
-                                <div class="">${fetchPosts[i].creation_time}</div>  
+            let arrLength = fetchPosts.length-1;
+            for ( let i = arrLength; i >= 0; i--){
+                $("#userpostid").append(
+                    `<section id="${i+1}" class="userPost container mt-4 card">
+                    <div class="progressSection card-body">
+                        <div class="input-group mb-3 ">
+                            <div class="form-control d-flex align-items-start card-body">
+                                <div class="userImg col-2">
+                                    <img src="${fetchPosts[i].user_img}" alt="" class="profilePicture" style="width: 100px;">
+                                </div>
+                                <div class="text-left col-10">
+                                    <h3>${fetchPosts[i].my_name}</h3>
+                                    <p class="text-left">${fetchPosts[i].info}</p>
+                                    <div class="">${fetchPosts[i].creation_time}</div>  
+                                </div>
                             </div>
                         </div>
+                        <ul class="nav justify-content-start">
+                            <li class="nav-item ">
+                                <i onclick="thumbsupFunc(${i+1})" id="thumbsupid${i+1}" class="thumbsUp fa fa-thumbs-o-up fa-lg" aria-hidden="true"></i>
+                                <span id="number${i+1}" class="pl-2"></span>
+                            </li>
+                        </ul>
                     </div>
-                    <ul class="nav justify-content-start">
-                        <li class="nav-item">
-                            <button><i onclick="thumbsupFunc(${i+1})" id="thumbsupid${i+1}" class="fa fa-thumbs-o-up fa-lg" aria-hidden="true"></i></button>
-                            <span id="number${i+1}" class="pl-2"></span>
-                        </li>
-                    </ul>
-                </div>
-            </section>`
-            )
-            $(`#number${i+1}`).html(fetchPosts[i].thumbs_up);
-        } 
-    }
+                </section>`
+                )
+                $(`#number${i+1}`).html(fetchPosts[i].thumbs_up);
+            } 
+        }
 
-    async function thumbsupFunc(idx){
-        const thumbsUp = await $.get(`/api/thumbsup/${idx}`);   
-        console.log(thumbsUp);
-        console.log(thumbsUp[0].thumbs_up); 
-        // console.log(thumbsUp);
-        $(`#number${idx}`).html(thumbsUp[0].thumbs_up);
-    }
-
+        async function thumbsupFunc(idx){
+            const thumbsUp = await $.get(`/api/thumbsup/${idx}`);   
+            console.log(thumbsUp);
+            console.log(thumbsUp[0].thumbs_up); 
+            // console.log(thumbsUp);
+            $(`#number${idx}`).html(thumbsUp[0].thumbs_up);
+        }
+        function showMenu(){
+                $( "#navMenu" ).show( "slow" );
+            };
+        function hideMenu(){
+            // alert('something');
+            $( "#navMenu" ).hide( "slow" );
+        }
+        function logOutBtn(){
+            localStorage.clear();
+            location.href = '/login.html';
+        }
 
         //=========================
 
         
     </script>
+
+    <div class="navBar d-flex justify-content-end">
+        <div class="navMenu col-lg-3 card hide" id="navMenu">
+            <ul class="card-body text-center">
+                <div class="text-right" id="menuCloseBtn">
+                    <i class="fa fa-times" onClick="hideMenu()" aria-hidden="true"></i>
+                </div>
+                <div class="appendThumbnailMenu">
+                    <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 75px;">
+                </div>
+                <li class="navItem"><a class="navLink" href="individual.html">My Profile</a></li>
+                <li class="navItem"><a class="navLink" href="groups.html" >View Groups</a></li>
+                <li class="navItem"><a class="navLink" href="#" onclick="logOutBtn()">Log Out</a></li>
+            </ul>
+        </div>
+        <div class="groupMenu thumbProfileimg" onClick="showMenu()">
+            <img src="assets/download.png" alt="" class="userImgThumb m-2" style="width: 50px; height: 50px;">
+        </div>
+    </div>
     <main role="main">
-        <section class="jumbotron text-center container-fluid">
-            <div class="text-center mb-5">
+        <section class="container-fluid">
+            <div class="container text-left mb-5 myCards">
                 <h1 id="groupName">Group Name</h1>
+                <h5 id="currentTime"></h5>
             </div>
-            <div class="d-flex justify-content-around">
-                <img src="assets/PossibleGlumAcouchi-small.gif" style="width: 30%;" alt="Flowers in Chania" width="">
-                <div class="col-4">
-                    <h3>Total point: 523</h3>
-                    <h5>Top 3</h5>
-                    <div class="card-body" id="top3List">
+            <div class="container row justify-content-between mx-auto">
+                <div class="col-lg-6 myCards">
+                    <div class="card-body">
+                        <div id="myItem1" class="ldBar label-center" data-value="0" data-preset="circle" style="width:100%;height:200px", >
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <div id="appendGroupGoal">
+                            <h3>To Reach: </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                </div>
+                <div class="col-lg-5">
+                    <div class="card-body myCards">
+                        <h3>Total point: 523</h3>
+                        <hr>
+                        <div class="card-body">
+                            
+                        </div>
+                    </div>
+                    <div class="card-body myCards">
+                        <h3>Top 3</h3>
+                        <hr>
+                        <div class="card-body" id="top3List">
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="container card">
+        <section class="container myCards">
+            <h5>Daily Motivational Quotes</h5>
+            <hr>
             <div class="card-body">
-                <div class="row" id="quotes" ></div>
+                <h3 class="text-center mx-auto" id="quotes"></h3>
             </div>
         </section>
-        <section class="members container card">
+        <section class="members container myCards">
+            <h5>Members List</h5>
+            <hr>
+
             <div class="card-body d-flex justify-content-around" id="membersList">
                 <div class="userImg col-2">
                     <img src="assets/download.png" alt="" class="profilePictureLink" style="width: 100px;" >
@@ -243,7 +427,7 @@
                 </div>
             </div>
         </section>
-        <section class="postSome container card mt-3">
+        <section class="postSome container myCards mt-3">
             <div class="card-body">
                 <h4>Post Something</h4>
                 <div class="input-group mb-3">
@@ -253,9 +437,10 @@
                     </div>
                 </div>
             </div>
-        </section>
-        <div id="userpostid">
-            
+        </section >
+        <div class="myCards container">
+            <div id="userpostid">
+            </div>
         </div>
     </main>
     

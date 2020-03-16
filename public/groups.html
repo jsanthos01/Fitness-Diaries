@@ -22,8 +22,12 @@
         body {
             height: 100%;
             color: #100048;
-            background-color: #cdedf7;
+            background-image: linear-gradient(to right, #c04848, #480048);
             font-family: 'Montserrat', sans-serif;
+        }
+        h1 {
+            color: white;
+            font-weight: bolder;
         }
         .thumbnail-size {
             width: 100%;
@@ -54,9 +58,7 @@
             width: 60%;
             border-radius: 10px;
         }
-        .jumbotron{
-            
-        }
+        
         .navBar{
             width: 100%;
             /* background: navy; */
@@ -66,6 +68,9 @@
         }
         ul {
             list-style: none;
+        }
+        .thumbProfileimg{
+            position: absolute;
         }
         .navMenu{
             /* background: red; */
@@ -117,8 +122,8 @@
             }
         .groupImg {
             border-radius: 50%;
-            width: 40vh;
-            height: 40vh;
+            width: 30vh;
+            height: 30vh;
             object-fit: cover;
         }
         .memberImg {
@@ -130,6 +135,16 @@
         .userImgThumb{
             border-radius: 50%;
             width: 30px;
+        }
+        .groupInfo{
+            /* width: 100%; */
+            border-radius: 10px;
+            margin: 30px auto;
+            padding: 15px;
+            border: 2px solid white;
+        }
+        #grpNmRow{
+            color: white;
         }
     </style>
     <script>
@@ -145,8 +160,16 @@
             console.log(myName);
             
             const myUserInfo = await $.get(`/api/dashboardInfo/${id}`);
-            console.log('my user is ' + myUserInfo[0]);
-            $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">`);
+            console.log('my user is ' + myUserInfo);
+            if (myUserInfo.user_img != null){
+            $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+
+            $( ".appendThumbnailMenu" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">`);
+
+
+            }
+
+
         })
 
         function showMenu(){
@@ -225,7 +248,7 @@
             $( "#grpNmRow" ).append(`
                 <div class="text-center">
                     <h3>${myGroupName.group_name}</h3>
-                    <img src="assets/add.png" alt="" class="addMemberIcon" onClick="showAddMemberForm(${idx})" style="width: 100px;" ><p>Add member</p>
+                    <img src="assets/add(white).png" alt="" class="addMemberIcon" onClick="showAddMemberForm(${idx})" style="width: 100px;" ><p>Add member</p>
                 </div>`
             )
             $( "#addShowGrpBtn" ).html( `<button type="button" class="btn btn-outline-primary" onClick="showGrpDshbrd(${idx})">Show Group Dashboard</button>` )
@@ -355,9 +378,8 @@
             localStorage.clear();
             location.href = '/login.html';
         }
-
     </script>
-    
+
     <div class="navBar d-flex justify-content-end">
         <div id="addGroupWin" class="window container-fluid hide card-body">
             <div class="d-flex justify-content-end">
@@ -375,7 +397,7 @@
                     </div>
                     <div class="form-group">
                         <label for="groupGoal">Group Goal</label>
-                        <input type="text" class="form-control" id="groupGoal" placeholder="Insert Your Group Goal">
+                        <input type="text" class="form-control" id="groupGoal" placeholder="Insert Your Group Goal. It must be a number!">
                     </div>
                     <div class="form-group">
                         <label for="groupImgUrl">Group Image</label>
@@ -403,19 +425,19 @@
                 <div class="text-right" id="menuCloseBtn">
                     <i class="fa fa-times" onClick="hideMenu()" aria-hidden="true"></i>
                 </div>
-                <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 75px;">
-                <li class="navItem"><a class="navLink">view something</a></li>
-                <li class="navItem"><a class="navLink" href="#">My Profile</a></li>
-                <li class="navItem"><a class="navLink" href="#">Log Out</a></li>
+                <div class="appendThumbnailMenu">
+                    <img src="assets/download.png" alt="" class="profilePicture m-2 " style="width: 75px;">
+                </div>
+                <li class="navItem"><a class="navLink" href="individual.html">My Profile</a></li>
+                <li class="navItem"><a class="navLink" onclick="logOutBtn()">Log Out</a></li>
             </ul>
         </div>
-        <div class="col-lg-11"></div>
-        <div class="col-lg-1 groupMenu" onClick="showMenu()">
-            <img src="assets/download.png" alt="" class="userImgThumb m-2" style="width: 50px;">
+        <div class="groupMenu thumbProfileimg" onClick="showMenu()">
+            <img src="assets/download.png" alt="" class="userImgThumb m-2" style="width: 50px; height: 50px;">
         </div>
     </div>
     <main role="main">
-        <section class="jumbotron text-center container-fluid">
+        <section class="text-center container">
             <div class="hero card-body d-flex justify-content-center">
                 <h1 class="col-11">My Groups</h1>
                 <div class="col-1">
@@ -433,7 +455,7 @@
             </div>
         </section>
         <section class="groupInfo container hide" id="groupDetailInfo">
-            <div class="d-flex justify-content-center" id="grpNmRow"></div>
+            <div class=" card-body d-flex justify-content-center" id="grpNmRow"></div>
             <div id="selectMemberForm"></div>
             <div class="addMemberForm hide card-body" id="memberForm"></div>
             <section class="card-body members_list">
@@ -445,7 +467,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex justify-content-center" id="membersListDisplay">
+                        <div class="row" id="membersListDisplay">
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@ const orm = require('./orm');
 
 const PORT = process.env.PORT || 8080;
 const app = express();
+
 const bcrypt = require ("bcrypt");
 const saltRounds = 10;
 
@@ -13,7 +14,6 @@ app.use(express.urlencoded({ extended: false }));
 //posts user's registration information inside database
 app.post("/api/registration", async function(req, res){
   console.log(req.body);
-  
   bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
     console.log(hash);
     orm.registrationSql({
@@ -109,6 +109,16 @@ app.get("/api/groupName/:id", async function(req, res){
   res.send(groupNameList);
   
 });
+
+
+app.get("/api/groupInfo/:id", async function(req, res){
+  console.log( `get api/groupInfo/ ] recieved: `, req.params.id );
+  const groupInfo = await orm.getGrpInfo(req.params.id);
+  res.send(groupInfo);
+  
+});
+ 
+
 app.get("/api/userProfile/:id", async function(req, res){
   console.log( `[/api/userProfile/] recieved: `, req.params.id );
   const userProfile = await orm.getUserProfile(req.params.id);
