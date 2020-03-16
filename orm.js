@@ -69,7 +69,7 @@ async function getUsersInfo() {
     let myInfo = await db.query("SELECT id, my_weight, height, goal, BMI FROM personal_info");
     myInfo = JSON.stringify(myInfo); 
     myInfo = JSON.parse(myInfo); 
-    return myInfo[0];
+    return myInfo;
 }
 
 

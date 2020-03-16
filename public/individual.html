@@ -369,8 +369,6 @@
           }
         }
 
-       
-
       }
       
     }
@@ -392,16 +390,13 @@
       let bmi = Number(weight) / Math.pow(Number(height), 2);
 
       console.log(`This is the bmi: ${bmi}`);
-      // let profileImg = $("#profileImg").val();
 
-      console.log("hello man")
       let myDashboardInfo = {
         userName: userName,
         inputWeight: weight,
         inputHeight: height,
         inputGoal: goal,
         bmi:bmi
-        // user_img: profileImg
       }
       console.log(myDashboardInfo)
 
@@ -447,10 +442,10 @@
         inputWeight: weight,
         inputHeight: height,
         inputGoal: goal,
-        bmi:bmi
-        // user_img: profileImg
+        bmi:bmi,
       };
 
+      userId = userDate.userId;
       console.log(userDashboardInfo);
 
       const postInfo = await $.post("/api/userInfo", userDashboardInfo);
@@ -462,10 +457,16 @@
       console.log("Getting the dashboard info from edit function !!!!")
       console.log(getInfo);
 
-      $("#appendWeight").html(`Weight: ${getInfo.my_weight}`);
-      $("#appendHeight").html(`Height: ${getInfo.height}`);
-      $("#usersMainGoal").html(`${getInfo.goal}`);
-      $("#appendBMI").html(`BMI: ${getInfo.BMI}`);
+      for (var i = 0; i < getInfo.length; i++){
+        if(getInfo[i].id == userId){
+          $("#appendWeight").html(`Weight: ${getInfo[i].my_weight} kg`);
+          $("#appendHeight").html(`Height: ${getInfo[i].height} m`);
+          $("#usersMainGoal").html(`${getInfo[i].goal}`);
+          $("#appendBMI").html(`BMI: ${getInfo[i].BMI}`);
+        }
+        break;
+      }
+      
     }
     function logOutBtn(){
       localStorage.clear();
@@ -1017,15 +1018,9 @@
         <div class="card mt-4 col-8">
           <form class="card-body">
             <h3>Add your Information</h3>
-            <div class="input-group mb-3">
+            <div class="form-group">
               <label for="profileImg">Add Profile Image</label>
-              <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="profileImg">
-                  <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
-              </div>
-              <div class="input-group-append">
-                  <span class="input-group-text" id="">Upload</span>
-              </div>
+              <input type="text" class="form-control" id="profileImg" placeholder="Add image url">
             </div>
             <div class="form-group">
               <label for="insertWeight">Weight</label>
@@ -1039,6 +1034,7 @@
               <label for="insertGoal">Goal</label>
               <input type="text" class="form-control" id="insertGoal" placeholder="Insert how much kg you want to loose">
             </div>
+          
             <button type="button" class="btn btn-primary" onClick="insertInfo()">Submit</button>
           </form>
         </div>
@@ -1052,7 +1048,7 @@
         <div class="card mt-4 col-8">
           <form class="card-body">
             <h3>Edit your Information</h3>
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="editProfileImg">Edit Profile Image</label>
               <div class="input-group mb-3 ">
                 <div class="custom-file">
@@ -1063,6 +1059,10 @@
                     <span class="input-group-text" id="">Upload</span>
                 </div>
               </div>
+            </div> -->
+            <div class="form-group">
+              <label for="editProfileImg">Edit Profile Image</label>
+              <input type="text" class="form-control" id="editProfileImg" placeholder="Edit image url">
             </div>
             <div class="form-group">
               <label for="editWeight">Weight</label>
