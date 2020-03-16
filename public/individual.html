@@ -258,7 +258,6 @@
         console.log('my user is ' + myUserInfo[0]);
         // $("#appendWeight").html(`Weight: ${myUserInfo.my_weight}`);
         // $("#userProfilePicture").html(`<img src="${myUserInfo.user_img}" alt="" class="profilePictureBig">`);
-        
         $("#navMenu").empty();
         $("#navMenu").html(`
             <ul class="card-body text-center">
@@ -290,7 +289,7 @@
         $(".disableCrossBtn").remove();
 
       const getGoalInfoForOtherProfile = await $.get(`/api/getGoal/${editId}`);
-        console.log('why is it not appending the goal: what :' + getGoalInfoForOtherProfile + ' editId: ' + editId )
+        // console.log('why is it not appending the goal: what :' + getGoalInfoForOtherProfile + ' editId: ' + editId )
         getGoalInfoForOtherProfile.forEach( (message) => {
         if(message.goal_range == "Daily"){
           $("#dailyGoals").append(
@@ -327,9 +326,6 @@
     
 
         appendCompletedGoalList(editId)
-
-
-
 
       } else {
 
@@ -369,6 +365,7 @@
           }
         }
 
+
       }
       
     }
@@ -381,12 +378,14 @@
       userData3 = JSON.parse(userData3);
       console.log(userData3.userName);
       userName = userData3.userName;
+      userId= userData3.userId
 
       hideAddInfo();
       console.log("I AM CLICKED")
       let weight = $( "#insertWeight" ).val();
       let height = $( "#insertHeight" ).val();
       let goal = $( "#insertGoal" ).val();
+      let imgUrl = $( "#profileImg" ).val();
       let bmi = Number(weight) / Math.pow(Number(height), 2);
 
       console.log(`This is the bmi: ${bmi}`);
@@ -396,30 +395,36 @@
         inputWeight: weight,
         inputHeight: height,
         inputGoal: goal,
+        inputUrl: imgUrl,
         bmi:bmi
       }
       console.log(myDashboardInfo)
-
-      userId = userData3.userId;
       const postInfo = await $.post("/api/userInfo", myDashboardInfo);
       console.log(`this is the response ${postInfo}`);
 
       //get the info from database so that it can be added to html
-      const getInfo = await $.get("/api/userInfo");
-      console.log("Getting the dashboard info!!!!")
-      console.log(getInfo);
+      // const getInfo = await $.get("/api/userInfo/");
+      // console.log("Getting the dashboard info!!!!")
+      // console.log(getInfo);
+      const getInfo = await $.get(`/api/dashboardInfo/${userId}`);
+      $("#appendWeight").html(`Weight: ${getInfo.my_weight}`);
+          $("#appendHeight").html(`Height: ${getInfo.height}`);
+          $("#usersMainGoal").html(`${getInfo.goal}`);
+          $("#appendBMI").html(`BMI: ${getInfo.BMI}`);
 
-      for (var i = 0; i < getInfo.length; i++){
-        if(getInfo[i].id == userId){
-          $("#appendWeight").html(`Weight: ${getInfo[i].my_weight} kg`);
-          $("#appendHeight").html(`Height: ${getInfo[i].height} m`);
-          $("#usersMainGoal").html(`${getInfo[i].goal}`);
-          $("#appendBMI").html(`BMI: ${getInfo[i].BMI}`);
-        }
-        break;
+          if (getInfo.user_img != null){
+
+          $( ".thumbProfileimg" ).html( `<img src="${getInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+
+          $("#userProfilePicture").html(`<img src="${getInfo.user_img}" alt="" class="profilePictureBig">`);
+          }
+          // console.log(getInfo)
+
+      
+
       }
       
-    }
+    
     async function editInfo(){
       hideEditInfo();
       console.log("Edit Buttpn : I AM CLICKED")
@@ -427,6 +432,8 @@
       let height = $( "#editHeight" ).val();
       let goal = $( "#editGoal" ).val();
       let bmi = Number(weight) / Math.pow(Number(height), 2);
+      let imgUrl = $( "#editProfileImg" ).val();
+
 
       console.log(`This is the bmi edited: ${bmi}`);
 
@@ -436,6 +443,8 @@
       let userName = userData.userName;
       console.log(userName);
       // let name = userData.my_name;
+      let userId = userData.userId;
+
 
       let userDashboardInfo = {
         userName: userName,
@@ -443,9 +452,9 @@
         inputHeight: height,
         inputGoal: goal,
         bmi:bmi,
+        inputUrl: imgUrl,
       };
 
-      userId = userDate.userId;
       console.log(userDashboardInfo);
 
       const postInfo = await $.post("/api/userInfo", userDashboardInfo);
@@ -453,21 +462,22 @@
       console.log(postInfo);
 
       //get the info from database so that it can be added to html
-      const getInfo = await $.get("/api/userInfo");
-      console.log("Getting the dashboard info from edit function !!!!")
-      console.log(getInfo);
+      const getInfo = await $.get(`/api/dashboardInfo/${userId}`);
+      $("#appendWeight").html(`Weight: ${getInfo.my_weight}`);
+          $("#appendHeight").html(`Height: ${getInfo.height}`);
+          $("#usersMainGoal").html(`${getInfo.goal}`);
+          $("#appendBMI").html(`BMI: ${getInfo.BMI}`);
 
-      for (var i = 0; i < getInfo.length; i++){
-        if(getInfo[i].id == userId){
-          $("#appendWeight").html(`Weight: ${getInfo[i].my_weight} kg`);
-          $("#appendHeight").html(`Height: ${getInfo[i].height} m`);
-          $("#usersMainGoal").html(`${getInfo[i].goal}`);
-          $("#appendBMI").html(`BMI: ${getInfo[i].BMI}`);
-        }
-        break;
-      }
-      
+          if (getInfo.user_img != null){
+
+          $( ".thumbProfileimg" ).html( `<img src="${getInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+
+          $("#userProfilePicture").html(`<img src="${getInfo.user_img}" alt="" class="profilePictureBig">`);
+          }
     }
+
+
+
     function logOutBtn(){
       localStorage.clear();
       location.href = '/login.html';

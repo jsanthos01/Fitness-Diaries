@@ -1,5 +1,5 @@
 # Fitness-Diaries
-Fitness Diaries is a full-stack web application that uses MVC design pattern with local server-side API. The application is designed for people who are conscious about their health and follow a fitness regime or lose weight with a socializing aspect. The app address the need of having some friends around who can motivate and cheer you up in your fitness journey instead of a plain list of exercises and diet plan. It's concise compared to social networking channels and broader than chat applications. 
+Fitness Diaries is a full-stack web application that uses MVC design pattern with local server-side API. The application is designed for people who are conscious about their health and follow a fitness regime or lose weight with a socializing aspect. The app addresses the need of having some friends around who can motivate and cheer you up in your fitness journey instead of a showcasing a plain list of exercises and diet plans. It's concise compared to social networking channels and broader than chat applications. 
 
 ## Functionalities of App
 * Create a group
