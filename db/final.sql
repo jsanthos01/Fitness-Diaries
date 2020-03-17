@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS fitness_diaries;
 CREATE DATABASE fitness_diaries;
-USE fitness_diaries;
+USE hfotawzm63znjqmt;
 
 CREATE TABLE login_credential(
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
