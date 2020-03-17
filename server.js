@@ -4,8 +4,6 @@ const orm = require('./orm');
 const PORT = process.env.PORT || 8080;
 const app = express();
 
-const bcrypt = require ("bcrypt");
-const saltRounds = 10;
 
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
@@ -14,22 +12,27 @@ app.use(express.urlencoded({ extended: false }));
 //posts user's registration information inside database
 app.post("/api/registration", async function(req, res){
   console.log(req.body);
-  bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
-    console.log(hash);
-    orm.registrationSql({
-      my_name:req.body.my_name,
-      userName:req.body.userName,
-      user_password:hash
+  // const storeUserInfo = await storeRegistrationInfo(req.body);
+    // bcrypt.hash(req.body.user_password, saltRounds, function(err,hash){
+    //   console.log(hash);
+      // orm.registerUser({
+      //     first_name:req.body.first_name,
+      //     last_name:req.body.last_name,
+      //     email_address:req.body.email_address,
+      //     user_password:hash
 
-    }).then (function(data){
-      console.log(hash);
-      if (data){
-          res.send({
-            message: "Success!!!"
-          })
-      }
-  
-    });
+      // }).then (function(data){
+      //     console.log(hash);
+      //     if (data){
+      //         res.send('success!')
+      //     }
+      
+      // })
+
+  console.log( `[POST api/registration] recieved: `, req.body );
+  let storeUserInfo = await orm.registrationSql(req.body);
+  res.send({
+    message: "Success!!!"
   });
 })
 
@@ -237,10 +240,30 @@ app.post("/api/postinfo", async function(req, res){
 //   console.log( `[POST dashboard info] recieved: `, req.body );
   // console.log(postUserInfo);
   res.send("success!")
-}); 
+});
 
-app.get("/api/getposts", async function(req, res){
-  const getPostDbQuery = await orm.getPostDbQueryFn();
+
+app.post("/api/postComment", async function(req, res){
+  console.log("This is in the user comments!")
+  const postComment = await orm.postComment(req.body);
+  res.send("success!")
+});
+
+app.get("/api/getComment/:id", async function(req, res){
+  const getComment = await orm.getComment(req.params.id);
+  // console.log("the server response pic" + { getPostDbQuery });
+  res.send(getComment); 
+});
+app.get("/api/getCommentsNmb/:id", async function(req, res){
+  const getCommentNum = await orm.getCommentNum(req.params.id);
+  // console.log("the server response pic" + { getPostDbQuery });
+  res.send(getCommentNum); 
+});
+
+
+
+app.get("/api/getposts/:id", async function(req, res){
+  const getPostDbQuery = await orm.getPostDbQueryFn(req.params.id);
   // console.log("the server response pic" + { getPostDbQuery });
   res.send(getPostDbQuery); 
 });

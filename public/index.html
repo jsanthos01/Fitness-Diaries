@@ -142,7 +142,6 @@
             }
 
             .about-area p {
-                margin-left: 25px;
                 text-align: justify;
                 font-family: 'Karla', sans-serif;    
                 line-height: 30px;
@@ -252,6 +251,50 @@
                 flex-direction: column;
 
             }
+
+            @media only screen and (max-width: 800px) {
+                .background h2 {
+                    font-size: 70px;                    
+                }
+
+                .text {
+                    text-align: center;
+                }
+            }
+            @media only screen and (max-width: 500px) {
+                .background .text {
+                    position: absolute;
+                    top: 30%;
+                    /* left: 10%; */
+                    color: white;
+                }
+                .background h2 {
+                    font-size: 40px;                    
+                }
+                .background h3 {
+                    font-size: 30px;                    
+                }
+
+                .text {
+                    text-align: center;
+                }
+            }
+            @media only screen and (max-width: 1100px) {
+                .background {
+                    height: 70vh                    
+                }
+            }
+            @media only screen and (max-width: 1100px) {
+                .background {
+                    height: 70vh                    
+                }
+            }
+            @media only screen and (max-width: 1100px) {
+                .background {
+                    height: 70vh                    
+                }
+            }
+
         </style>
 
         <div class="header-area">
@@ -290,10 +333,10 @@
         <div class="about-area">
             <div class="container">
                 <div class="row " id="scrollHereAbout">
-                    <div class="col-6 about-image" >
+                    <div class="col-lg-6 about-image" >
                         <img src="assets/indexPg/about.png" alt="" class="img-fluid">
                     </div>
-                    <div class="col-6 about-title">
+                    <div class="col-lg-6 about-title">
                         <h2 class="text-uppercase">
                             <span style="font-weight: bold; font-size: 45px;">About</span>
                             <hr style="border: 1px solid #df10d4; width: 50%;"/>
@@ -376,7 +419,7 @@
     
         <div class="container">
             <div class="row">
-                <div class="col-6 textGetStarted" >
+                <div class="col-lg-6 textGetStarted" >
                     <h1 class="getStart text-uppercase">Get Started Today</h1>
                     <h3>Take a small step everyday . . .</h3>
                     <div class="button">
@@ -385,8 +428,8 @@
                     </div>
                     
                 </div>
-                <div class="col-6">
-                    <img src="https://media.giphy.com/media/3ornjHnlfyrQclXGZq/giphy.gif" alt="This is an animated gif image, but it does not move"/>
+                <div class="col-lg-6 d-flex justify-content-center align-items-center">
+                    <img src="https://media.giphy.com/media/3ornjHnlfyrQclXGZq/giphy.gif" style= "width: 100%;" alt="This is an animated gif image, but it does not move"/>
                 </div>
             </div>
         </div>

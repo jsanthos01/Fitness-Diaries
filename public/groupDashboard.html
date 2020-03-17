@@ -113,6 +113,8 @@
             color: #1f0d1f;
         }
         .thumbsUp {
+            padding: 0 10px;
+
             color: rgb(148, 148, 148);
             font-size: 1.7rem;
         }
@@ -123,11 +125,37 @@
         .pl-2{
             color: rgb(44, 44, 44);
         }
+        .commentersName{
+            font-size: 1rem;
+            color: blue;
+        }
+        .commentersComment{
+            font-size: .9rem;
+            color: black;
+        }
+        .commentedTime {
+            font-size: .7rem;
+            color: rgb(77, 77, 77);
+
+        }
+        .comntNum {
+            color: black;
+            padding: 0 10px;
+        }
+        .comntBorder {
+            width: 50%;
+            border: 1px solid rgb(202, 202, 202);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 5px;
+
+        }
         
     </style>
     <script>
     $(document).ready( async function(){
             //===========akanksha=====
+
 
 
             //========FOR MENU WHO EVER IS LOGGED IN
@@ -139,7 +167,6 @@
             const id = userData.userId;
 
             console.log(myName);
-            
             const myUserInfo = await $.get(`/api/dashboardInfo/${id}`);
             console.log('my user is ' + myUserInfo);
             if (myUserInfo.user_img != null){
@@ -165,7 +192,6 @@
             mQuotes();
 
             //==========sara======FOR getting group info
-
             const groupId = location.hash.substr(1);
             const getGroupInfo = await $.get(`/api/groupInfo/${groupId}`);
             console.log(' getting group info ' + getGroupInfo[0])
@@ -174,15 +200,11 @@
             // group_goal INT,
             // group_imageUrl VARCHAR(250),
             // createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
-
             $('#appendGroupGoal').html(`
             <h3>Group Goal to lose : ${getGroupInfo[0].group_goal}</h3>
             `);
-
             //FOR PRINTING OUT THE MEMBERS OF THE LIST
-            // const myMembersList = await $.get(`/api/membersList/${groupId}`);
-            // console.log(myMembersList);
-
+            
             let  currentTime= moment().format('MMMM Do YYYY');;   
 
             $('#groupName').html(`${getGroupInfo[0].group_name} Dashboard `);
@@ -192,7 +214,8 @@
             
             var sumOfGoalLost = 0;
             var groupsGoal =  parseInt(getGroupInfo[0].group_goal);
-
+            
+            //=========== TO PRINT OUT MEMBERS =====
             getGroupInfo.forEach(function( group ){
                 console.log('printing out the goals: ' + group.goal)
                 let newNumber = parseInt(group.goal);
@@ -204,19 +227,20 @@
                     <img src="${group.user_img}" alt="" class="profilePictureLink" style="width: 100px;" onClick="showMemberProfile('${group.id}')">
                 </div>`)
             })
-            console.log(' sum Of Goal Lost is ' + sumOfGoalLost)
-            $('#appendGroupGoal').append(`
-                <h4>Total lost : ${sumOfGoalLost}</h4>
-            `)
+            //===== TO PRINT GOAL PROGRESS BAR ======
 
+            console.log(' sum Of Goal Lost is ' + sumOfGoalLost)
+            $('#appendGroupGoal').append(`<h4>Total lost : ${sumOfGoalLost}</h4>
+            `)
             var completedPercentage = Math.round((sumOfGoalLost*100)/groupsGoal);
             console.log(completedPercentage);
-
-            var bar1 = new ldBar("#myItem1");
             /* ldBar stored in the element */
+            var bar1 = new ldBar("#myItem1");
             var bar2 = document.getElementById('myItem1').ldBar;
             bar1.set(completedPercentage);
 
+
+            //==== TO PRINT TOP 3 ====
             const myTop3List = await $.get(`/api/top3List/${groupId}`);
             console.log(myTop3List);
             $('#top3List').html('');
@@ -228,23 +252,21 @@
                     <h6 class="mt-4">Weight: ${top3.my_weight}</h6>
                 </div>`)
             })
-
             //==============normas code
-            const fetchProfilePic = await $.get("/api/profilepic");
-            console.log("Getting the profile pics!!!!")
-            console.log(fetchProfilePic);
-            for ( let i=1; i<fetchProfilePic.length; i++){
-                $("#profileimg").append(
-                    `<div class="userImg col-2">
-                        <a href="individual.html/${i}" class="hoverProfile"><img src="${fetchProfilePic[i].user_img}" alt="" class="profilePicture" style="width: 100px;"></a>
-                    </div>
-                    `
-                );
-            }
+            // const fetchProfilePic = await $.get("/api/profilepic");
+            // console.log("Getting the profile pics!!!!")
+            // console.log(fetchProfilePic);
+            // for ( let i=1; i<fetchProfilePic.length; i++){
+            //     $("#profileimg").append(
+            //         `<div class="userImg col-2">
+            //             <a href="individual.html/${i}" class="hoverProfile"><img src="${fetchProfilePic[i].user_img}" alt="" class="profilePicture" style="width: 100px;"></a>
+            //         </div>
+            //         `
+            //     );
+            // }
             showInfo();
 
             //============don't delete below=====
-
             })
             //================sara===========
 
@@ -255,74 +277,199 @@
         //================sara===========
 
              //--============Norma Code====================//
-        async function getPosts() {
-            alert('i am clicked');
-            
-                let userData = localStorage.getItem("myUser");
-                userData = JSON.parse(userData);
-                const userName = userData.userName;
-                const userId = userData.userId;
+        async function postPosts() {
             
             let inputPost = $("#postinput").val();
-                console.log(inputPost)
-            let userPostInfo = {
-                inputpost: inputPost,
-                name: userData.userName,
-                member_id: userData.userId
-            };
-                console.log(userPostInfo);
 
-            const userPost = await $.post("/api/postinfo", userPostInfo);
-            console.log("Getting the Post Info Stuff!!!!");
-            // console.log(postInfo);
-            showInfo();
+            if (inputPost != ''){
+                $("#postinput").val('');
+                let userData = localStorage.getItem("myUser");
+                userData = JSON.parse(userData);
+                const userName = userData.my_name;
+                const userId = userData.userId;
+                const groupId =location.hash.substr(1)
+                console.log(inputPost)
+
+                alert('you have entered ' + inputPost);
+
+                let userPostInfo = {
+                    inputpost: inputPost,
+                    name: userName,
+                    member_id: userId,
+                    posts_group_id: groupId
+                };
+                console.log(userPostInfo);
+                const userPost = await $.post("/api/postinfo", userPostInfo);
+                console.log("Getting the Post Info Stuff!!!!");
+                // console.log(postInfo);
+                // $("#navMenu").empty();
+
+                showInfo();
+
+            } else {
+                alert('you have not entered anything!!')
+            }
+            
             
         };
         async function showInfo(){
-            const fetchPosts = await $.get("/api/getposts");
+
+            const groupId =location.hash.substr(1)
+
+            const fetchPosts = await $.get(`/api/getposts/${groupId}`);
             console.log("Getting the posts from server!!!!") 
             console.log( 'what is this: ' + fetchPosts[0].thumbs_up);
-
-            
             $("#userpostid").empty();
+
+            let userData = localStorage.getItem("myUser");
+                userData = JSON.parse(userData);
+                const commentersName = userData.my_name;
+                const commentersId = userData.userId;
+
+                // moment().startOf('hour').fromNow();
+                
+                // // var calendar = picture.creation_time
+                // // console.log(calendar);
+                // // var time = moment(calendar).fromNow();
 
             let arrLength = fetchPosts.length-1;
             for ( let i = arrLength; i >= 0; i--){
+
+                const grpPstId = fetchPosts[i].post_id;
+                console.log('what is group Post Id? ' + grpPstId)
+                const commentNumber = await $.get(`/api/getCommentsNmb/${grpPstId}`);
+
+                const cmntNmb = commentNumber[0].comments;
+                console.log('what is the comment number showing? ' + cmntNmb)
+
+                var createdPostTime = fetchPosts[i].creation_time;
+                var timePosted = moment(createdPostTime).fromNow();
+                
+                console.log( ` the thumbnail for the post id: ${fetchPosts[i].post_id} and the no of thumbnail is  ${fetchPosts[i].thumbs_up}`)
                 $("#userpostid").append(
                     `<section id="${i+1}" class="userPost container mt-4 card">
                     <div class="progressSection card-body">
                         <div class="input-group mb-3 ">
                             <div class="form-control d-flex align-items-start card-body">
-                                <div class="userImg col-2">
-                                    <img src="${fetchPosts[i].user_img}" alt="" class="profilePicture" style="width: 100px;">
+                                <div class="userImg col-lg-2">
+                                    <img src="${fetchPosts[i].user_img}" alt="" class="profilePictureLink" style="width: 100px;"onclick="showMemberProfile('${fetchPosts[i].id}')">
                                 </div>
-                                <div class="text-left col-10">
-                                    <h3>${fetchPosts[i].my_name}</h3>
+                                <div class="text-left col-lg-10" id="postIDChek${fetchPosts[i].post_id}">
+                                    <h3>${fetchPosts[i].group_member_name}</h3>
                                     <p class="text-left">${fetchPosts[i].info}</p>
-                                    <div class="">${fetchPosts[i].creation_time}</div>  
+                                    <div class="">${timePosted}</div>  
                                 </div>
                             </div>
                         </div>
                         <ul class="nav justify-content-start">
                             <li class="nav-item ">
-                                <i onclick="thumbsupFunc(${i+1})" id="thumbsupid${i+1}" class="thumbsUp fa fa-thumbs-o-up fa-lg" aria-hidden="true"></i>
-                                <span id="number${i+1}" class="pl-2"></span>
+                                <i onclick="thumbsupFunc(${fetchPosts[i].post_id})" id="thumbsupid${i+1}" class="thumbsUp fa fa-thumbs-o-up fa-lg" aria-hidden="true"></i>
+                                <span id="number${fetchPosts[i].post_id}" class="pl-2">${fetchPosts[i].thumbs_up}</span>
+                                <i onclick="showCommentForm(${i}, ${fetchPosts[i].post_id})" class=" thumbsUp fa fa-comment fa-lg" aria-hidden="true"></i><span id="comment${fetchPosts[i].post_id}" class="comntNum">${cmntNmb}</span>
                             </li>
                         </ul>
+                        <div id="commentSection${i}" class="hide mb-3 mt-3">
+                            <div class="input-group mb-3 " >
+                                <input type="text" id="commentInput${i}" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="postcomment(${i},'${commentersName}',${commentersId}, ${fetchPosts[i].post_id})">comment</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="postedComment${i}" class="container row mx-auto mb-3 mt-3">
+                        </div>
                     </div>
                 </section>`
                 )
                 $(`#number${i+1}`).html(fetchPosts[i].thumbs_up);
+                // $(`#comment${i+1}`).html(fetchPosts[i].thumbs_up);
+                
             } 
         }
-
         async function thumbsupFunc(idx){
             const thumbsUp = await $.get(`/api/thumbsup/${idx}`);   
             console.log(thumbsUp);
             console.log(thumbsUp[0].thumbs_up); 
-            // console.log(thumbsUp);
             $(`#number${idx}`).html(thumbsUp[0].thumbs_up);
         }
+        async function showCommentForm(id, postId ){
+            // const thumbsUp = await $.get(`/api/thumbsup/${idx}`); 
+            $( `#commentSection${id}` ).show( "slow" );
+
+            showPrintComments(id, postId)
+
+            // $(`#number${idx}`).html(thumbsUp[0].thumbs_up);
+        }
+
+
+        async function postcomment(id, commentersName, commentersId, postId){
+            
+            let comment = $(`#commentInput${id}`).val();
+            let postedComments = {
+                commenters_name: commentersName,
+                commenters_id: commentersId,
+                comments: comment,
+                cmnts_post_id: postId
+            }
+
+            const postComment = await $.post("/api/postComment", postedComments);
+            // $(`#commentInput${id}`).html('');
+            $(`#commentInput${id}`).val('');
+            showPrintComments(id, postId);
+
+
+        }
+
+        async function showPrintComments(id, postId){
+            const fetchComments = await $.get(`/api/getComment/${postId}`);  
+                console.log('THE COMMENTS ARE: ' + fetchComments);
+
+                // comment_id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+
+                // commenters_name,
+                // commenters_id,
+                // comments,
+                // cmnts_post_id INT,
+                // FOREIGN KEY (commenters_id) REFERENCES personal_info(id),
+                // FOREIGN KEY (cmnts_post_id) REFERENCES group_posts(post_id)
+
+                const commentNumber = await $.get(`/api/getCommentsNmb/${postId}`);
+
+                const cmntNmb = commentNumber[0].comments;
+                console.log('what is the comment number showing? ' + cmntNmb)
+
+
+                // comment${fetchPosts[i].post_id}
+
+                $(`#comment${postId}`).html(
+                    `${cmntNmb}`
+                )
+
+
+                $(`#postedComment${id}`).empty();
+                fetchComments.forEach(function( comments){
+
+                    var createdPostTime = comments.createdAt;
+                    var timePosted = moment(createdPostTime).fromNow();
+
+                    console.log('printing out the comments: ' + comments + comments.comments)
+                    $(`#postedComment${id}`).append(
+                    `
+                    <div class="col d-flex justify-content-left comntBorder" id="${comments.post_id}">
+                        <div class="userImg col-lg-3">
+                            <img src="${comments.user_img}" alt="" class="profilePictureLink" style="width: 50px;height: 50px;"onclick="showMemberProfile('${comments.id}')">
+                        </div>
+                        <div class="text-left col-lg-9">
+                            <span class="commentersName">${comments.commenters_name}</span>
+                            <p class="commentersComment"> ${comments.comments} </p>
+                            <p class="commentedTime">${timePosted}</p>  
+                        </div>
+                    </div>
+                    `
+                    )
+                })
+            };
+
         function showMenu(){
                 $( "#navMenu" ).show( "slow" );
             };
@@ -431,11 +578,9 @@
             <div class="card-body">
                 <h4>Post Something</h4>
                 <div class="input-group mb-3">
-                    <input type="text" id="postinput" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" onclick="getPosts()" >Post</button>
-                    </div>
+                    <textarea class="form-control"  id="postinput" aria-label="With textarea"></textarea>
                 </div>
+                <button type="button" class="btn btn-primary col-lg-5" onclick="postPosts()">Post</button>
             </div>
         </section >
         <div class="myCards container">

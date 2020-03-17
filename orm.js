@@ -59,17 +59,16 @@ async function postUsersInfo(myPost){
     console.log("This is for the sql posting section");
     console.log(myPost.userName);
     const postMemberInfo = await db.query("UPDATE personal_info SET my_weight=?, height=?, goal=?, BMI=?,user_img=? WHERE username=?", [ myPost.inputWeight, myPost.inputHeight, myPost.inputGoal, myPost.bmi, myPost.inputUrl, myPost.userName]);
-    
     return postMemberInfo;
 }
 
 async function getUsersInfo() {
     console.log("This is for the sql get section");
 
-    let myInfo = await db.query("SELECT id, my_weight, height, goal, BMI FROM personal_info");
+    let myInfo = await db.query("SELECT my_weight, height, goal, BMI FROM personal_info");
     myInfo = JSON.stringify(myInfo); 
     myInfo = JSON.parse(myInfo); 
-    return myInfo;
+    return myInfo[0];
 }
 
 
@@ -163,6 +162,21 @@ async function getCompletedGoal(){
     let getCompletedGoalSql = await db.query("SELECT * FROM personal_goal WHERE goalCompleted= 1 ORDER BY updatedTime DESC LIMIT 20;");    
     return getCompletedGoalSql;
 }
+
+async function postComment( comments ){
+    const newComment = await db.query( 
+        "INSERT INTO post_comments (commenters_name, commenters_id, comments, cmnts_post_id) VALUES(?,?,?,?);",
+        [ comments.commenters_name, comments.commenters_id, comments.comments, comments.cmnts_post_id ] );
+    return newComment;
+}
+async function getComment( postId ){
+    const getComment = await db.query( 
+        "SELECT post_comments.commenters_name, post_comments.comment_id, post_comments.comments, post_comments.createdAt, personal_info.id, personal_info.user_img, personal_info.my_name, group_posts.post_id,group_posts.posts_group_id FROM post_comments, personal_info, group_posts WHERE post_comments.commenters_id = personal_info.id AND post_comments.cmnts_post_id = group_posts.post_id AND cmnts_post_id = ? ORDER BY post_comments.createdAt DESC;",
+        [ postId ] );
+    return getComment;
+}
+
+
 //===============sara dont delete above============
 
 async function getId(emailId){
@@ -226,27 +240,43 @@ async function profilePicDbQuery(){
 }
 
 async function postUserDbQuery(userPost){
-    let postDbRes = await db.query("INSERT INTO group_posts(my_name, info, member_id) VALUES(?,?,?)", [userPost.name, userPost.inputpost, userPost.member_id]);
+    let postDbRes = await db.query("INSERT INTO group_posts(group_member_name, info, member_id, posts_group_id) VALUES(?,?,?,?)", [userPost.name, userPost.inputpost, userPost.member_id, userPost.posts_group_id]);
     // console.log( `[loadUser] profileImage:`, postDbRes );
     return postDbRes;
 }
+// let userPostInfo = {
+//     inputpost: inputPost,
+//     name: userData.userName,
+//     member_id: userData.userId,
+//     posts_group_id: groupId
+// };
 
-async function getPostDbQueryFn(Post){
-    let postRes = await db.query("SELECT user_img, info, creation_time, thumbs_up, group_posts.my_name from group_posts LEFT JOIN personal_info ON group_posts.member_id = personal_info.id");
+async function getPostDbQueryFn(grpId){
+    // let postRes = await db.query("SELECT user_img, info, creation_time, thumbs_up, group_posts.my_name from group_posts LEFT JOIN personal_info ON group_posts.member_id = personal_info.id");
+    let postRes = await db.query("SELECT group_posts.group_member_name, group_posts.post_id, group_posts.info, group_posts.creation_time, group_posts.thumbs_up, group_posts.user_comments, personal_info.id, personal_info.user_img, new_group.group_id, new_group.group_name FROM group_posts, personal_info, new_group WHERE group_posts.posts_group_id=new_group.group_id AND group_posts.member_id=personal_info.id AND new_group.group_id = ? ;", [grpId]);
     // console.log( `[loadUser] userPost:`, postRes );
     return postRes;
 }
 
 async function changeThumbsupNum(id){
-    let thumbsupSql = await db.query("UPDATE group_posts SET thumbs_up = thumbs_up + 1 WHERE id = ?",[id]);
-    let getThumbsUpVal = await db.query("SELECT thumbs_up, group_posts.my_name FROM group_posts WHERE id = ?", [id]);
+    let thumbsupSql = await db.query("UPDATE group_posts SET thumbs_up = thumbs_up + 1 WHERE post_id = ?",[id]);
+    let getThumbsUpVal = await db.query("SELECT thumbs_up, group_posts.group_member_name FROM group_posts WHERE post_id = ?", [id]);
 
     // console.log( `[loadUser] thumbsupSql:`, getThumbsUpVal );
     return getThumbsUpVal;
 }
+async function getCommentNum(id){
+    let getCommentNum = await db.query("SELECT COUNT(*) comments FROM post_comments WHERE cmnts_post_id = ?;", [id]);
+
+    // console.log( `[loadUser] thumbsupSql:`, getThumbsUpVal );
+    return getCommentNum;
+}
+
+
 
 //==================Norma code ended ============================
 module.exports = {
+    getCommentNum,
     registrationSql,
     postUsersInfo,
     getUsersInfo,
@@ -268,9 +298,11 @@ module.exports = {
     getUserProfile,
     getOthersGoalInfo,
     getCompletedOthersGoal,
+    getComment,
     //=============sara
     getGrpInfo,
     getCompletedGoal,
+    postComment,
     //--------norma
     changeThumbsupNum,
     getPostDbQueryFn,
