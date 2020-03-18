@@ -24,9 +24,6 @@ class Database {
     }
 }
 
-
-
-// at top INIT DB connection
 var db;
 if(process.env.JAWSDB_URL){
      db = new Database(process.env.JAWSDB_URL);
@@ -41,8 +38,6 @@ if(process.env.JAWSDB_URL){
     });
 };
 
-//store registration info 
-
 async function registrationSql(myPost){
     console.log(myPost);
     const postUserLogin = await db.query( 
@@ -53,8 +48,6 @@ async function registrationSql(myPost){
     return postUserLogin, storeUsersName;
 }
 
-
-//retrieve fullname of user 
 async function postUsersInfo(myPost){
     console.log("This is for the sql posting section");
     console.log(myPost.userName);
@@ -64,13 +57,11 @@ async function postUsersInfo(myPost){
 
 async function getUsersInfo() {
     console.log("This is for the sql get section");
-
     let myInfo = await db.query("SELECT my_weight, height, goal, BMI FROM personal_info");
     myInfo = JSON.stringify(myInfo); 
     myInfo = JSON.parse(myInfo); 
     return myInfo[0];
 }
-
 
 async function loginUser( email, password ) {
     let userFetch = await db.query('SELECT * FROM login_credential WHERE username=?', [ email ] );
@@ -84,16 +75,16 @@ async function loginUser( email, password ) {
     return userFetch[0]
 }
 
-//==============sara==========
-
 async function getAllRegisMember(){
     const regisMembList = await db.query("SELECT * FROM personal_info;");
     return regisMembList;
 }
+
 async function getGroupList(){
     const GroupList = await db.query("SELECT * FROM new_group;");
     return GroupList;
 }
+
 async function  getMembListForGrpId( grpId ){
     const myResult = await db.query( 
         "SELECT new_group.group_name,new_group.group_id,personal_info.id,personal_info.user_img, personal_info.username, personal_info.my_name, personal_info.my_weight, personal_info.height, personal_info.BMI, personal_info.diet, group_member.grp_mbr_id FROM new_group, personal_info, group_member WHERE new_group.group_id=group_member.group_id_fk AND personal_info.id=group_member.member_id_frk AND new_group.group_id = ? ;",
@@ -101,6 +92,7 @@ async function  getMembListForGrpId( grpId ){
         console.log(myResult);
     return myResult;
 }
+
 async function  getGrpName( grpNameId ){
     const myGrpName = await db.query( 
         "SELECT * FROM new_group WHERE group_id = ?",
@@ -108,6 +100,7 @@ async function  getGrpName( grpNameId ){
         console.log(` in orm the value of myGrpName ` + myGrpName[0]);
     return myGrpName[0];
 }
+
 async function  getGrpInfo( grpId ){
     const myGrpId = await db.query( 
         "SELECT new_group.group_id,new_group.group_name,new_group.group_imageUrl,new_group.group_goal,new_group.createdAt, personal_info.id, personal_info.user_img, personal_info.username, personal_info.my_name, personal_info.my_weight, personal_info.height, personal_info.goal, group_member.grp_mbr_id FROM new_group, personal_info, group_member WHERE new_group.group_id=group_member.group_id_fk AND personal_info.id=group_member.member_id_frk AND new_group.group_id = ?;",
@@ -129,26 +122,27 @@ async function addNewMember( newMember ){
         [ newMember.memberName, newMember.memberId, newMember.groupId ] );
     return myNewMemberResult;
 }
+
 async function addNewGroup( newGroup ){
     const myNewGroupResult = await db.query( 
         "INSERT INTO new_group (group_name, group_imageUrl, group_goal) VALUES(?,?,?);",
         [ newGroup.groupName, newGroup.groupImageUrl, newGroup.groupGoal ] );
     return myNewGroupResult;
 }
+
 async function deleteGrpMember( membId, memName ){
     const myDeletedMember = await db.query( 
         "DELETE FROM group_member WHERE grp_mbr_id = ?",
         [ membId ] );
     return myDeletedMember;
 }
+
 async function deleteGroup( grId ){
     const myDeletedGroup = await db.query( 
         "DELETE FROM new_group WHERE group_id = ?",
         [ grId ] );
     return myDeletedGroup;
 }
-
-        //=============top 3=======
 
 async function getTop3( grpNameId ){
     const myGrpName = await db.query( 
@@ -176,9 +170,6 @@ async function getComment( postId ){
     return getComment;
 }
 
-
-//===============sara dont delete above============
-
 async function getId(emailId){
     let userFetch = await db.query('SELECT * FROM personal_info WHERE username=?', [ emailId ] );
     userFetch = JSON.stringify(userFetch); 
@@ -202,79 +193,53 @@ async function getGoalInfo(){
     let getGoalSql = await db.query("SELECT * FROM personal_goal WHERE goalCompleted=0");
     getGoalSql = JSON.stringify(getGoalSql);
     getGoalSql = JSON.parse(getGoalSql);
-
     console.log(getGoalSql);
-    
+
     return getGoalSql;
 }
+
 async function getOthersGoalInfo(otherId){
     let getOthersGoalSql = await db.query("SELECT * FROM personal_goal WHERE goalCompleted = 0 and userId=?", [otherId]);
-    
-
     console.log('otherId is ' + otherId + ' getOthersGoalSql ' + getOthersGoalSql);
-    
     return getOthersGoalSql;
 }
-
-//-----------sara
 
 async function getCompletedOthersGoal(Id){
     let getCompletedGoalSql = await db.query("SELECT * FROM personal_goal WHERE goalCompleted= 1 AND userId=? ORDER BY updatedTime DESC LIMIT 20;", [Id]);    
     return getCompletedGoalSql;
 }
-//------
+
 async function updateGoalStatus(goalId){
     const updateGoal = await db.query("UPDATE personal_goal SET goalCompleted=? WHERE goal_id=?", [true, goalId]);
     console.log("Goal is updated")
     console.log(updateGoal);
 }
 
-
-//------------------------- Norma's code------------------------------//
-
 async function profilePicDbQuery(){
     let profileImage = await db.query('SELECT user_img FROM personal_info limit 10')
-    // console.log( `[loadUser] profileImage:`, profileImage );
-    return profileImage;
-    
+    return profileImage;    
 }
 
 async function postUserDbQuery(userPost){
     let postDbRes = await db.query("INSERT INTO group_posts(group_member_name, info, member_id, posts_group_id) VALUES(?,?,?,?)", [userPost.name, userPost.inputpost, userPost.member_id, userPost.posts_group_id]);
-    // console.log( `[loadUser] profileImage:`, postDbRes );
     return postDbRes;
 }
-// let userPostInfo = {
-//     inputpost: inputPost,
-//     name: userData.userName,
-//     member_id: userData.userId,
-//     posts_group_id: groupId
-// };
 
 async function getPostDbQueryFn(grpId){
-    // let postRes = await db.query("SELECT user_img, info, creation_time, thumbs_up, group_posts.my_name from group_posts LEFT JOIN personal_info ON group_posts.member_id = personal_info.id");
     let postRes = await db.query("SELECT group_posts.group_member_name, group_posts.post_id, group_posts.info, group_posts.creation_time, group_posts.thumbs_up, group_posts.user_comments, personal_info.id, personal_info.user_img, new_group.group_id, new_group.group_name FROM group_posts, personal_info, new_group WHERE group_posts.posts_group_id=new_group.group_id AND group_posts.member_id=personal_info.id AND new_group.group_id = ? ;", [grpId]);
-    // console.log( `[loadUser] userPost:`, postRes );
     return postRes;
 }
 
 async function changeThumbsupNum(id){
     let thumbsupSql = await db.query("UPDATE group_posts SET thumbs_up = thumbs_up + 1 WHERE post_id = ?",[id]);
     let getThumbsUpVal = await db.query("SELECT thumbs_up, group_posts.group_member_name FROM group_posts WHERE post_id = ?", [id]);
-
-    // console.log( `[loadUser] thumbsupSql:`, getThumbsUpVal );
     return getThumbsUpVal;
 }
 async function getCommentNum(id){
     let getCommentNum = await db.query("SELECT COUNT(*) comments FROM post_comments WHERE cmnts_post_id = ?;", [id]);
-
-    // console.log( `[loadUser] thumbsupSql:`, getThumbsUpVal );
     return getCommentNum;
 }
 
-
-
-//==================Norma code ended ============================
 module.exports = {
     getCommentNum,
     registrationSql,
@@ -299,14 +264,11 @@ module.exports = {
     getOthersGoalInfo,
     getCompletedOthersGoal,
     getComment,
-    //=============sara
     getGrpInfo,
     getCompletedGoal,
     postComment,
-    //--------norma
     changeThumbsupNum,
     getPostDbQueryFn,
     postUserDbQuery,
-    profilePicDbQuery
-    
+    profilePicDbQuery   
 }

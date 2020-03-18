@@ -13,7 +13,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Rubik&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css?family=Karla|Rubik&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="loading-bar.css"/>
     <script type="text/javascript" src="loading-bar.js"></script>
 </head>
@@ -22,13 +23,11 @@
         body {
             height: 100%;
             color: #ececec;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Karla', sans-serif;
             background-image: linear-gradient(45deg, #773030, #381238, #270127);
-            /* background: #3b003b; */
-
         }
         h1 {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Karla', sans-serif;
             color: rgb(255, 115, 0);;
             font-weight: lighter;
             text-transform: capitalize;
@@ -44,9 +43,11 @@
             height: 15vw;
             object-fit: cover;
         }
+
         a:hover {
-        text-decoration: none;
+            text-decoration: none;
         }
+
         .profilePictureLink {
             cursor: pointer;
             width: 100px;
@@ -62,47 +63,54 @@
             border-radius: 50%;
             object-fit: cover;
         }
+
         .hide {
             display: none;
         }
+
         .navLink {
             padding: 10px;
             display: block;
         }
+        
         ul {
             list-style: none;
         }
+        
         .navMenu{
             position: absolute;
             top: 0;
             right: 0;
             z-index: 100;
         }
+        
         .thumbProfileimg{
             position: absolute;
             z-index: 50;
         }
+        
         .profilePicture {
             border-radius: 50%;
         }
+        
         .ldBar path.baseline {
             stroke-width: 4;
             stroke: #d6d6d6;
             stroke-linecap: round;
-            /* filter:url(#custom-shadow); */
         }
+        
         .ldBar path.mainline {
             stroke-width: 10;
             stroke: #c75454;
             stroke-linecap: round;
         }
+        
         .ldBar{
             width: 50px;
             height: 50px;
         }
+        
         .myCards{
-            /* display: block; */
-            /* background-image: linear-gradient(to right, #480048, #c04848); */
             background: #5c245c91;
             padding: 20px;
             border-radius: 10px;
@@ -153,13 +161,23 @@
         
     </style>
     <script>
-    $(document).ready( async function(){
-            //===========akanksha=====
+        function mQuotes(){
+            $.ajax({
+            url: "https://type.fit/api/quotes",
+            method: "GET"
+            }).then(function(response){
+            var motQuotes = JSON.parse(response)
+            console.log(motQuotes);
 
+            var quote = Math.floor(Math.random()*motQuotes.length);
 
+            //console.log("Random quote: "+JSON.stringify(motQuotes[quote]));
+            $("#quotes").text(motQuotes[quote].text);
+            $("#quotes").html(`<i class="fa fa-quote-left" aria-hidden="true"></i>   ${motQuotes[quote].text}   <i class="fa fa-quote-right" aria-hidden="true"></i>`);
+            })
+        } 
 
-            //========FOR MENU WHO EVER IS LOGGED IN
-
+        $(document).ready( async function(){
             let userData = localStorage.getItem("myUser");
             userData = JSON.parse(userData);
             console.log(userData);
@@ -170,52 +188,28 @@
             const myUserInfo = await $.get(`/api/dashboardInfo/${id}`);
             console.log('my user is ' + myUserInfo);
             if (myUserInfo.user_img != null){
-            $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
-            $( ".appendThumbnailMenu" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">`);
+                $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+                $( ".appendThumbnailMenu" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">`);
             }
-            //=================== FOR QUOTES
-            function mQuotes(){
-                $.ajax({
-                url: "https://type.fit/api/quotes",
-                method: "GET"
-                }).then(function(response){
-                var motQuotes = JSON.parse(response)
-                console.log(motQuotes);
-
-                var quote = Math.floor(Math.random()*motQuotes.length);
-
-                //console.log("Random quote: "+JSON.stringify(motQuotes[quote]));
-                $("#quotes").text(motQuotes[quote].text);
-                $("#quotes").html(`<i class="fa fa-quote-left" aria-hidden="true"></i>   ${motQuotes[quote].text}   <i class="fa fa-quote-right" aria-hidden="true"></i>`);
-                })
-                }    
+            
             mQuotes();
 
-            //==========sara======FOR getting group info
             const groupId = location.hash.substr(1);
             const getGroupInfo = await $.get(`/api/groupInfo/${groupId}`);
             console.log(' getting group info ' + getGroupInfo[0])
-            //group_id INT PRIMARY KEY AUTO_INCREMENT,
-            // group_name VARCHAR(100) NOT NULL,
-            // group_goal INT,
-            // group_imageUrl VARCHAR(250),
-            // createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
             $('#appendGroupGoal').html(`
-            <h3>Group Goal to lose : ${getGroupInfo[0].group_goal}</h3>
+                <h3>Group Goal to lose : ${getGroupInfo[0].group_goal}</h3>
             `);
-            //FOR PRINTING OUT THE MEMBERS OF THE LIST
             
             let  currentTime= moment().format('MMMM Do YYYY');;   
-
             $('#groupName').html(`${getGroupInfo[0].group_name} Dashboard `);
             $('#currentTime').html(`${currentTime}`);
-
             $('#membersList').html('');
             
             var sumOfGoalLost = 0;
             var groupsGoal =  parseInt(getGroupInfo[0].group_goal);
             
-            //=========== TO PRINT OUT MEMBERS =====
+            //PRINT OUT MEMBERS
             getGroupInfo.forEach(function( group ){
                 console.log('printing out the goals: ' + group.goal)
                 let newNumber = parseInt(group.goal);
@@ -227,20 +221,23 @@
                     <img src="${group.user_img}" alt="" class="profilePictureLink" style="width: 100px;" onClick="showMemberProfile('${group.id}')">
                 </div>`)
             })
-            //===== TO PRINT GOAL PROGRESS BAR ======
+            // TO PRINT GOAL PROGRESS BAR
 
             console.log(' sum Of Goal Lost is ' + sumOfGoalLost)
-            $('#appendGroupGoal').append(`<h4>Total lost : ${sumOfGoalLost}</h4>
-            `)
+            $('#appendGroupGoal').append(`
+                <h4>Total lost : ${sumOfGoalLost}</h4>
+                `
+            )
+
             var completedPercentage = Math.round((sumOfGoalLost*100)/groupsGoal);
             console.log(completedPercentage);
+
             /* ldBar stored in the element */
             var bar1 = new ldBar("#myItem1");
             var bar2 = document.getElementById('myItem1').ldBar;
             bar1.set(completedPercentage);
 
-
-            //==== TO PRINT TOP 3 ====
+            // PRINT TOP 3 USERS
             const myTop3List = await $.get(`/api/top3List/${groupId}`);
             console.log(myTop3List);
             $('#top3List').html('');
@@ -252,35 +249,16 @@
                     <h6 class="mt-4">Weight: ${top3.my_weight}</h6>
                 </div>`)
             })
-            //==============normas code
-            // const fetchProfilePic = await $.get("/api/profilepic");
-            // console.log("Getting the profile pics!!!!")
-            // console.log(fetchProfilePic);
-            // for ( let i=1; i<fetchProfilePic.length; i++){
-            //     $("#profileimg").append(
-            //         `<div class="userImg col-2">
-            //             <a href="individual.html/${i}" class="hoverProfile"><img src="${fetchProfilePic[i].user_img}" alt="" class="profilePicture" style="width: 100px;"></a>
-            //         </div>
-            //         `
-            //     );
-            // }
             showInfo();
-
-            //============don't delete below=====
-            })
-            //================sara===========
+        })
 
         function showMemberProfile(id){
-        console.log('loading profile of ' + id);
-        location.href = '/individual.html#'+ id;
+            console.log('loading profile of ' + id);
+            location.href = '/individual.html#'+ id;
         }
-        //================sara===========
-
-             //--============Norma Code====================//
+        
         async function postPosts() {
-            
             let inputPost = $("#postinput").val();
-
             if (inputPost != ''){
                 $("#postinput").val('');
                 let userData = localStorage.getItem("myUser");
@@ -301,40 +279,28 @@
                 console.log(userPostInfo);
                 const userPost = await $.post("/api/postinfo", userPostInfo);
                 console.log("Getting the Post Info Stuff!!!!");
-                // console.log(postInfo);
-                // $("#navMenu").empty();
-
                 showInfo();
 
             } else {
                 alert('you have not entered anything!!')
-            }
-            
-            
+            } 
         };
+
         async function showInfo(){
-
             const groupId =location.hash.substr(1)
-
             const fetchPosts = await $.get(`/api/getposts/${groupId}`);
             console.log("Getting the posts from server!!!!") 
             console.log( 'what is this: ' + fetchPosts[0].thumbs_up);
             $("#userpostid").empty();
 
             let userData = localStorage.getItem("myUser");
-                userData = JSON.parse(userData);
-                const commentersName = userData.my_name;
-                const commentersId = userData.userId;
-
-                // moment().startOf('hour').fromNow();
-                
-                // // var calendar = picture.creation_time
-                // // console.log(calendar);
-                // // var time = moment(calendar).fromNow();
+            userData = JSON.parse(userData);
+            const commentersName = userData.my_name;
+            const commentersId = userData.userId;
 
             let arrLength = fetchPosts.length-1;
-            for ( let i = arrLength; i >= 0; i--){
 
+            for ( let i = arrLength; i >= 0; i--){
                 const grpPstId = fetchPosts[i].post_id;
                 console.log('what is group Post Id? ' + grpPstId)
                 const commentNumber = await $.get(`/api/getCommentsNmb/${grpPstId}`);
@@ -381,29 +347,25 @@
                     </div>
                 </section>`
                 )
+
                 $(`#number${i+1}`).html(fetchPosts[i].thumbs_up);
-                // $(`#comment${i+1}`).html(fetchPosts[i].thumbs_up);
                 
             } 
         }
+
         async function thumbsupFunc(idx){
             const thumbsUp = await $.get(`/api/thumbsup/${idx}`);   
             console.log(thumbsUp);
             console.log(thumbsUp[0].thumbs_up); 
             $(`#number${idx}`).html(thumbsUp[0].thumbs_up);
         }
+
         async function showCommentForm(id, postId ){
-            // const thumbsUp = await $.get(`/api/thumbsup/${idx}`); 
             $( `#commentSection${id}` ).show( "slow" );
-
             showPrintComments(id, postId)
-
-            // $(`#number${idx}`).html(thumbsUp[0].thumbs_up);
         }
 
-
         async function postcomment(id, commentersName, commentersId, postId){
-            
             let comment = $(`#commentInput${id}`).val();
             let postedComments = {
                 commenters_name: commentersName,
@@ -413,47 +375,27 @@
             }
 
             const postComment = await $.post("/api/postComment", postedComments);
-            // $(`#commentInput${id}`).html('');
             $(`#commentInput${id}`).val('');
             showPrintComments(id, postId);
-
-
         }
 
         async function showPrintComments(id, postId){
             const fetchComments = await $.get(`/api/getComment/${postId}`);  
-                console.log('THE COMMENTS ARE: ' + fetchComments);
+            console.log('THE COMMENTS ARE: ' + fetchComments);
+            const commentNumber = await $.get(`/api/getCommentsNmb/${postId}`);
+            const cmntNmb = commentNumber[0].comments;
+            console.log('what is the comment number showing? ' + cmntNmb)
+            $(`#comment${postId}`).html(
+                `${cmntNmb}`
+            )
 
-                // comment_id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+            $(`#postedComment${id}`).empty();
+            fetchComments.forEach(function( comments){
+                var createdPostTime = comments.createdAt;
+                var timePosted = moment(createdPostTime).fromNow();
 
-                // commenters_name,
-                // commenters_id,
-                // comments,
-                // cmnts_post_id INT,
-                // FOREIGN KEY (commenters_id) REFERENCES personal_info(id),
-                // FOREIGN KEY (cmnts_post_id) REFERENCES group_posts(post_id)
-
-                const commentNumber = await $.get(`/api/getCommentsNmb/${postId}`);
-
-                const cmntNmb = commentNumber[0].comments;
-                console.log('what is the comment number showing? ' + cmntNmb)
-
-
-                // comment${fetchPosts[i].post_id}
-
-                $(`#comment${postId}`).html(
-                    `${cmntNmb}`
-                )
-
-
-                $(`#postedComment${id}`).empty();
-                fetchComments.forEach(function( comments){
-
-                    var createdPostTime = comments.createdAt;
-                    var timePosted = moment(createdPostTime).fromNow();
-
-                    console.log('printing out the comments: ' + comments + comments.comments)
-                    $(`#postedComment${id}`).append(
+                console.log('printing out the comments: ' + comments + comments.comments)
+                $(`#postedComment${id}`).append(
                     `
                     <div class="col d-flex justify-content-left comntBorder" id="${comments.post_id}">
                         <div class="userImg col-lg-3">
@@ -465,26 +407,24 @@
                             <p class="commentedTime">${timePosted}</p>  
                         </div>
                     </div>
-                    `
-                    )
-                })
-            };
+                `
+                )
+            })
+        };
 
+        //ANIMATION EFFECTS
         function showMenu(){
-                $( "#navMenu" ).show( "slow" );
-            };
+            $( "#navMenu" ).show( "slow" );
+        };
         function hideMenu(){
-            // alert('something');
             $( "#navMenu" ).hide( "slow" );
         }
+
         function logOutBtn(){
             localStorage.clear();
             location.href = '/login.html';
         }
 
-        //=========================
-
-        
     </script>
 
     <div class="navBar d-flex justify-content-end">
