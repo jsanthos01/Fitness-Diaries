@@ -4,33 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitness Diaries</title>
-
+    <link href="https://fonts.googleapis.com/css?family=PT+Serif|Raleway:400,700,800|Karla&display=swap" rel="stylesheet">        
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-
 </head>
-
 <body>
+    <style>
+        html {
+            height:100%;
+        }
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Karla', sans-serif;    
+          background: rgb(218, 27, 27); /* fallback for old browsers */
+          background: -webkit-linear-gradient(to right, #c04848, #480048); /* Chrome 10-25, Safari 5.1-6 */
+          background: linear-gradient(to right, #c04848, #480048); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+        .register {
+            width: 80%;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: row;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+        .Regimage {
+            width: 100%;
+            height: 450px;
+            background: url(assets/login/exercise3.jpg);
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            background-size: cover;
+            box-sizing: border-box;
+        }
+        .textSection {
+            width: 100%;
+            height: 450px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .formBox{
+            width: 100%;
+            padding: 40px;
+            box-sizing: border-box;
+            height: 450px;
+        }
+        .formBox p{
+            font-weight: bold;
+            color: rgb(255, 115, 0);
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+        .formBox input {
+            margin-bottom: 20px;
+            border: none;
+            border-bottom: 2px solid black;
+            height: 40px;
+            outline: none;
+        }
+        
+        .formBox input:focus {
+            border-bottom: purple;
+        }
+        
+        @media only screen and (max-width: 700px) {
+            .register{
+                flex-direction: column;  
+            }
+            .Regimage {
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                border-bottom-left-radius: 0;
+            }
+            .textSection {
+                width: 100%;
+                height: 500px;
+                
+            }
+        }
+        @media only screen and (max-width: 450px) {
+            .Regimage {
+                height: 250px;
+            }
+        }
+
+    </style>
+    
     <script>
         $(document).ready( async function(){
-            // if(localStorage !=null){
-            //     let userData = localStorage.getItem("userData");
-            //     userData = JSON.parse(userData);
-            //     if( userData.userId )
-            //     console.log(userData);
-            //     let userName = userData.userName;
-            //     console.log(userName);
-            //     location.href = '/individual.html';
-            // }
-
-            // if username exists in local storage direct to dashboard
             $('#submitUserBtn').click( async function(event){
                 event.preventDefault();
-
                 const usersEmail= $('#userEmail').val();
                 const usersPassword= $('#userPassword').val();
-
                 //checking validation of email and password
                 if( usersEmail == "" ) {
                     alert( "Please provide your Email!" );
@@ -52,7 +122,6 @@
                     $('#userPassword').focus() ;
                     return false;
                 }
-
                 const storeInLocalStorage = {
                     my_name: $('#myName').val(),
                     userName: $('#userEmail').val(),
@@ -60,66 +129,53 @@
               
                 console.log(storeInLocalStorage);
                 localStorage.setItem("myUser", JSON.stringify(storeInLocalStorage));
-
-
                 
                 const storeInDatabase = {
                     my_name: $('#myName').val(),
                     userName: $('#userEmail').val(),
                     user_password: $('#userPassword').val()  
                 };
-
                 let apiResult = await $.post( '/api/registration', storeInDatabase );
+<<<<<<< HEAD
                 // location.href = '/individual.html';
                 alert( apiResult);
                 console.log(apiResult);
+=======
+                alert( apiResult.message );
+>>>>>>> master
                 if( apiResult.message ){
-                    location.href = '/individual.html';
-                    // registration worked! redirect to the main page (listing thumbnails)
+                    location.href = '/login.html';
                 }
+                
             })
         })
             
-
-    </script>
-
-    <main role="main">
-        <section class="jumbotron text-center">
-            <div class="container">
-                <h1>User Registration</h1>
-            </div>
-        </section>
-    
-        <!-- add picture form -->
-        <div class="container">
-            <div class="card">
-                <div class="card-header">
-                Register
-                </div>
-                <div class="card-body">
-                    <form role="form">
-                        <input type='hidden' id='db_id' value=''>
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="myName">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="userEmail" class="form-control" name="email" >
-                        <!-- pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required -->
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" id="userPassword" class="form-control" name="psw">
-                            <!-- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required -->
-                        </div>
-                        <button id='submitUserBtn' type="submit" class="btn btn-primary submit" >Register</button>
-                    </form>
-                </div>
+    </script>    
+    <div class="register">
+        <div class="Regimage">
+        </div>
+        <div class="textSection">
+            <div class="formBox">
+                <form role="form">
+                    <input type='hidden' id='db_id' value=''>
+                    <div class="form-group">
+                        <p>Name</p>
+                        <input type="text" class="form-control" placeholder="Enter your Name" id="myName">
+                    </div>
+                    <div class="form-group">
+                        <p>Email</p>
+                        <input type="email" id="userEmail" class="form-control" placeholder="Enter your Email" name="email" >
+                    <!-- pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required -->
+                    </div>
+                    <div class="form-group">
+                        <p>Password</p>
+                        <input type="password" id="userPassword" class="form-control" placeholder="Enter Your Password" name="psw">
+                        <!-- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required -->
+                    </div>
+                    <button id='submitUserBtn' type="submit" class="btn btn-primary submit" >Register</button>
+                </form>
             </div>
         </div>
-    </main>
-
+    </div>
 </body>
 </html>
