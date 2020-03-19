@@ -4,16 +4,17 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <!-- Bootstrap CSS -->
+        <!-- Bootstrap CSS FONT-AWESOME-->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Rubik&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
+        <!-- <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Rubik&display=swap" rel="stylesheet"> -->
+        <link href="https://fonts.googleapis.com/css?family=PT+Serif|Raleway:400,700,800|Karla&display=swap" rel="stylesheet">        
 
         <title>Fitness Diaries</title>
     </head>
@@ -142,7 +143,6 @@
             }
 
             .about-area p {
-                margin-left: 25px;
                 text-align: justify;
                 font-family: 'Karla', sans-serif;    
                 line-height: 30px;
@@ -153,7 +153,7 @@
             }
 
                         
-            .crops-info {
+            .fitness-info {
                 background: rgb(218, 27, 27); /* fallback for old browsers */
                 background: -webkit-linear-gradient(to right, #c04848, #480048); /* Chrome 10-25, Safari 5.1-6 */
                 background: linear-gradient(to right, #c04848, #480048); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
@@ -164,7 +164,7 @@
             }
 
 
-            .crop-title {
+            .offer-title {
                 font-weight: bold;
                 text-align: center;
                 padding-top: 40px;
@@ -176,7 +176,7 @@
 
             }
 
-            .crop-button {
+            .fitness-button {
                 border-radius: 80px;
                 background-color: orange;
                 color: white;
@@ -252,6 +252,50 @@
                 flex-direction: column;
 
             }
+
+            @media only screen and (max-width: 800px) {
+                .background h2 {
+                    font-size: 70px;                    
+                }
+
+                .text {
+                    text-align: center;
+                }
+            }
+            @media only screen and (max-width: 500px) {
+                .background .text {
+                    position: absolute;
+                    top: 30%;
+                    /* left: 10%; */
+                    color: white;
+                }
+                .background h2 {
+                    font-size: 40px;                    
+                }
+                .background h3 {
+                    font-size: 30px;                    
+                }
+
+                .text {
+                    text-align: center;
+                }
+            }
+            @media only screen and (max-width: 1100px) {
+                .background {
+                    height: 70vh                    
+                }
+            }
+            @media only screen and (max-width: 1100px) {
+                .background {
+                    height: 70vh                    
+                }
+            }
+            @media only screen and (max-width: 1100px) {
+                .background {
+                    height: 70vh                    
+                }
+            }
+
         </style>
 
         <div class="header-area">
@@ -283,17 +327,17 @@
                 <h2><span class="special2">GET FIT </span>, STRONG <br> & <span class="special2">MOTIVATED </span>!</h2>
                 <div class="links">
                     
-                    <a href="#" class="btn btn-lg btn-warning mx-auto crop-button"  role="button" aria-pressed="true" class="" onclick="showLearnMore()" >Learn More</a>
+                    <a href="#" class="btn btn-lg btn-warning mx-auto fitness-button"  role="button" aria-pressed="true" class="" onclick="showLearnMore()" >Learn More</a>
                 </div>
             </div>  
         </div>
         <div class="about-area">
             <div class="container">
                 <div class="row " id="scrollHereAbout">
-                    <div class="col-6 about-image" >
+                    <div class="col-lg-6 about-image" >
                         <img src="assets/indexPg/about.png" alt="" class="img-fluid">
                     </div>
-                    <div class="col-6 about-title">
+                    <div class="col-lg-6 about-title">
                         <h2 class="text-uppercase">
                             <span style="font-weight: bold; font-size: 45px;">About</span>
                             <hr style="border: 1px solid #df10d4; width: 50%;"/>
@@ -313,8 +357,8 @@
             </div>
         </div>
 
-        <div class="container-fluid crops-info">
-            <h1 class="crop-title text-uppercase">WHAT WE OFFER</h1>
+        <div class="container-fluid fitness-info">
+            <h1 class="offer-title text-uppercase">WHAT WE OFFER</h1>
             <div class="row justify-content-center" style='padding-bottom: 25px;'>
                 <div class="col-12 col-lg-3 col-md-6">
                     <div class="column">
@@ -376,17 +420,17 @@
     
         <div class="container">
             <div class="row">
-                <div class="col-6 textGetStarted" >
+                <div class="col-lg-6 textGetStarted" >
                     <h1 class="getStart text-uppercase">Get Started Today</h1>
                     <h3>Take a small step everyday . . .</h3>
                     <div class="button">
-                        <a href="registration.html" class="btn btn-lg mx-auto crop-button" role="button" aria-pressed="true"   s>Register Now</a>
-                        <a href="login.html" class="btn btn-lg mx-auto crop-button" role="button" aria-pressed="true" >Login </a>
+                        <a href="registration.html" class="btn btn-lg mx-auto fitness-button" role="button" aria-pressed="true"   s>Register Now</a>
+                        <a href="login.html" class="btn btn-lg mx-auto fitness-button" role="button" aria-pressed="true" >Login </a>
                     </div>
                     
                 </div>
-                <div class="col-6">
-                    <img src="https://media.giphy.com/media/3ornjHnlfyrQclXGZq/giphy.gif" alt="This is an animated gif image, but it does not move"/>
+                <div class="col-lg-6 d-flex justify-content-center align-items-center">
+                    <img src="https://media.giphy.com/media/3ornjHnlfyrQclXGZq/giphy.gif" style= "width: 100%;" alt="This is an animated gif image, but it does not move"/>
                 </div>
             </div>
         </div>
