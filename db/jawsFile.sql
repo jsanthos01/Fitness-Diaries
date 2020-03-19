@@ -29,11 +29,6 @@ CREATE TABLE personal_info(
 	createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 );
 
--- CREATE TABLE weight_history(
---     weight_id INTEGER AUTO_INCREMENT PRIMARY KEY,
---     weight_past INTEGER 
--- );
-
 CREATE TABLE member_goal(
     goal_id INTEGER AUTO_INCREMENT PRIMARY KEY,
     goal_message VARCHAR(250),
@@ -42,7 +37,6 @@ CREATE TABLE member_goal(
 
 );
 
----------------------------------- groups list html page ---------------------------------------------
 CREATE TABLE new_group (
     group_id INT PRIMARY KEY auto_increment,
     group_name VARCHAR(100) NOT NULL,

@@ -11,12 +11,9 @@
 </head>
 <body>
     <style>
-        /* .profilePicture{
-            height:200px;
-            width: 200px;
-            border-radius: 50%;
-        } */
-        html{height:100%;}
+        html {
+            height:100%;
+        }
         body {
           margin: 0;
           padding: 0;
@@ -74,42 +71,32 @@
         .formBox input:focus {
             border-bottom: purple;
         }
-        @media only screen and (max-width: 700px) {
-        .register{
-            flex-direction: column;
-            
-            }
-        .Regimage {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            border-bottom-left-radius: 0;
-            }
         
-        .textSection {
-            width: 100%;
-            height: 500px;
-            
+        @media only screen and (max-width: 700px) {
+            .register{
+                flex-direction: column;  
+            }
+            .Regimage {
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                border-bottom-left-radius: 0;
+            }
+            .textSection {
+                width: 100%;
+                height: 500px;
+                
             }
         }
         @media only screen and (max-width: 450px) {
-        .Regimage {
-            height: 250px;
+            .Regimage {
+                height: 250px;
             }
-        
         }
+
     </style>
+    
     <script>
         $(document).ready( async function(){
-            // if(localStorage !=null){
-            //     let userData = localStorage.getItem("userData");
-            //     userData = JSON.parse(userData);
-            //     if( userData.userId )
-            //     console.log(userData);
-            //     let userName = userData.userName;
-            //     console.log(userName);
-            //     location.href = '/individual.html';
-            // }
-            // if username exists in local storage direct to dashboard
             $('#submitUserBtn').click( async function(event){
                 event.preventDefault();
                 const usersEmail= $('#userEmail').val();
@@ -149,45 +136,40 @@
                     user_password: $('#userPassword').val()  
                 };
                 let apiResult = await $.post( '/api/registration', storeInDatabase );
-                // location.href = '/individual.html';
                 alert( apiResult.message );
                 if( apiResult.message ){
                     location.href = '/login.html';
-                    // registration worked! redirect to the main page (listing thumbnails)
                 }
                 
             })
         })
             
-    </script>
-    
-        
-        <!-- add picture form -->
-        <div class="register">
-            <div class="Regimage">
-            </div>
-            <div class="textSection">
-                <div class="formBox">
-                    <form role="form">
-                        <input type='hidden' id='db_id' value=''>
-                        <div class="form-group">
-                            <p>Name</p>
-                            <input type="text" class="form-control" placeholder="Enter your Name" id="myName">
-                        </div>
-                        <div class="form-group">
-                            <p>Email</p>
-                            <input type="email" id="userEmail" class="form-control" placeholder="Enter your Email" name="email" >
-                        <!-- pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required -->
-                        </div>
-                        <div class="form-group">
-                            <p>Password</p>
-                            <input type="password" id="userPassword" class="form-control" placeholder="Enter Your Password" name="psw">
-                            <!-- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required -->
-                        </div>
-                        <button id='submitUserBtn' type="submit" class="btn btn-primary submit" >Register</button>
-                    </form>
-                </div>
+    </script>    
+    <div class="register">
+        <div class="Regimage">
+        </div>
+        <div class="textSection">
+            <div class="formBox">
+                <form role="form">
+                    <input type='hidden' id='db_id' value=''>
+                    <div class="form-group">
+                        <p>Name</p>
+                        <input type="text" class="form-control" placeholder="Enter your Name" id="myName">
+                    </div>
+                    <div class="form-group">
+                        <p>Email</p>
+                        <input type="email" id="userEmail" class="form-control" placeholder="Enter your Email" name="email" >
+                    <!-- pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required -->
+                    </div>
+                    <div class="form-group">
+                        <p>Password</p>
+                        <input type="password" id="userPassword" class="form-control" placeholder="Enter Your Password" name="psw">
+                        <!-- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required -->
+                    </div>
+                    <button id='submitUserBtn' type="submit" class="btn btn-primary submit" >Register</button>
+                </form>
             </div>
         </div>
+    </div>
 </body>
 </html>

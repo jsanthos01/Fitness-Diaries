@@ -1,6 +1,8 @@
 DROP DATABASE IF EXISTS fitness_diaries;
 CREATE DATABASE fitness_diaries;
-USE hfotawzm63znjqmt;
+USE fitness_diaries;
+
+---------------------------------- Login/Registration html page ---------------------------------------------
 
 CREATE TABLE login_credential(
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -10,6 +12,8 @@ CREATE TABLE login_credential(
     user_img VARCHAR(250),
     createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 );
+
+---------------------------------- Individual html page ---------------------------------------------
 
 CREATE TABLE personal_info(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -25,7 +29,7 @@ CREATE TABLE personal_info(
     FOREIGN KEY (member_id) REFERENCES login_credential(id),
     createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 );
-DROP TABLE IF EXISTS new_group;
+
 CREATE TABLE new_group (
     group_id INT PRIMARY KEY AUTO_INCREMENT,
     group_name VARCHAR(100) NOT NULL,
@@ -33,7 +37,7 @@ CREATE TABLE new_group (
     group_imageUrl VARCHAR(250),
     createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 );
-DROP TABLE IF EXISTS group_member;
+
 CREATE TABLE group_member (
     grp_mbr_id INT PRIMARY KEY AUTO_INCREMENT ,
     member_name VARCHAR(100) NOT NULL,
@@ -44,15 +48,6 @@ CREATE TABLE group_member (
     createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 );
 
-SELECT * FROM group_member;
-
-
-CREATE TABLE member_goal(
-    goal_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    goal_message VARCHAR(250),
-    goalCompleted BOOLEAN DEFAULT false,
-    createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
-);
 
 ---------------------------------- groups list html page ---------------------------------------------
 CREATE TABLE group_goal(
@@ -61,14 +56,13 @@ CREATE TABLE group_goal(
     createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 
 );
+
 CREATE TABLE top_three(
     name VARCHAR(250) PRIMARY KEY,
     weight DECIMAL(4,2),
     user_img VARCHAR(250),
     createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 );
-
-DROP TABLE IF EXISTS group_posts;
 
 CREATE TABLE group_posts(
     post_id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -85,7 +79,6 @@ CREATE TABLE group_posts(
     createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 );
 
-DROP TABLE IF EXISTS post_comments;
 CREATE TABLE post_comments(
 	comment_id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
     commenters_name VARCHAR(250),
@@ -97,8 +90,9 @@ CREATE TABLE post_comments(
 	createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 
 );
-SELECT COUNT(*) comments FROM post_comments WHERE cmnts_post_id = 1;
 
+
+SELECT COUNT(*) comments FROM post_comments WHERE cmnts_post_id = 1;
 
 SELECT post_comments.commenters_name, post_comments.comment_id, post_comments.comments, post_comments.createdAt,
 	personal_info.id, personal_info.user_img, personal_info.my_name,

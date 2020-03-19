@@ -12,8 +12,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
-        <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
-
+        <link href="https://fonts.googleapis.com/css?family=Karla&display=swap" rel="stylesheet">
 
     </head>
 
@@ -23,7 +22,7 @@
             height: 100%;
             color: #100048;
             background-image: linear-gradient(to right, #c04848, #480048);
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Karla', sans-serif;
         }
         h1 {
             color: white;
@@ -162,33 +161,27 @@
             const myUserInfo = await $.get(`/api/dashboardInfo/${id}`);
             console.log('my user is ' + myUserInfo);
             if (myUserInfo.user_img != null){
-            $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+                $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
 
-            $( ".appendThumbnailMenu" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">`);
-
-
+                $( ".appendThumbnailMenu" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 75px; height: 75px;">`);
             }
-
-
         })
 
+        //Animations
         function showMenu(){
             $( "#navMenu" ).show( "slow" );
         };
 
         function hideMenu(){
-            // alert('something');
             $( "#navMenu" ).hide( "slow" );
         }
 
         function showAddGroupWin(){
-            // alert('something');
             $( "#addGroupWin" ).slideDown( "slow" );
             $( "#navMenu" ).hide( "slow" );
         }
 
         function hideAddGroupWin(){
-            // alert('something');
             $( "#addGroupWin" ).hide( "slow" );
         }
 
@@ -216,14 +209,11 @@
             const apiResult = await $.post(`/api/addNewMember`, newMember );
             appendMemberList(grpId);
             alert( apiResult.message );
-            //===============================
-            //========
-            // await $.post()
-            // $("#inputUserName").val("");
             $("#inputGroupSelect02").val("Choose a User to add to your group");
             $( "#memberForm" ).hide();
 
         }
+
         async function createGrp(){
             event.preventDefault();
             const group = {
@@ -233,9 +223,7 @@
             }
             const apiNewGroup = await $.post( '/api/newGroup', group );
             alert( apiNewGroup.message );
-            //
             appendGroupList()
-
             $( "#addGroupWin" ).hide( "slow" );
         }
 
@@ -250,9 +238,8 @@
                     <h3>${myGroupName.group_name}</h3>
                     <img src="assets/add(white).png" alt="" class="addMemberIcon" onClick="showAddMemberForm(${idx})" style="width: 100px;" ><p>Add member</p>
                 </div>`
-            )
+            );
             $( "#addShowGrpBtn" ).html( `<button type="button" class="btn btn-outline-primary" onClick="showGrpDshbrd(${idx})">Show Group Dashboard</button>` )
-                
             $( "#memberForm" ).html('');
             $( "#memberForm" ).append(`
                 <div class="input-group mb-3">
@@ -264,7 +251,8 @@
                     </div>
                 </div>
                 <button type="button" class="btn btn-primary btn-lg" onClick="addMemberBtn(${idx})">Add Member to Group</button>
-            `)
+                `
+            )
             appendAllMemberToSelect()
 
             $('html, body').animate({
@@ -275,7 +263,6 @@
         }
 
         async function deleteMemberBtn(grpMemberId, name, grId){
-            // const name = memberName;
             console.log('deleting member ' + name + ' of id:' + grpMemberId);
             const apiDeleteMember = await $.ajax({
                 url: `/api/deleteMember/${grpMemberId}/${name}`,
@@ -283,6 +270,7 @@
             })
             appendMemberList(grId);
         }
+
         async function deleteGrpBtn(grpId){
             console.log('deleting group ' + ' of id:' + grpId);
             const apiDeleteGroup = await $.ajax({
@@ -295,10 +283,8 @@
 
         async function appendMemberList(grIdx){
             const myMembersList =await $.get(`/api/membersList/${grIdx}`);
-            
             console.log(myMembersList);
             if( myMembersList !== null && myMembersList !== '') {
-            // do something
                 $('#membersListDisplay').html('');
                 myMembersList.forEach( function( member ){
                     $("#membersListDisplay").append(`<div class="col-md-3">
@@ -310,14 +296,15 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" onClick="showMemberProfile(${member.id})">View Member Profile</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" onClick="deleteMemberBtn(${member.grp_mbr_id}, '${member.my_name}', ${member.group_id})"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" onClick="showMemberProfile(${member.id})">View Member Profile</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" onClick="deleteMemberBtn(${member.grp_mbr_id}, '${member.my_name}', ${member.group_id})"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>`)
                 });
+
                 return ;
             }
 
@@ -340,8 +327,8 @@
                                 <p class="card-text">${myGroupList[i].group_name}</p>
                                 <div class="d-flex justify-content-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="showGroupDetailInfo(${myGroupList[i].group_id})">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" onClick="deleteGrpBtn(${myGroupList[i].group_id}, '${myGroupList[i].group_name}')">Delete</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onClick="showGroupDetailInfo(${myGroupList[i].group_id})">View</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onClick="deleteGrpBtn(${myGroupList[i].group_id}, '${myGroupList[i].group_name}')">Delete</button>
                                 </div>
                             </div>
                             <br>
@@ -378,6 +365,7 @@
             localStorage.clear();
             location.href = '/login.html';
         }
+        
     </script>
 
     <div class="navBar d-flex justify-content-end">
@@ -461,7 +449,7 @@
             <section class="card-body members_list">
                 <div class="memberList card">
                     <div class="card-body d-flex justify-content-between">
-                        <h3>members List</h3>
+                        <h3>Members List</h3>
                         <div id="addShowGrpBtn">
                             <button type="button" class="btn btn-outline-primary">Show Group Dashboard</button>
                         </div>
