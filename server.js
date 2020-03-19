@@ -65,8 +65,8 @@ app.post("/api/registration", async function(req, res){
 //this is for the login page=====norma bcrypt==============
 app.post("/api/checkuser", async function(req, res){
     // console.log(req.body)
-    const userEmail = req.body.userEmail;
-    const userPassword = req.body.userPassword;
+    // const userEmail = req.body.userEmail;
+    // const userPassword = req.body.userPassword;
     console.log(req.body.userPassword);
     const userData = await orm.loginUser(userEmail, userPassword);
     // console.log(`[POST ] recieved: `,userData);
@@ -77,7 +77,7 @@ app.post("/api/checkuser", async function(req, res){
         res.send(userData);
     } else {
         console.log(result)
-        res.send('Incorrect password');
+        res.send({ error: 'Sorry unknown user or wrong password' } );
     }
     });
     
