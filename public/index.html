@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://use.fontawesome.com/4b53ea2f0f.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Rubik&display=swap" rel="stylesheet">
+
+        <title>Fitness Diaries</title>
+    </head>
+    <body>
+        
+        <style>
+            body {
+                box-sizing: border-box;
+                margin: 0;
+                font-family: 'Karla', sans-serif;    
+            }
+
+            /* Navbar */
+            .h1-title{
+                font-size: 30px;
+                font-weight: bold;
+                text-align: center;
+                font-family: 'Raleway', sans-serif;
+                padding: 10px;
+            }
+
+            .special{
+                background: -webkit-linear-gradient(#c04848, #480048);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                
+            }
+            .navbar {
+                display: flex;
+                justify-content: space-evenly;
+                
+            }
+
+            .navbar .navbar-nav .nav-item{
+                list-style: none;
+            }
+
+            .navbar-nav li {
+                display: inline-block;
+                padding: 0px 20px;
+
+            }
+
+            .navbar-nav .nav-item .nav-link {
+                text-align: center;
+                transition: all 0.5s ease 0s;
+                color: black;
+                font-size: 15px;
+                text-transform: uppercase;
+
+            }
+
+            .navbar-nav .nav-item .nav-link:hover {
+                padding: 15px 45px;
+                border-radius: 80px;
+                color: white;
+                padding: 10px;
+                background-image: linear-gradient(45deg, #FBD72B, #F9484A);
+                text-align: center;
+                font-size: 20px;
+
+            }
+
+            .navbar-brand img {
+                width: 60px;
+                border-radius: 50%;
+                background-color: white;
+                padding: 10px;
+            }
+
+            .background {
+                width: 100%;
+                height: 90vh;
+                position: relative;
+                background: #fff url(assets/indexPg/exercise.jpg) center center no-repeat;
+                background-size: cover;
+            }
+            .background::before {
+                content: " ";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #000;
+                opacity: 0.3;
+            }
+
+            .background .text {
+                position: absolute;
+                top: 30%;
+                left: 10%;
+                color: white;
+            }
+
+            .background .text .links a{
+                margin-right: 35px;
+            }
+
+            .links-btn{
+                background: -webkit-linear-gradient(to right, #FBD72B, #F9484A); /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to right, #FBD72B, #F9484A); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            }
+            .background h2 {
+                font-weight: 700;
+                font-size: 100px;
+                font-family: 'Raleway', sans-serif;
+            }
+            .background h3 {
+                font-size: 40px;
+                font-family: 'Raleway', sans-serif;
+            }
+            .about-area {
+                margin: 100px 0;
+            }
+
+            .about-area .row {
+                display: flex;
+                display: flex;
+            }
+            .about-area .about-title {
+                text-align: center;
+                margin-top: 25px;
+                font-family: 'Raleway', sans-serif;
+
+            }
+
+            .about-area p {
+                margin-left: 25px;
+                text-align: justify;
+                font-family: 'Karla', sans-serif;    
+                line-height: 30px;
+            }
+
+            .about-area .about-image img:hover {
+                box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+            }
+
+                        
+            .crops-info {
+                background: rgb(218, 27, 27); /* fallback for old browsers */
+                background: -webkit-linear-gradient(to right, #c04848, #480048); /* Chrome 10-25, Safari 5.1-6 */
+                background: linear-gradient(to right, #c04848, #480048); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+                                
+                width: 100%;
+                margin: 40px 0;
+                padding-bottom: 40px;
+            }
+
+
+            .crop-title {
+                font-weight: bold;
+                text-align: center;
+                padding-top: 40px;
+                color: white;
+                font-family: 'Raleway', sans-serif;
+                font-size: 50px;
+                margin-bottom: 30px;
+                letter-spacing: 3px;
+
+            }
+
+            .crop-button {
+                border-radius: 80px;
+                background-color: orange;
+                color: white;
+            }
+            .button {
+                padding: 25px;
+            }
+
+            .special2{
+                background: -webkit-linear-gradient(#FBD72B, #F9484A);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            
+            .column:hover {
+                
+                border-radius: 10px;
+                box-shadow: 10px 10px 10px rgba(0,0,0,0.3);
+                transition: 1.0s ease-in-out;
+                transform: scale(1);
+                z-index: 1;
+
+            }
+
+            .card-title {
+                font-weight: bold;
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 25px;
+                letter-spacing: 2px;
+                color: rgb(255, 241, 221);
+
+            }
+
+            .card-text {
+                text-align: center;
+                color: rgb(255, 255, 255);
+            }
+
+            .card-image{
+                display: block;
+                margin: auto;
+                padding: 25px;
+                border-radius: 50%;
+                background-color: white;
+                padding: 25px;
+                
+            }
+
+            .column {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                padding: 15px;
+                margin-bottom: 25px;
+
+            }
+             
+            .getStart{
+                font-weight: bold;
+                text-align: center;
+                padding-top: 40px;
+                font-family: 'Raleway', sans-serif;
+                font-size: 50px;
+                margin-bottom: 30px;
+                letter-spacing: 3px
+            }
+
+            .textGetStarted{
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+
+            }
+        </style>
+
+        <div class="header-area">
+            <nav class="navbar navbar-expand-lg navbar-light sticky-top" id="navBar" style="background-color: rgb(255, 255, 255);">
+                <a class="navbar-brand"><img src="assets/indexPg/heartbeat.png" alt="" width="100px"></a>
+                <span class="h1-title">FITNESS <span class="special2">DIARIES</span></span>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.html">Login</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="login.html">Dashboard</a>
+                        </li> 
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <div class="background container-fluid ">
+            <div class="text">
+                <h3>Are You Ready to</h3>
+                <h2><span class="special2">GET FIT </span>, STRONG <br> & <span class="special2">MOTIVATED </span>!</h2>
+                <div class="links">
+                    
+                    <a href="#" class="btn btn-lg btn-warning mx-auto crop-button"  role="button" aria-pressed="true" class="" onclick="showLearnMore()" >Learn More</a>
+                </div>
+            </div>  
+        </div>
+        <div class="about-area">
+            <div class="container">
+                <div class="row " id="scrollHereAbout">
+                    <div class="col-6 about-image" >
+                        <img src="assets/indexPg/about.png" alt="" class="img-fluid">
+                    </div>
+                    <div class="col-6 about-title">
+                        <h2 class="text-uppercase">
+                            <span style="font-weight: bold; font-size: 45px;">About</span>
+                            <hr style="border: 1px solid #df10d4; width: 50%;"/>
+                        </h2>
+                        <div class="about-paragraph">
+                            <p>
+                                Lose your weight over a chat and socializing! At Fitness Diaries, we believe staying 
+                                healthy and losing weight need not be a lonely and exhausting journey. Fitness Diaries adds a
+                                twist to your fitness routine and makes it fun and competitive.  Create your fitness group, add your friends, track your goal 
+                                to challenge each other and make it fun. Also, the app gives you trending diets
+                                and recipes and exercises to follow to achieve your goal. 
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid crops-info">
+            <h1 class="crop-title text-uppercase">WHAT WE OFFER</h1>
+            <div class="row justify-content-center" style='padding-bottom: 25px;'>
+                <div class="col-12 col-lg-3 col-md-6">
+                    <div class="column">
+                        <div class="image center">
+                            <img src="assets/indexPg/target.png" alt="Target Icon">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Track Progress </h5>
+                            <p class="card-text">
+                                Bring your fitness gang on Fitness Diaries, declare your goal, track your weight and let the competition begin. Socialize over your Fitness and make losing weight motivating & fun. 
+                            </p>
+                        </div>
+                    </div> 
+                </div>
+                
+                <div class="col-12 col-lg-3 col-md-6">
+                    <div class="column">
+                        <div class="image">
+                            <img src="assets/indexPg/diet.png" alt="Diet Icon">
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title">Solid Diet Plan </h5>
+                            <p class="card-text">
+                                Choose your diet and get a list of recipes to supplement your fitness regime. Fitness Diaries gives out all trending to traditional diets to choose from.                             
+                            </p>
+                        </div>
+                    </div> 
+                </div>
+                <div class="col-12 col-lg-3 col-md-6">
+                    <div class="column">
+                        <div class="image">
+                            <img src="assets/indexPg/question.png" alt="Umbrella Icon">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Fitness Groups </h5>
+                            <p class="card-text">
+                                Losing weight need not be a boring journey. Bring your friends to create your group and motivate each other to stay fit & lose weight. Share your fitness day with your circle and keep growing.
+                            </p>
+                        </div>
+                    </div> 
+                </div>
+                <div class="col-12 col-lg-3 col-md-6">
+                    <div class="column">
+                        <div class="image">
+                            <img src="assets/indexPg/sport.png" alt="Umbrella Icon">
+                        </div>
+
+                        <div class="card-body">
+                            <h5 class="card-title">Workout Exercises</h5>
+                            <p class="card-text">
+                                Get a quick insight on workouts and exercises which can fit in your busy day schedule. Challenge your group and push everyone to achieve their goal.
+                            </p>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    
+        <div class="container">
+            <div class="row">
+                <div class="col-6 textGetStarted" >
+                    <h1 class="getStart text-uppercase">Get Started Today</h1>
+                    <h3>Take a small step everyday . . .</h3>
+                    <div class="button">
+                        <a href="registration.html" class="btn btn-lg mx-auto crop-button" role="button" aria-pressed="true"   s>Register Now</a>
+                        <a href="login.html" class="btn btn-lg mx-auto crop-button" role="button" aria-pressed="true" >Login </a>
+                    </div>
+                    
+                </div>
+                <div class="col-6">
+                    <img src="https://media.giphy.com/media/3ornjHnlfyrQclXGZq/giphy.gif" alt="This is an animated gif image, but it does not move"/>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="copyright">
+                <small>&copy; Copyright 2020</small>
+            </div>            
+        </footer>  
+
+        <script>
+            function registerBtn(){
+                location.href = "registration.html";
+            }
+            function loginBtn(){
+                    location.href = "login.html";
+            }
+            function showLearnMore(){
+            $('html, body').animate({
+                scrollTop: $("#scrollHereAbout").offset().top
+            }, 1000);
+        }
+        </script>
+    </body>
+</html>
