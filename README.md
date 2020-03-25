@@ -33,9 +33,13 @@ Fitness Diaries is a full-stack web application that uses MVC design pattern wit
 
 * Upload Images (multer)
 
-## Preview Work
-![Demo1](public/assets/gifs/Demo1.gif)
+## Group Members
+* [Norma Moras](https://github.com/nmoras)
+* [Sara Munir](https://github.com/SaraMunir)
+* [Akanksha Gupta](https://github.com/Akanksha-Gupta03)
 
+## Live Deployment
 
-![Demo2](public/assets/gifs/Demo2.gif)
+[Heroku Link](https://fitness-diaries.herokuapp.com/)
+
 

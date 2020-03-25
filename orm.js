@@ -170,6 +170,13 @@ async function getComment( postId ){
     return getComment;
 }
 
+async function deleteComment( postId ){
+    console.log("In the delete orm file")
+    console.log(postId);
+    const deleteComment = await db.query( "DELETE FROM post_comments WHERE cmnts_post_id = ?", [postId]);
+    console.log(deleteComment);
+}
+
 async function getId(emailId){
     let userFetch = await db.query('SELECT * FROM personal_info WHERE username=?', [ emailId ] );
     userFetch = JSON.stringify(userFetch); 
@@ -240,6 +247,8 @@ async function getCommentNum(id){
     return getCommentNum;
 }
 
+
+
 module.exports = {
     getCommentNum,
     registrationSql,
@@ -264,6 +273,7 @@ module.exports = {
     getOthersGoalInfo,
     getCompletedOthersGoal,
     getComment,
+    deleteComment,
     getGrpInfo,
     getCompletedGoal,
     postComment,
