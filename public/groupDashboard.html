@@ -397,7 +397,7 @@
                 console.log('printing out the comments: ' + comments + comments.comments)
                 $(`#postedComment${id}`).append(
                     `
-                    <div class="col d-flex justify-content-left comntBorder" id="${comments.post_id} commentNo-${}">
+                    <div class="col d-flex justify-content-left comntBorder" id="${comments.post_id}">
                         <div class="userImg col-lg-2">
                             <img src="${comments.user_img}" alt="" class="profilePictureLink" style="width: 50px;height: 50px;"onclick="showMemberProfile('${comments.id}')">
                         </div>
@@ -450,7 +450,7 @@
                 </div>
                 <li class="navItem"><a class="navLink" href="individual.html">My Profile</a></li>
                 <li class="navItem"><a class="navLink" href="groups.html" >View Groups</a></li>
-                <li class="navItem"><a class="navLink" href="#" onclick="logOutBtn()">Log Out</a></li>
+                <li class="navItem"><a class="navLink" href="login.html" onclick="logOutBtn()">Log Out</a></li>
             </ul>
         </div>
         <div class="groupMenu thumbProfileimg" onClick="showMenu()">
