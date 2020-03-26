@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding a Picture</title>
+      <!-- Latest compiled and minified CSS -->
+      <link href="https://fonts.googleapis.com/css?family=PT+Serif|Raleway:400,700,800|Karla&display=swap" rel="stylesheet">        
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <style>
+        html {
+          height:100%;
+        }
+        body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Karla', sans-serif;    
+          background: rgb(218, 27, 27); /* fallback for old browsers */
+          background: -webkit-linear-gradient(to right, #c04848, #480048); /* Chrome 10-25, Safari 5.1-6 */
+          background: linear-gradient(to right, #c04848, #480048); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        }
+        .login {
+          width: 80%;
+          margin: 60px auto;
+          background-color: white;
+          border-radius: 10px;
+          display: flex;
+          box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+        .image {
+          width: 100%;
+          height: 400px;
+          background: url(assets/login/loginImg.jpg);
+          border-top-left-radius: 10px;
+          border-bottom-left-radius: 10px;
+          background-size: cover;
+          box-sizing: border-box;
+          background-position-y: -100px;
+
+        }
+        .textSection {
+          width: 100%;
+          height: 400px;
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .formBox{
+          width: 100%;
+          padding: 80px 40px;
+          box-sizing: border-box;
+          height: 400px;
+        }
+        .formBox p{
+          font-weight: bold;
+          color: rgb(255, 115, 0);
+          font-size: 20px;
+          text-transform: uppercase;
+        }
+        .formBox input {
+          margin-bottom: 20px;
+          border: none;
+          border-bottom: 2px solid black;
+          height: 40px;
+          outline: none;
+        }
+      
+        .formBox input:focus {
+          border-bottom: purple;
+        }
+
+        @media only screen and (max-width: 700px) {
+          .login{
+          flex-direction: column;
+          
+        }
+
+        .image {
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+          border-bottom-left-radius: 0;
+
+        }
+        
+        .textSection {
+          width: 100%;
+          height: 400px;
+          
+        }
+      }
+      @media only screen and (max-width: 450px) {
+        .textSection {
+          width: 100%;
+          height: 400px;
+          
+        }
+        .image {
+          width: 100%;
+          height: 250px;
+          
+        }
+        .formBox{
+          padding: 40px 40px;
+        }
+      }
+    </style>
+    <script>
+      async function loginBtn(){
+        console.log('clicked');
+        const userInfo = {
+            userEmail : $("#userEmail").val(),
+            userPassword :  $("#userPassword").val()
+        }
+
+        //login uses post to keep data secure
+        const checkUser = await $.post("/api/checkuser", userInfo);
+        console.log(checkUser.id);
+        console.log(checkUser.my_name);
+        if (checkUser.id){
+          console.log('passwords match!')
+          let userData = {
+            userId: checkUser.id,
+            my_name: checkUser.my_name,
+            userName: checkUser.username
+          } 
+
+          localStorage.setItem("myUser", JSON.stringify(userData));
+          console.log("local storage workeddd???")
+          location.href = 'individual.html';
+        }else{
+          alert("User not found");
+        }
+      }
+
+      $(document).ready( function(){
+        let userData = localStorage.getItem("myUser");
+        userData = JSON.parse(userData);
+        if( userData.userId )
+        location.href = '/individual.html';
+      });
+
+      function registerBtn(){
+        location.href = "registration.html";
+      }
+
+    </script>
+    
+    <div class="login">
+      <div class="image">
+      </div>
+      <div class="textSection">
+        <div class="formBox">
+          <form role="form">
+            <div class="form-group">
+              <p>Username or Email</p>
+              <input type="text" class="form-control"placeholder=" Add your username or email" id="userEmail">
+            </div>
+            <div class="form-group">
+              <p>Password</p>
+              <input type="password" class="form-control"  placeholder=" Add your password" id="userPassword">
+            </div>
+            <button id='submitUserBtn' type="button" class="btn btn-primary submit" onClick="loginBtn()">Login</button>
+            <button id='submitUserBtn' type="button" class="btn btn-primary submit" onClick="registerBtn()">Create an Account</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+</body>
+</html>
