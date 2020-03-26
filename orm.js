@@ -1,3 +1,6 @@
+// var db = require("./connection");
+
+
 const mysql = require("mysql");
 
 class Database {
