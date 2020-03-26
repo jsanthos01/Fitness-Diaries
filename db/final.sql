@@ -29,7 +29,6 @@ CREATE TABLE personal_info(
     FOREIGN KEY (member_id) REFERENCES login_credential(id),
     createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 );
-
 CREATE TABLE new_group (
     group_id INT PRIMARY KEY AUTO_INCREMENT,
     group_name VARCHAR(100) NOT NULL,

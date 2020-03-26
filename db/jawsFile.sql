@@ -87,7 +87,7 @@ CREATE TABLE group_posts(
     info VARCHAR(250),
     picture VARCHAR(250),
     thumbs_up INTEGER DEFAULT 0,
-        update_time DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    update_time DATETIME ON UPDATE CURRENT_TIMESTAMP,
     update_time DATETIME ON UPDATE CURRENT_TIMESTAMP,
 	createdAt TIMESTAMP not null default CURRENT_TIMESTAMP
 );
