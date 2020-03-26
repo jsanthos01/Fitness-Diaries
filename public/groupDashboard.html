@@ -397,14 +397,17 @@
                 console.log('printing out the comments: ' + comments + comments.comments)
                 $(`#postedComment${id}`).append(
                     `
-                    <div class="col d-flex justify-content-left comntBorder" id="${comments.post_id}">
-                        <div class="userImg col-lg-3">
+                    <div class="col d-flex justify-content-left comntBorder" id="${comments.post_id} commentNo-${}">
+                        <div class="userImg col-lg-2">
                             <img src="${comments.user_img}" alt="" class="profilePictureLink" style="width: 50px;height: 50px;"onclick="showMemberProfile('${comments.id}')">
                         </div>
-                        <div class="text-left col-lg-9">
+                        <div class="text-left col-lg-8">
                             <span class="commentersName">${comments.commenters_name}</span>
                             <p class="commentersComment"> ${comments.comments} </p>
-                            <p class="commentedTime">${timePosted}</p>  
+                            <p class="commentedTime">${timePosted}</p>
+                        </div>
+                        <div class="col-lg-2">
+                            <i onclick="deleteCommentForm(${comments.post_id})" class="thumbsUp fa fa-trash-o fa-lg" aria-hidden="true"></i>  
                         </div>
                     </div>
                 `
@@ -412,6 +415,15 @@
             })
         };
 
+        async function deleteCommentForm(id){
+            const apiResult = await $.ajax({
+                url: `/api/deleteComments/${id}`,
+                type: "DELETE"
+            });
+            console.log("Delete Worked!!!!!")
+            // location.href = 'groupDashboard.html';
+
+        }
         //ANIMATION EFFECTS
         function showMenu(){
             $( "#navMenu" ).show( "slow" );

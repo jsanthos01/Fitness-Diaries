@@ -153,7 +153,7 @@ app.delete( '/api/deleteGroup/:id', async function( req, res ){
     res.send( { message: `Thank you, deleted group: ${req.params.id}`} );
   }
   catch(err) {
-    res.send( { message: `Sorry, unable to delete group: ${req.params.id} ${req.params.name}. this may be because there are already members assigned to this group`} );
+    res.send( { message: `Sorry, unable to delete group: ${req.params.id} ${req.params.name}. This may be because there are already members assigned to this group`} );
   }
   
 });
@@ -214,6 +214,12 @@ app.post("/api/postComment", async function(req, res){
 app.get("/api/getComment/:id", async function(req, res){
   const getComment = await orm.getComment(req.params.id);
   res.send(getComment); 
+});
+
+app.delete("/api/deleteComments/:id", async function(req, res){
+  console.log("In the delete server file")
+  const deleteComment = await orm.deleteComment(req.params.id);
+  res.send(deleteComment); 
 });
 
 app.get("/api/getCommentsNmb/:id", async function(req, res){
