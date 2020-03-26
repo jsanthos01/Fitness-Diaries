@@ -33,7 +33,8 @@ if(process.env.JAWSDB_URL){
         host: "localhost",
         port: 3306,
         user: "root",
-        password: "bootcamp2020", //change 
+        // password: "bootcamp2020", //change 
+        password: "1234", //change 
         database: "fitness_diaries"
     });
 };
