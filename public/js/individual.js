@@ -118,6 +118,8 @@ $(document).ready( async function(){
             $( ".thumbProfileimg" ).html( `<img src="${myUserInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
             $("#userProfilePicture").html(`<img src="${myUserInfo.user_img}" alt="" class="profilePictureBig">`);
         }
+            $( ".thumbProfileimg" ).html( `<img src=" assets/download.png" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+            $("#userProfilePicture").html(`<img src=" assets/download.png" alt="" class="profilePictureBig">`);
         }
     }
     
@@ -163,6 +165,8 @@ async function insertInfo() {
     $( ".thumbProfileimg" ).html( `<img src="${getInfo.user_img}" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
     $("#userProfilePicture").html(`<img src="${getInfo.user_img}" alt="" class="profilePictureBig">`);
     }
+    $( ".thumbProfileimg" ).html( `<img src=" assets/download.png" alt="" class="profilePicture m-2 " style="width: 50px; height: 50px;">`);
+    $("#userProfilePicture").html(`<img src=" assets/download.png" alt="" class="profilePictureBig">`);
 }
     
 async function editInfo(){
